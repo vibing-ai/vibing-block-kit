@@ -15,9 +15,15 @@
     },
     "test": {
       "dependsOn": ["build"],
-      "outputs": []
+      "outputs": ["coverage/**"]
+    },
+    "e2e": {
+      "dependsOn": ["build"],
+      "outputs": ["playwright-report/**", "test-results/**"]
     },
     "storybook": {
+      "dependsOn": ["build"],
+      "outputs": [".storybook-static/**"],
       "cache": false,
       "persistent": true
     },
@@ -27,6 +33,13 @@
     "release": {
       "dependsOn": ["build", "test", "lint"],
       "outputs": []
+    },
+    "chromatic": {
+      "dependsOn": ["build"],
+      "outputs": []
+    },
+    "tokens:build": {
+      "outputs": ["tokens/dist/**"]
     }
   }
 } 

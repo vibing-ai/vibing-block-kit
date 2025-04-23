@@ -11,17 +11,30 @@
     "dev": "turbo run dev",
     "lint": "turbo run lint",
     "test": "turbo run test",
+    "e2e": "turbo run e2e",
+    "tokens:build": "style-dictionary build --config tokens/config.json",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "prepare": "husky install"
   },
   "devDependencies": {
     "@commitlint/cli": "^18.4.4",
     "@commitlint/config-conventional": "^18.4.4",
+    "@playwright/test": "^1.39.0",
+    "@testing-library/jest-dom": "^6.1.0",
+    "@testing-library/react": "^14.1.0",
+    "@vitest/coverage-v8": "^1.1.3",
     "eslint": "^8.56.0",
+    "eslint-plugin-boundaries": "^3.1.0",
+    "happy-dom": "^13.0.0",
     "husky": "^9.0.3",
+    "jsdom": "^23.0.0",
     "lint-staged": "^15.2.0",
+    "playwright": "^1.39.0",
     "prettier": "^3.2.2",
-    "turbo": "latest"
+    "style-dictionary": "^3.8.0",
+    "tailwindcss-animate": "^1.0.7",
+    "turbo": "latest",
+    "vitest": "^1.1.3"
   },
   "engines": {
     "node": ">=18.0.0"

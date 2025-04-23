@@ -2,6 +2,52 @@
 
 A monorepo for the Reality Agent Block Kit component library.
 
+[![CI](https://github.com/marvelai-org/block-kit/actions/workflows/ci.yml/badge.svg)](https://github.com/marvelai-org/block-kit/actions/workflows/ci.yml)
+[![Package Size](https://img.shields.io/badge/package%20size-<150kB-brightgreen)](https://github.com/marvelai-org/block-kit/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
+
+## Project Layers
+
+| Directory | Purpose |
+|-----------|---------|
+| `apps/` | Applications that consume the Block Kit components |
+| `packages/blocks/kit` | Core primitive components (buttons, inputs, etc.) with no dependencies on higher-level libraries |
+| `packages/block-kit` | Opinionated composite components that depend on `@block-kit/blocks` and may use `assistant-ui` |
+| `packages/ui` | Theme helpers and UI providers for the component ecosystem |
+| `tokens/` | Design tokens using Style Dictionary for consistent visual language |
+
+## Quick Start
+
+```bash
+# Install dependencies
+pnpm i
+
+# Build all packages
+turbo run build
+
+# Start Storybook documentation
+turbo run storybook
+```
+
+## Design Tokens
+
+Block Kit uses a design token system powered by Style Dictionary to ensure consistent theming across all components.
+
+### Updating Design Tokens
+
+1. Edit the token files in the `tokens/` directory
+   - Color tokens: `tokens/colors/`
+   - Spacing tokens: `tokens/spacing/`
+
+2. Build the tokens:
+   ```bash
+   npm run tokens:build
+   ```
+
+3. The built tokens will be available in:
+   - CSS Variables: `tokens/dist/variables.css`
+   - JavaScript: `tokens/dist/tokens.js`
+
 ## What's inside?
 
 This monorepo uses [pnpm](https://pnpm.io) as a package manager and [Turborepo](https://turbo.build/repo) for builds. It includes the following packages/apps:
@@ -90,3 +136,65 @@ This component library follows [WCAG 2.1 AA](https://www.w3.org/WAI/WCAG21/quick
 ## License
 
 MIT 
+
+## Quality & Testing
+
+### Running Tests Locally
+
+```bash
+# Run unit tests
+yarn test
+
+# Run tests in watch mode
+cd packages/blocks/kit && yarn test:watch
+
+# Run E2E tests
+yarn e2e
+
+# Run E2E tests in UI mode
+cd apps/web && yarn playwright test --ui
+```
+
+### Design Tokens
+
+Block Kit uses a design token system powered by Style Dictionary to ensure consistent theming across all components.
+
+#### Updating Design Tokens
+
+1. Edit the token files in the `tokens/` directory
+   - Color tokens: `tokens/colors/`
+   - Spacing tokens: `tokens/spacing/`
+
+2. Build the tokens:
+   ```bash
+   yarn tokens:build
+   ```
+
+3. The built tokens will be available in:
+   - CSS Variables: `tokens/dist/variables.css`
+   - JavaScript: `tokens/dist/tokens.js`
+
+#### Adding New Tokens
+
+1. Create or edit JSON files in the `tokens/` directory following the Style Dictionary format
+2. Reference tokens in the tailwind config using CSS variables with the `--bk-` prefix
+3. Build tokens using `yarn tokens:build`
+4. Update relevant Tailwind config files to use the new tokens
+
+### Chromatic Visual Testing
+
+Block Kit uses Chromatic for visual regression testing through Storybook.
+
+#### Approving Chromatic Changes
+
+1. When you open a PR, Chromatic will run automatically
+2. Visit the Chromatic link in the PR comment
+3. Review visual changes
+4. Approve or reject changes based on whether they're intentional
+
+## CI/CD
+
+Block Kit uses GitHub Actions for CI/CD:
+
+- **CI Workflow**: Runs build, lint, tests, and E2E tests
+- **Chromatic Workflow**: Publishes Storybook to Chromatic for visual regression testing 

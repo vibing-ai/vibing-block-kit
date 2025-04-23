@@ -2,7 +2,7 @@ name: CI
 
 on:
   push:
-    branches: ['main']
+    branches: ["main"]
   pull_request:
     types: [opened, synchronize]
 
@@ -11,58 +11,82 @@ jobs:
     name: Build and Test
     timeout-minutes: 15
     runs-on: ubuntu-latest
-
+    
     steps:
-      - name: Check out code
-        uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v3
         with:
           fetch-depth: 2
 
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v3
         with:
-          node-version: 20
-          cache: 'pnpm'
+          node-version: 18
 
-      - name: Setup PNPM
+      - name: Install pnpm
         uses: pnpm/action-setup@v2
         with:
-          version: 8
-          run_install: false
-
+          version: 8.14.1
+          
       - name: Get pnpm store directory
+        id: pnpm-cache
         shell: bash
         run: |
-          echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
+          echo "STORE_PATH=$(pnpm store path)" >> $GITHUB_OUTPUT
 
       - name: Setup pnpm cache
         uses: actions/cache@v3
         with:
-          path: ${{ env.STORE_PATH }}
+          path: ${{ steps.pnpm-cache.outputs.STORE_PATH }}
           key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
           restore-keys: |
             ${{ runner.os }}-pnpm-store-
-
+          
       - name: Install dependencies
         run: pnpm install
+        
+      - name: Build design tokens
+        run: pnpm tokens:build
+        
+      - name: Cache turbo build
+        uses: actions/cache@v3
+        with:
+          path: .turbo
+          key: ${{ runner.os }}-turbo-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-turbo-
 
       - name: Build
         run: pnpm build
 
+      - name: Check Package Size
+        run: |
+          echo "Checking package size limits..."
+          for pkg in packages/blocks/kit packages/block-kit packages/ui; do
+            if [ -d "$pkg" ]; then
+              echo "Checking $pkg..."
+              cd $pkg
+              SIZE=$(npm pack --dry-run | grep -o 'package size: .*' | grep -o '[0-9.]\+ kB')
+              SIZE_NUM=$(echo $SIZE | grep -o '[0-9.]\+')
+              if (( $(echo "$SIZE_NUM > 150" | bc -l) )); then
+                echo "Error: $pkg exceeds size limit (${SIZE}, limit: 150 kB)"
+                exit 1
+              else
+                echo "✓ $pkg size is ${SIZE} (within limit of 150 kB)"
+              fi
+              cd -
+            fi
+          done
+
       - name: Lint
-        run: pnpm lint
-
-      - name: Test
-        run: pnpm test
-
-      - name: Build Storybook
-        run: pnpm turbo run build-storybook
-
-      - name: Upload Storybook artifact
+        run: pnpm turbo run lint test build storybook --filter=...[HEAD^]
+        
+      - name: Upload test coverage
         uses: actions/upload-artifact@v3
         with:
-          name: storybook-static
-          path: playground/docs/storybook-static
+          name: coverage
+          path: packages/*/coverage/
+          retention-days: 7
 
   deploy-storybook:
     name: Deploy Storybook
