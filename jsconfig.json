@@ -1,0 +1,10 @@
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@vibing/block-kit": ["./src"],
+      "@vibing/block-kit/*": ["./src/*"],
+      "@/*": ["./src/*"]
+    }
+  }
+} 

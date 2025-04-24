@@ -1,200 +1,118 @@
-# Reality Agent Block Kit
+# Vibing Block Kit
 
-A monorepo for the Reality Agent Block Kit component library.
+Composable React + Tailwind component library for building Vibing apps, agents and plugins. Includes fully-typed props, dark-mode tokens and a Storybook playground.
 
-[![CI](https://github.com/marvelai-org/block-kit/actions/workflows/ci.yml/badge.svg)](https://github.com/marvelai-org/block-kit/actions/workflows/ci.yml)
-[![Package Size](https://img.shields.io/badge/package%20size-<150kB-brightgreen)](https://github.com/marvelai-org/block-kit/actions/workflows/ci.yml)
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
-
-## Project Layers
-
-| Directory | Purpose |
-|-----------|---------|
-| `apps/` | Applications that consume the Block Kit components |
-| `packages/blocks/kit` | Core primitive components (buttons, inputs, etc.) with no dependencies on higher-level libraries |
-| `packages/block-kit` | Opinionated composite components that depend on `@block-kit/blocks` and may use `assistant-ui` |
-| `packages/ui` | Theme helpers and UI providers for the component ecosystem |
-| `tokens/` | Design tokens using Style Dictionary for consistent visual language |
-
-## Quick Start
+## Installation
 
 ```bash
-# Install dependencies
-pnpm i
-
-# Build all packages
-turbo run build
-
-# Start Storybook documentation
-turbo run storybook
+npm install @vibing/block-kit
 ```
 
-## Design Tokens
+## Usage
 
-Block Kit uses a design token system powered by Style Dictionary to ensure consistent theming across all components.
+```jsx
+import { TextBlock, AICompletionBlock, BlockKitProvider } from '@vibing/block-kit';
 
-### Updating Design Tokens
+function MyApp() {
+  return (
+    <BlockKitProvider theme="light">
+      <div>
+        <TextBlock 
+          id="intro-text"
+          content="Welcome to Vibing Block Kit"
+        />
+        
+        <AICompletionBlock
+          id="ai-completion"
+          initialPrompt="Tell me about Vibing"
+        />
+      </div>
+    </BlockKitProvider>
+  );
+}
+```
 
-1. Edit the token files in the `tokens/` directory
-   - Color tokens: `tokens/colors/`
-   - Spacing tokens: `tokens/spacing/`
+## HeroUI Integration
 
-2. Build the tokens:
-   ```bash
-   npm run tokens:build
-   ```
+Block Kit is built on top of HeroUI components, providing a consistent design system. There are several ways to use and customize the theme:
 
-3. The built tokens will be available in:
-   - CSS Variables: `tokens/dist/variables.css`
-   - JavaScript: `tokens/dist/tokens.js`
+### Basic Usage
 
-## What's inside?
+Wrap your application with the `BlockKitProvider`:
 
-This monorepo uses [pnpm](https://pnpm.io) as a package manager and [Turborepo](https://turbo.build/repo) for builds. It includes the following packages/apps:
+```jsx
+import { BlockKitProvider } from '@vibing/block-kit';
 
-### Apps and Packages
+function App() {
+  return (
+    <BlockKitProvider theme="light">
+      <YourApp />
+    </BlockKitProvider>
+  );
+}
+```
 
-- `blocks/kit`: Core component library built with React 18, TypeScript 5, and Tailwind CSS
-- `playground/docs`: Storybook documentation app for browsing and testing components
-- `shared/tsconfig`: Shared TypeScript configurations
-- `shared/eslint-config`: ESLint configurations
+### Theme Options
 
-### Utilities
+```jsx
+// Light/dark theme
+<BlockKitProvider theme="light" />
+<BlockKitProvider theme="dark" />
 
-This repository has some additional tools:
+// System theme preference
+<BlockKitProvider useSystemTheme />
 
-- [TypeScript](https://www.typescriptlang.org/) for static type checking
-- [ESLint](https://eslint.org/) for code linting
-- [Prettier](https://prettier.io) for code formatting
-- [Husky](https://typicode.github.io/husky/) for Git hooks
-- [Commitlint](https://commitlint.js.org/) for commit message linting
-- [Semantic Release](https://semantic-release.gitbook.io/) for automated versioning and releases
+// Custom theme
+import { createCustomTheme } from '@vibing/block-kit';
 
-## Prerequisites
+const customTheme = createCustomTheme({
+  type: 'light',
+  primary: '#3498db',
+  secondary: '#2ecc71',
+});
 
-- Node.js 18+
-- pnpm 8+ (install with `npm install -g pnpm`)
+<BlockKitProvider theme={customTheme} />
+```
 
-## Getting Started
+### Theme Switching
 
-1. Install pnpm if you don't have it already:
-   ```
-   npm install -g pnpm
-   ```
+```jsx
+import { useState } from 'react';
+import { BlockKitProvider } from '@vibing/block-kit';
 
-2. Clone the repository:
-   ```
-   git clone https://github.com/marvelai-org/block-kit.git
-   cd block-kit
-   ```
+function App() {
+  const [theme, setTheme] = useState('light');
+  
+  const toggleTheme = () => {
+    setTheme(current => current === 'light' ? 'dark' : 'light');
+  };
+  
+  return (
+    <BlockKitProvider theme={theme}>
+      <button onClick={toggleTheme}>Toggle Theme</button>
+      <YourApp />
+    </BlockKitProvider>
+  );
+}
+```
 
-3. Install dependencies:
-   ```
-   pnpm install
-   ```
+## Documentation
 
-4. Build packages:
-   ```
-   pnpm build
-   ```
-
-5. Start Storybook:
-   ```
-   pnpm --filter docs dev
-   ```
+For full documentation, visit the [Storybook](https://vibing.github.io/vibing-block-kit).
 
 ## Development
 
-To develop all apps and packages:
+```bash
+# Install dependencies
+npm install
 
+# Run Storybook
+npm run storybook
+
+# Build the library
+npm run build
 ```
-pnpm dev
-```
-
-### Useful commands
-
-- `pnpm build` - Build all packages and apps
-- `pnpm dev` - Develop all packages and apps
-- `pnpm lint` - Lint all packages
-- `pnpm test` - Test all packages
-- `pnpm format` - Format all files with Prettier
-
-## Using Conventional Commits
-
-This repository follows the [Conventional Commits](https://www.conventionalcommits.org/) specification for commit messages. This helps with semantic versioning and automated releases.
-
-Examples:
-- `feat: add new button component` - For new features
-- `fix: resolve button focus issue` - For bug fixes
-- `docs: update README` - For documentation updates
-- `chore: update dependencies` - For maintenance tasks
-
-## Accessibility
-
-This component library follows [WCAG 2.1 AA](https://www.w3.org/WAI/WCAG21/quickref/) standards for accessibility.
 
 ## License
 
 MIT 
-
-## Quality & Testing
-
-### Running Tests Locally
-
-```bash
-# Run unit tests
-yarn test
-
-# Run tests in watch mode
-cd packages/blocks/kit && yarn test:watch
-
-# Run E2E tests
-yarn e2e
-
-# Run E2E tests in UI mode
-cd apps/web && yarn playwright test --ui
-```
-
-### Design Tokens
-
-Block Kit uses a design token system powered by Style Dictionary to ensure consistent theming across all components.
-
-#### Updating Design Tokens
-
-1. Edit the token files in the `tokens/` directory
-   - Color tokens: `tokens/colors/`
-   - Spacing tokens: `tokens/spacing/`
-
-2. Build the tokens:
-   ```bash
-   yarn tokens:build
-   ```
-
-3. The built tokens will be available in:
-   - CSS Variables: `tokens/dist/variables.css`
-   - JavaScript: `tokens/dist/tokens.js`
-
-#### Adding New Tokens
-
-1. Create or edit JSON files in the `tokens/` directory following the Style Dictionary format
-2. Reference tokens in the tailwind config using CSS variables with the `--bk-` prefix
-3. Build tokens using `yarn tokens:build`
-4. Update relevant Tailwind config files to use the new tokens
-
-### Chromatic Visual Testing
-
-Block Kit uses Chromatic for visual regression testing through Storybook.
-
-#### Approving Chromatic Changes
-
-1. When you open a PR, Chromatic will run automatically
-2. Visit the Chromatic link in the PR comment
-3. Review visual changes
-4. Approve or reject changes based on whether they're intentional
-
-## CI/CD
-
-Block Kit uses GitHub Actions for CI/CD:
-
-- **CI Workflow**: Runs build, lint, tests, and E2E tests
-- **Chromatic Workflow**: Publishes Storybook to Chromatic for visual regression testing 
