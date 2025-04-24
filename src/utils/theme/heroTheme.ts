@@ -24,6 +24,7 @@ export function createCustomTheme(options: {
 
 /**
  * Default light theme with Block Kit branding
+ * @deprecated Use createTheme from HeroUI directly
  */
 export const blockKitLightTheme = createCustomTheme({
   type: 'light',
@@ -45,6 +46,7 @@ export const blockKitLightTheme = createCustomTheme({
 
 /**
  * Default dark theme with Block Kit branding
+ * @deprecated Use createTheme from HeroUI directly
  */
 export const blockKitDarkTheme = createCustomTheme({
   type: 'dark',
@@ -66,19 +68,15 @@ export const blockKitDarkTheme = createCustomTheme({
 
 /**
  * Get a theme based on a name
+ * @deprecated Use createTheme from HeroUI directly
  */
 export function getThemeByName(themeName: string | undefined): Theme {
-  switch (themeName) {
-    case 'dark':
-      return blockKitDarkTheme;
-    case 'light':
-    default:
-      return blockKitLightTheme;
-  }
+  return { type: themeName as 'light' | 'dark' || 'light' };
 }
 
 /**
  * Create a theme for a specific brand or client
+ * @deprecated Use createTheme from HeroUI directly
  */
 export function createBrandTheme(options: {
   name: string;

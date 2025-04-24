@@ -1,3 +1,6 @@
+/**
+ * @deprecated Use HeroUI theme directly instead
+ */
 export interface BlockTheme {
   /**
    * Default background color
@@ -72,6 +75,7 @@ export interface BlockTheme {
 
 /**
  * Default light theme
+ * @deprecated Use HeroUI theme directly instead
  */
 export const lightTheme: BlockTheme = {
   background: 'var(--hero-color-background, #FFFFFF)',
@@ -92,6 +96,7 @@ export const lightTheme: BlockTheme = {
 
 /**
  * Default dark theme
+ * @deprecated Use HeroUI theme directly instead
  */
 export const darkTheme: BlockTheme = {
   background: 'var(--hero-color-background, #1A1A1A)',
@@ -112,6 +117,7 @@ export const darkTheme: BlockTheme = {
 
 /**
  * Get spacing value in multiples of the spacing unit
+ * @deprecated Use HeroUI spacing functions instead
  */
 export function getSpacing(theme: BlockTheme, multiplier: number): string {
   // Parse the spacing unit value
@@ -124,6 +130,7 @@ export function getSpacing(theme: BlockTheme, multiplier: number): string {
 
 /**
  * Create a custom theme by extending the default theme
+ * @deprecated Use HeroUI theme directly instead
  */
 export function createBlockTheme(
   baseTheme: 'light' | 'dark' | BlockTheme,

@@ -1,34 +1,40 @@
-import React, { createContext, useContext } from 'react';
+import React from 'react';
 import { HeroUIProvider, Theme } from '@heroui/react';
-import { BlockTheme, lightTheme } from './blockTheme';
-import { blockKitLightTheme, blockKitDarkTheme, getThemeByName } from './heroTheme';
+import { useTheme } from '../../../src/BlockKitProvider';
+import { BlockThemeContext } from './useBlockTheme';
+import { lightTheme } from './blockTheme';
 
-// Create theme context for backward compatibility
-const BlockThemeContext = createContext<BlockTheme>(lightTheme);
-
-// Hook to use theme (for backward compatibility)
-export const useTheme = () => useContext(BlockThemeContext);
+/**
+ * @deprecated Use BlockKitProvider from root instead
+ */
+export const useTheme = () => {
+  console.warn('useTheme from utils/theme/Providers is deprecated. Use useTheme from BlockKitProvider instead.');
+  return useTheme();
+};
 
 // Theme provider component
 interface ProvidersProps {
   children: React.ReactNode;
   theme?: Theme | 'light' | 'dark';
-  blockTheme?: BlockTheme;
 }
 
+/**
+ * @deprecated Use BlockKitProvider from root instead
+ */
 export const Providers: React.FC<ProvidersProps> = ({ 
   children, 
-  theme = 'light',
-  blockTheme = lightTheme
+  theme = 'light'
 }) => {
+  console.warn('Providers from utils/theme is deprecated. Use BlockKitProvider instead.');
+  
   // Determine the HeroUI theme to use
   const heroTheme = typeof theme === 'string' 
-    ? getThemeByName(theme)
+    ? { type: theme }
     : theme;
 
   return (
     <HeroUIProvider theme={heroTheme}>
-      <BlockThemeContext.Provider value={blockTheme}>
+      <BlockThemeContext.Provider value={lightTheme}>
         {children}
       </BlockThemeContext.Provider>
     </HeroUIProvider>

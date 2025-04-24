@@ -1,8 +1,5 @@
 import React from 'react';
-import { HeroUIProvider, Theme } from '@heroui/react';
-import { blockKitLightTheme, blockKitDarkTheme, getThemeByName } from './utils/theme/heroTheme';
-import { lightTheme, darkTheme, BlockTheme } from './utils/theme/blockTheme';
-import { BlockThemeContext } from './utils/theme/useBlockTheme';
+import { HeroUIProvider, Theme, useTheme as useHeroTheme } from '@heroui/react';
 
 export interface BlockKitProviderProps {
   /**
@@ -16,11 +13,6 @@ export interface BlockKitProviderProps {
   theme?: 'light' | 'dark' | Theme;
   
   /**
-   * Optional BlockTheme for backward compatibility
-   */
-  blockTheme?: BlockTheme;
-  
-  /**
    * Whether to use system preferred color scheme
    */
   useSystemTheme?: boolean;
@@ -32,7 +24,6 @@ export interface BlockKitProviderProps {
 export const BlockKitProvider: React.FC<BlockKitProviderProps> = ({
   children,
   theme = 'light',
-  blockTheme,
   useSystemTheme = false,
 }) => {
   // Detect system theme if needed
@@ -57,17 +48,21 @@ export const BlockKitProvider: React.FC<BlockKitProviderProps> = ({
   // Determine which theme to use
   const effectiveThemeName = useSystemTheme ? systemTheme : (typeof theme === 'string' ? theme : undefined);
   
-  // Get the HeroUI theme
-  const heroTheme = typeof theme !== 'string' ? theme : getThemeByName(effectiveThemeName);
-  
-  // Determine BlockTheme for backward compatibility
-  const effectiveBlockTheme = blockTheme || (effectiveThemeName === 'dark' ? darkTheme : lightTheme);
+  // Use the built-in HeroUI themes
+  const heroTheme = typeof theme !== 'string' 
+    ? theme 
+    : { type: effectiveThemeName || 'light' };
   
   return (
     <HeroUIProvider theme={heroTheme}>
-      <BlockThemeContext.Provider value={effectiveBlockTheme}>
-        {children}
-      </BlockThemeContext.Provider>
+      {children}
     </HeroUIProvider>
   );
-}; 
+};
+
+/**
+ * Hook for accessing the current theme
+ */
+export function useTheme() {
+  return useHeroTheme();
+} 

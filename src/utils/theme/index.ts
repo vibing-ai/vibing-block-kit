@@ -1,4 +1,4 @@
-// Export legacy theme
+// Export legacy theme (deprecated)
 export * from './blockTheme';
 export * from './useBlockTheme';
 
@@ -6,4 +6,8 @@ export * from './useBlockTheme';
 export * from './heroTheme';
 
 // Export providers
-export * from './Providers'; 
+export * from './Providers';
+
+// Recommended: Use these imports instead
+// import { useTheme } from '@vibing-ai/block-kit';
+// import { createTheme } from '@heroui/react'; 
