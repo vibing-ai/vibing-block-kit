@@ -1,5 +1,6 @@
 import React from 'react';
-import { Card, Box, Text, Table, Tbody, Thead, Tr, Th, Td } from '@heroui/react';
+import { Card, Box, Table, Tbody, Thead, Tr, Th, Td } from '@heroui/react';
+import { Text } from '../../components/Text';
 import { BlockProps } from '../../types';
 
 export interface TableColumn {

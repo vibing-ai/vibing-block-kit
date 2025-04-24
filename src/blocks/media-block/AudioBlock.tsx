@@ -1,5 +1,6 @@
 import React from 'react';
-import { Box, Text, Card } from '@heroui/react';
+import { Box, Card } from '@heroui/react';
+import { Text } from '../../components/Text';
 import { Icon } from '@iconify/react';
 import { motion } from 'framer-motion';
 import { BlockProps } from '../../types';

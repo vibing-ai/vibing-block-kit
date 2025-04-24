@@ -1,5 +1,6 @@
 import React from 'react';
-import { Card, Box, Text } from '@heroui/react';
+import { Card, Box } from '@heroui/react';
+import { Text } from '../../components/Text';
 import { 
   ResponsiveContainer, 
   BarChart, 

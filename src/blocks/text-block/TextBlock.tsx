@@ -1,5 +1,6 @@
 import React from 'react';
 import { Text } from '@heroui/react';
+import { Text } from '../../components/Text';
 import { BlockProps } from '../../types';
 
 export interface TextBlockProps extends BlockProps {

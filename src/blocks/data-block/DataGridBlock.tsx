@@ -1,5 +1,6 @@
 import React, { useState, useMemo } from 'react';
-import { Card, Box, Input, Button, Table, Thead, Tbody, Tr, Th, Td, Select, Text } from '@heroui/react';
+import { Card, Box, Input, Button, Table, Thead, Tbody, Tr, Th, Td, Select } from '@heroui/react';
+import { Text } from '../../components/Text';
 import { Icon } from '@iconify/react';
 import { useTable, useSortBy, useGlobalFilter, usePagination } from 'react-table';
 import { BlockProps } from '../../types';

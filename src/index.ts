@@ -15,3 +15,6 @@ export * from './types';
 
 // Export main provider
 export * from './BlockKitProvider';
+
+// Export components
+export * from './components';
