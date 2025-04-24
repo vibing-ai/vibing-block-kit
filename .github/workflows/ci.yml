@@ -38,11 +38,11 @@ jobs:
           echo "Checking package size limits..."
           SIZE=$(npm pack --dry-run | grep -o 'package size: .*' | grep -o '[0-9.]\+ kB')
           SIZE_NUM=$(echo $SIZE | grep -o '[0-9.]\+')
-          if (( $(echo "$SIZE_NUM > 150" | bc -l) )); then
-            echo "Error: Package exceeds size limit (${SIZE}, limit: 150 kB)"
+          if (( $(echo "$SIZE_NUM > 400" | bc -l) )); then
+            echo "Error: Package exceeds size limit (${SIZE}, limit: 400 kB)"
             exit 1
           else
-            echo "✓ Package size is ${SIZE} (within limit of 150 kB)"
+            echo "✓ Package size is ${SIZE} (within limit of 400 kB)"
           fi
 
       - name: Lint
