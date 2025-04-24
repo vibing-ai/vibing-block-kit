@@ -1,23 +1,32 @@
 # Dependencies
-node_modules
-.pnp
+node_modules/
+.pnp/
 .pnp.js
-
-# Build output
-dist
-build
-storybook-static
-
-# Testing
-coverage
-
-# Logs
-logs
-*.log
+.yarn/
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
+.pnpm-store/
+
+# Build output
+dist/
+build/
+storybook-static/
+*.tsbuildinfo
+.cache/
+.output/
+out/
+
+# Testing
+coverage/
+.nyc_output/
+cypress/videos/
+cypress/screenshots/
+
+# Logs
+logs/
+*.log
 
 # Environment variables
 .env
@@ -29,10 +38,43 @@ pnpm-debug.log*
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
-.idea
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+.idea/
 .DS_Store
 *.suo
 *.ntvs*
 *.njsproj
 *.sln
-*.sw? 
+*.sw?
+*.sublime-workspace
+.history/
+
+# OS files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Temporary files
+*.tmp
+*.temp
+.eslintcache
+.stylelintcache
+*.bak
+*~
+*.swp
+storybook.log
+
+# Package files
+*.tar.gz
+*.tgz
+*.zip
+
+# Optional cache directories
+.npm/
+.eslintcache 
