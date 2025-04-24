@@ -1,26 +1,13 @@
-// Export Button
-export * from './Button';
-
-// Export Text Block components
+// Export all blocks
+export * from './ai-block';
+export * from './code-block';
+export * from './connector-block';
+export * from './data-block';
+export * from './embed-block';
+export * from './interactive-block';
+export * from './media-block';
 export * from './text-block';
 
-// Export Code Block components
-export * from './code-block';
-
-// Export Media Block components
-export * from './media-block';
-
-// Export Data Block components
-export * from './data-block';
-
-// Export Embed Block components
-export * from './embed-block';
-
-// Export AI Block components
-export * from './ai-block';
-
-// Export Connector Block components
-export * from './connector-block';
-
-// Export Interactive Block components
-export * from './interactive-block'; 
+// Re-export Button from components for backward compatibility
+import { Button } from '../components/Button';
+export { Button }; 
