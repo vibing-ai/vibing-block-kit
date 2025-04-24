@@ -1,6 +1,6 @@
 # Vibing Block Kit
 
-[![npm version](https://img.shields.io/npm/v/@vibing/block-kit.svg)](https://www.npmjs.com/package/@vibing/block-kit)
+[![npm version](https://img.shields.io/npm/v/@vibing-ai/block-kit.svg)](https://www.npmjs.com/package/@vibing-ai/block-kit)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](CONTRIBUTING.md)
 
@@ -19,19 +19,19 @@ Composable React + Tailwind component library for building Vibing apps, agents a
 ## Installation
 
 ```bash
-npm install @vibing/block-kit
+npm install @vibing-ai/block-kit
 ```
 
 Or using yarn:
 
 ```bash
-yarn add @vibing/block-kit
+yarn add @vibing-ai/block-kit
 ```
 
 ## Quick Start
 
 ```jsx
-import { TextBlock, AICompletionBlock, BlockKitProvider } from '@vibing/block-kit';
+import { TextBlock, AICompletionBlock, BlockKitProvider } from '@vibing-ai/block-kit';
 
 function MyApp() {
   return (
@@ -71,7 +71,7 @@ Block Kit is built on top of HeroUI components, providing a consistent design sy
 Wrap your application with the `BlockKitProvider`:
 
 ```jsx
-import { BlockKitProvider } from '@vibing/block-kit';
+import { BlockKitProvider } from '@vibing-ai/block-kit';
 
 function App() {
   return (
@@ -93,7 +93,7 @@ function App() {
 <BlockKitProvider useSystemTheme />
 
 // Custom theme
-import { createCustomTheme } from '@vibing/block-kit';
+import { createCustomTheme } from '@vibing-ai/block-kit';
 
 const customTheme = createCustomTheme({
   type: 'light',
@@ -108,7 +108,7 @@ const customTheme = createCustomTheme({
 
 ```jsx
 import { useState } from 'react';
-import { BlockKitProvider } from '@vibing/block-kit';
+import { BlockKitProvider } from '@vibing-ai/block-kit';
 
 function App() {
   const [theme, setTheme] = useState('light');

@@ -8,7 +8,7 @@ import {
   createCustomTheme,
   createBrandTheme,
   useCompatibleTheme
-} from '@vibing/block-kit';
+} from '@vibing-ai/block-kit';
 
 // Create a custom brand theme
 const brandTheme = createBrandTheme({
@@ -21,7 +21,7 @@ const brandTheme = createBrandTheme({
 
 // Sample code to display
 const themeUsageCode = `// Create a custom theme
-import { createCustomTheme } from '@vibing/block-kit';
+import { createCustomTheme } from '@vibing-ai/block-kit';
 
 const myTheme = createCustomTheme({
   type: 'light',

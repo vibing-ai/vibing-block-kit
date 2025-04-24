@@ -1,9 +1,9 @@
 import React from 'react';
-import { BlockKitProvider, blockKitLightTheme, blockKitDarkTheme } from '@vibing/block-kit';
+import { BlockKitProvider, blockKitLightTheme, blockKitDarkTheme } from '@vibing-ai/block-kit';
 import Home from './index';
 
 // Example of a custom theme
-import { createCustomTheme } from '@vibing/block-kit';
+import { createCustomTheme } from '@vibing-ai/block-kit';
 
 const customTheme = createCustomTheme({
   type: 'light',

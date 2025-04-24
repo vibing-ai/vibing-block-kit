@@ -1,6 +1,6 @@
 import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
-import { TableBlock } from '@vibing/block-kit';
+import { TableBlock } from '@vibing-ai/block-kit';
 
 const meta: Meta<typeof TableBlock> = {
   title: 'Blocks/Data/TableBlock',

@@ -1,6 +1,6 @@
 import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
-import { BoardView, TextBlock, ImageBlock, CodeBlock } from '@vibing/block-kit';
+import { BoardView, TextBlock, ImageBlock, CodeBlock } from '@vibing-ai/block-kit';
 
 const meta: Meta<typeof BoardView> = {
   title: 'Composition/Views/BoardView',

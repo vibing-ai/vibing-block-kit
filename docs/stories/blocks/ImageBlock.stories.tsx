@@ -1,6 +1,6 @@
 import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
-import { ImageBlock } from '@vibing/block-kit';
+import { ImageBlock } from '@vibing-ai/block-kit';
 
 const meta: Meta<typeof ImageBlock> = {
   title: 'Blocks/Media/ImageBlock',

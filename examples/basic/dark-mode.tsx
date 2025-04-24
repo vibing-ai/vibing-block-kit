@@ -6,7 +6,7 @@ import {
   Surface,
   Button,
   VisualBlock
-} from '@vibing/block-kit';
+} from '@vibing-ai/block-kit';
 
 export default function DarkModeExample() {
   const [isDarkMode, setIsDarkMode] = useState(false);

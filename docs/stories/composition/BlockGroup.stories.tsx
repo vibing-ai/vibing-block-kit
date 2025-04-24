@@ -1,6 +1,6 @@
 import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
-import { BlockGroup, TextBlock, ImageBlock, CodeBlock } from '@vibing/block-kit';
+import { BlockGroup, TextBlock, ImageBlock, CodeBlock } from '@vibing-ai/block-kit';
 
 const meta: Meta<typeof BlockGroup> = {
   title: 'Composition/Container/BlockGroup',
@@ -50,7 +50,7 @@ export const WithDividers: Story = {
         <CodeBlock
           id="install-example"
           language="bash"
-          code="npm install @vibing/block-kit"
+          code="npm install @vibing-ai/block-kit"
         />
         <TextBlock
           id="step-2"
@@ -60,7 +60,7 @@ export const WithDividers: Story = {
         <CodeBlock
           id="usage-example"
           language="tsx"
-          code="import { BlockContainer, TextBlock } from '@vibing/block-kit';"
+          code="import { BlockContainer, TextBlock } from '@vibing-ai/block-kit';"
         />
         <TextBlock
           id="step-3"

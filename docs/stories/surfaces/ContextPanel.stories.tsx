@@ -1,6 +1,6 @@
 import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
-import { ContextPanel, TextBlock } from '@vibing/block-kit';
+import { ContextPanel, TextBlock } from '@vibing-ai/block-kit';
 
 const meta: Meta<typeof ContextPanel> = {
   title: 'Surfaces/Context/ContextPanel',

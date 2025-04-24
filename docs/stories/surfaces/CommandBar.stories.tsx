@@ -1,6 +1,6 @@
 import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
-import { CommandBar } from '@vibing/block-kit';
+import { CommandBar } from '@vibing-ai/block-kit';
 
 const meta: Meta<typeof CommandBar> = {
   title: 'Surfaces/Command/CommandBar',

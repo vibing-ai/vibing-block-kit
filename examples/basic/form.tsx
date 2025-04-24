@@ -7,7 +7,7 @@ import {
   Button,
   ActionBlock,
   InputBlock
-} from '@vibing/block-kit';
+} from '@vibing-ai/block-kit';
 
 export default function FormExample() {
   const [formData, setFormData] = useState({

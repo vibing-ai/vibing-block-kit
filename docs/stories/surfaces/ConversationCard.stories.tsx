@@ -1,6 +1,6 @@
 import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
-import { ConversationCard } from '@vibing/block-kit';
+import { ConversationCard } from '@vibing-ai/block-kit';
 
 const meta: Meta<typeof ConversationCard> = {
   title: 'Surfaces/Conversation/ConversationCard',

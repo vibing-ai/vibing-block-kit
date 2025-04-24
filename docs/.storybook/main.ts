@@ -24,7 +24,7 @@ const config: StorybookConfig = {
     return mergeConfig(config, {
       resolve: {
         alias: {
-          '@vibing/block-kit': resolve(__dirname, '../../src'),
+          '@vibing-ai/block-kit': resolve(__dirname, '../../src'),
           '@': resolve(__dirname, '../../src'),
         },
       },

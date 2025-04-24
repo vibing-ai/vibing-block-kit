@@ -1,5 +1,5 @@
 {
-  "name": "@vibing/block-kit",
+  "name": "@vibing-ai/block-kit",
   "version": "0.1.0",
   "description": "Composable React + Tailwind component library for building Vibing apps, agents and plugins",
   "main": "dist/index.js",
@@ -64,7 +64,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/vibing-ai/vibing-block-kit.git"
+    "url": "git+https://github.com/vibing-ai/vibing-block-kit.git"
   },
   "keywords": [
     "react",

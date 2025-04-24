@@ -6,7 +6,7 @@ import {
   BlockContainer,
   Surface,
   VisualBlock
-} from '@vibing/block-kit';
+} from '@vibing-ai/block-kit';
 
 export default function BasicUsage() {
   return (

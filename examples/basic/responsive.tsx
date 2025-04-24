@@ -7,7 +7,7 @@ import {
   VisualBlock,
   Button,
   ActionBlock
-} from '@vibing/block-kit';
+} from '@vibing-ai/block-kit';
 
 export default function ResponsiveExample() {
   return (

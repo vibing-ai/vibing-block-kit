@@ -1,6 +1,6 @@
 import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
-import { FormBlock } from '@vibing/block-kit';
+import { FormBlock } from '@vibing-ai/block-kit';
 
 const meta: Meta<typeof FormBlock> = {
   title: 'Blocks/Interactive/FormBlock',

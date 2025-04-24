@@ -1,6 +1,6 @@
 import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
-import { ToolPalette } from '@vibing/block-kit';
+import { ToolPalette } from '@vibing-ai/block-kit';
 
 const meta: Meta<typeof ToolPalette> = {
   title: 'Surfaces/Tool/ToolPalette',

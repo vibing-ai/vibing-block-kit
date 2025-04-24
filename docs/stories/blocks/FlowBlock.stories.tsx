@@ -1,6 +1,6 @@
 import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
-import { FlowBlock } from '@vibing/block-kit';
+import { FlowBlock } from '@vibing-ai/block-kit';
 
 const meta: Meta<typeof FlowBlock> = {
   title: 'Blocks/Connector/FlowBlock',

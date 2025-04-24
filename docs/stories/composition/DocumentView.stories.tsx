@@ -1,6 +1,6 @@
 import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
-import { DocumentView, TextBlock, CodeBlock, ImageBlock, TableBlock } from '@vibing/block-kit';
+import { DocumentView, TextBlock, CodeBlock, ImageBlock, TableBlock } from '@vibing-ai/block-kit';
 
 const meta: Meta<typeof DocumentView> = {
   title: 'Composition/Views/DocumentView',
@@ -33,7 +33,7 @@ export const Basic: Story = {
             <CodeBlock
               id="installation-code"
               language="bash"
-              code="npm install @vibing/block-kit"
+              code="npm install @vibing-ai/block-kit"
             />
           </>
         ),
@@ -47,7 +47,7 @@ export const Basic: Story = {
               id="usage-code"
               language="jsx"
               code={`import React from 'react';
-import { BlockContainer, TextBlock } from '@vibing/block-kit';
+import { BlockContainer, TextBlock } from '@vibing-ai/block-kit';
 
 const Example = () => {
   return (

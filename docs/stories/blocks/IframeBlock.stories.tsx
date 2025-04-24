@@ -1,6 +1,6 @@
 import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
-import { IframeBlock } from '@vibing/block-kit';
+import { IframeBlock } from '@vibing-ai/block-kit';
 
 const meta: Meta<typeof IframeBlock> = {
   title: 'Blocks/Embed/IframeBlock',

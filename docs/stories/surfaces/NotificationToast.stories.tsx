@@ -1,6 +1,6 @@
 import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
-import { NotificationToast } from '@vibing/block-kit';
+import { NotificationToast } from '@vibing-ai/block-kit';
 
 const meta: Meta<typeof NotificationToast> = {
   title: 'Surfaces/Notification/NotificationToast',
