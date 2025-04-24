@@ -1,6 +1,20 @@
 # Vibing Block Kit
 
+[![npm version](https://img.shields.io/npm/v/@vibing/block-kit.svg)](https://www.npmjs.com/package/@vibing/block-kit)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](CONTRIBUTING.md)
+
 Composable React + Tailwind component library for building Vibing apps, agents and plugins. Includes fully-typed props, dark-mode tokens and a Storybook playground.
+
+## Features
+
+- 🧩 **Composable Components**: A comprehensive set of UI components designed to work seamlessly together
+- 🎨 **Theme Support**: Built-in light and dark themes with customization options
+- 📱 **Responsive Design**: Components work across desktop and mobile devices
+- 🔍 **Accessibility**: WCAG 2.1 AA compliant components
+- 🧠 **AI-Ready**: Special components designed for AI interactions
+- 📦 **Tree-Shakeable**: Only import what you need
+- 🔒 **Type-Safe**: Fully typed props for improved developer experience
 
 ## Installation
 
@@ -8,7 +22,13 @@ Composable React + Tailwind component library for building Vibing apps, agents a
 npm install @vibing/block-kit
 ```
 
-## Usage
+Or using yarn:
+
+```bash
+yarn add @vibing/block-kit
+```
+
+## Quick Start
 
 ```jsx
 import { TextBlock, AICompletionBlock, BlockKitProvider } from '@vibing/block-kit';
@@ -31,6 +51,16 @@ function MyApp() {
   );
 }
 ```
+
+## Core Components
+
+Vibing Block Kit includes a variety of components:
+
+- **Text Components**: `TextBlock`, `HeadingBlock`, `CodeBlock`
+- **Input Components**: `InputBlock`, `SelectBlock`, `CheckboxBlock`
+- **Layout Components**: `CardBlock`, `GridBlock`, `ContainerBlock`
+- **AI Components**: `AICompletionBlock`, `AIImageBlock`, `AIFormBlock`
+- **Interactive Components**: `ButtonBlock`, `ToggleBlock`, `SliderBlock`
 
 ## HeroUI Integration
 
@@ -111,8 +141,15 @@ npm run storybook
 
 # Build the library
 npm run build
+
+# Run tests
+npm test
 ```
+
+## Contributing
+
+We welcome contributions! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for details on how to submit pull requests, report issues, and suggest improvements.
 
 ## License
 
-MIT 
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details. 
