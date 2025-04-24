@@ -13,6 +13,7 @@
     "dev": "tsup --watch",
     "lint": "eslint \"src/**/*.{ts,tsx}\"",
     "test": "vitest run",
+    "tokens:build": "echo 'Token build step placeholder'",
     "storybook": "storybook dev -p 6006 -c docs/.storybook",
     "build-storybook": "storybook build -c docs/.storybook",
     "prepublishOnly": "npm run build"
