@@ -44,6 +44,15 @@ export const CanvasBlock: React.FC<CanvasBlockProps> = ({
         background: 'white',
       }}
       onClick={onSelect}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          onSelect?.();
+        }
+      }}
+      tabIndex={0}
+      role="button"
+      aria-label={`Canvas Block ${id}`}
       {...props}
     >
       <div className="block-content">

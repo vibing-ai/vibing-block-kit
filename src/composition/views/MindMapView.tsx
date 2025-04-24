@@ -56,7 +56,7 @@ export const MindMapView: React.FC<MindMapViewProps> = ({
     };
   }, []);
   
-  const renderNode = (node: MindMapNode, x: number, y: number, level: number = 0) => {
+  const renderNode = (node: MindMapNode, x: number, y: number, level = 0) => {
     const nodeWidth = 120;
     const nodeHeight = 40;
     const horizontalSpacing = 100;

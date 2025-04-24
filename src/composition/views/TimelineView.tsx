@@ -86,6 +86,15 @@ export const TimelineView: React.FC<TimelineViewProps> = ({
               <div 
                 className="mt-4 bg-white border border-gray-200 rounded-md shadow-sm p-4 w-60"
                 onClick={() => onItemClick && onItemClick(item.id)}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    onItemClick && onItemClick(item.id);
+                  }
+                }}
+                tabIndex={0}
+                role="button"
+                aria-label={`View ${item.title}`}
               >
                 <h3 className="font-medium text-gray-800 mb-2">{item.title}</h3>
                 <div className="text-sm text-gray-600">{item.content}</div>
@@ -148,6 +157,15 @@ export const TimelineView: React.FC<TimelineViewProps> = ({
               <div 
                 className="bg-white border border-gray-200 rounded-md shadow-sm p-4"
                 onClick={() => onItemClick && onItemClick(item.id)}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    onItemClick && onItemClick(item.id);
+                  }
+                }}
+                tabIndex={0}
+                role="button"
+                aria-label={`View ${item.title}`}
               >
                 <h3 className="font-medium text-gray-800 mb-2">{item.title}</h3>
                 <div className="text-sm text-gray-600">{item.content}</div>

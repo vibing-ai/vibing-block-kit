@@ -93,6 +93,17 @@ export const SlashCommand: React.FC<SlashCommandProps> = ({
                   setIsActive(false);
                   setSearchTerm('');
                 }}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    onCommandSelect(command);
+                    setIsActive(false);
+                    setSearchTerm('');
+                  }
+                }}
+                tabIndex={0}
+                role="option"
+                aria-selected={index === selectedIndex}
               >
                 {command.icon && <span className="mr-2">{command.icon}</span>}
                 <span>{command.label}</span>

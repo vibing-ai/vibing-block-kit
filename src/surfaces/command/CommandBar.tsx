@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 
 interface CommandBarProps {
   isOpen?: boolean;
@@ -28,6 +28,13 @@ export const CommandBar: React.FC<CommandBarProps> = ({
   onCommandSelect,
 }) => {
   const [searchTerm, setSearchTerm] = useState('');
+  const inputRef = useRef<HTMLInputElement>(null);
+  
+  useEffect(() => {
+    if (isOpen && inputRef.current) {
+      inputRef.current.focus();
+    }
+  }, [isOpen]);
   
   if (!isOpen) return null;
   
@@ -57,7 +64,7 @@ export const CommandBar: React.FC<CommandBarProps> = ({
             placeholder={placeholder}
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            autoFocus
+            ref={inputRef}
           />
         </div>
         
@@ -67,6 +74,15 @@ export const CommandBar: React.FC<CommandBarProps> = ({
               key={command.id}
               className="px-4 py-2 hover:bg-gray-100 cursor-pointer flex justify-between items-center"
               onClick={() => handleCommandSelect(command)}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                  e.preventDefault();
+                  handleCommandSelect(command);
+                }
+              }}
+              tabIndex={0}
+              role="button"
+              aria-label={`Execute command: ${command.label}`}
             >
               <div className="flex items-center">
                 {command.icon && <span className="mr-2">{command.icon}</span>}

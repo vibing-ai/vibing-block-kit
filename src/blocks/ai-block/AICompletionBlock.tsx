@@ -52,8 +52,11 @@ export const AICompletionBlock: React.FC<AICompletionBlockProps> = ({
       </div>
       
       <div className="response-section">
-        <label>Response</label>
-        <div className={`response-content ${isLoading ? 'is-loading' : ''}`}>
+        <label htmlFor={`response-${id}`}>Response</label>
+        <div 
+          id={`response-${id}`} 
+          className={`response-content ${isLoading ? 'is-loading' : ''}`}
+        >
           {isLoading ? (
             <div className="loading-indicator">Generating response...</div>
           ) : response ? (

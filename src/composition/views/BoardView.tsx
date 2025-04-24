@@ -99,6 +99,15 @@ export const BoardView: React.FC<BoardViewProps> = ({
       onMouseUp={handleMouseUp}
       onMouseLeave={handleMouseUp}
       onClick={handleBoardClick}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          handleBoardClick(e as unknown as React.MouseEvent);
+        }
+      }}
+      tabIndex={readOnly ? undefined : 0}
+      role={readOnly ? undefined : "button"}
+      aria-label="Board canvas"
     >
       {/* Grid lines */}
       {snapToGrid && (
@@ -124,6 +133,15 @@ export const BoardView: React.FC<BoardViewProps> = ({
             height: `${item.size.height}px`,
           }}
           onMouseDown={(e) => handleMouseDown(e, item.id)}
+          onKeyDown={readOnly ? undefined : (e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+              e.preventDefault();
+              handleMouseDown(e as unknown as React.MouseEvent, item.id);
+            }
+          }}
+          tabIndex={readOnly ? undefined : 0}
+          role={readOnly ? undefined : "button"}
+          aria-label={`Draggable item ${item.id}`}
         >
           <div className="p-2 h-full">
             {item.content}

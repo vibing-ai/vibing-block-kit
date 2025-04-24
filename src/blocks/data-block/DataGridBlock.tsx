@@ -133,10 +133,11 @@ export const DataGridBlock: React.FC<DataGridBlockProps> = ({
         <Table {...getTableProps()} width="100%" style={{ borderCollapse: 'collapse' }}>
           <Thead>
             {headerGroups.map(headerGroup => (
-              <Tr {...headerGroup.getHeaderGroupProps()}>
+              <Tr {...headerGroup.getHeaderGroupProps()} key={headerGroup.id}>
                 {headerGroup.headers.map(column => (
                   <Th 
                     {...column.getHeaderProps(column.getSortByToggleProps())}
+                    key={column.id}
                     style={{
                       width: column.width,
                       padding: 'var(--hero-spacing-2)',
@@ -175,6 +176,7 @@ export const DataGridBlock: React.FC<DataGridBlockProps> = ({
               return (
                 <Tr 
                   {...row.getRowProps()}
+                  key={row.id}
                   style={{
                     ...(striped && rowIndex % 2 === 1 ? { backgroundColor: 'var(--hero-color-muted-50)' } : {}),
                     ...(hoverable ? { ':hover': { backgroundColor: 'var(--hero-color-muted-100)' } } : {})
@@ -183,6 +185,7 @@ export const DataGridBlock: React.FC<DataGridBlockProps> = ({
                   {row.cells.map(cell => (
                     <Td 
                       {...cell.getCellProps()}
+                      key={cell.column.id}
                       style={{
                         padding: 'var(--hero-spacing-2)',
                         ...(bordered ? { border: '1px solid var(--hero-color-border)' } : {

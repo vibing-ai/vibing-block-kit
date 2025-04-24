@@ -96,7 +96,16 @@ export const BlockGroup: React.FC<BlockGroupProps> = ({
             {title && (
               <div 
                 className={`font-medium ${collapsible ? 'cursor-pointer' : ''} flex items-center`}
-                onClick={toggleCollapse}
+                onClick={collapsible ? toggleCollapse : undefined}
+                onKeyDown={collapsible ? (e) => {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    toggleCollapse();
+                  }
+                } : undefined}
+                tabIndex={collapsible ? 0 : undefined}
+                role={collapsible ? "button" : undefined}
+                aria-expanded={collapsible ? !isCollapsed : undefined}
               >
                 {collapsible && (
                   <span className="mr-1 text-xs">

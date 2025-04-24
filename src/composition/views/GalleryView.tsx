@@ -65,6 +65,15 @@ export const GalleryView: React.FC<GalleryViewProps> = ({
                 <div 
                   className="bg-white border border-gray-200 rounded-md shadow-sm overflow-hidden"
                   onClick={() => onItemClick && onItemClick(item.id)}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                      e.preventDefault();
+                      onItemClick && onItemClick(item.id);
+                    }
+                  }}
+                  tabIndex={0}
+                  role="button"
+                  aria-label={`View ${item.title || `item ${item.id}`}`}
                 >
                   <div className="p-4">
                     {item.title && (
@@ -158,6 +167,15 @@ export const GalleryView: React.FC<GalleryViewProps> = ({
             <div 
               className="bg-white border border-gray-200 rounded-md shadow-sm overflow-hidden h-full"
               onClick={() => onItemClick && onItemClick(item.id)}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                  e.preventDefault();
+                  onItemClick && onItemClick(item.id);
+                }
+              }}
+              tabIndex={0}
+              role="button"
+              aria-label={`View ${item.title || `item ${item.id}`}`}
             >
               {item.thumbnail && (
                 <div 

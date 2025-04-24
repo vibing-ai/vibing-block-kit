@@ -31,6 +31,15 @@ export const PanelSection: React.FC<PanelSectionProps> = ({
         <div 
           className="section-header"
           onClick={isCollapsible ? onToggleCollapse : undefined}
+          onKeyDown={isCollapsible ? (e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+              e.preventDefault();
+              onToggleCollapse?.();
+            }
+          } : undefined}
+          tabIndex={isCollapsible ? 0 : undefined}
+          role={isCollapsible ? "button" : undefined}
+          aria-expanded={isCollapsible ? !isCollapsed : undefined}
           style={isCollapsible ? { cursor: 'pointer' } : undefined}
         >
           <h4 className="section-title">{title}</h4>
