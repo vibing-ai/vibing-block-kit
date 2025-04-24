@@ -14,18 +14,18 @@ jobs:
         working-directory: packages/playground/docs
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0 # Required for Chromatic to track changes properly
 
       - name: Setup Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: 18
-          cache: 'yarn'
+          cache: 'npm'
           
       - name: Install dependencies
-        run: yarn install --frozen-lockfile
+        run: npm ci
         working-directory: .
         
       - name: Publish to Chromatic
