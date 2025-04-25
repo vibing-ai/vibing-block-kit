@@ -1,20 +1,41 @@
-import React from 'react';
+import * as React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 import { ToolPalette } from '@vibing-ai/block-kit';
 
-const meta: Meta<typeof ToolPalette> = {
+// Define a complete Tool interface for the story
+interface Tool {
+  id: string;
+  icon: string;
+  label: string;
+  tooltip?: string;
+}
+
+// Define a custom props interface for storybook
+interface ToolPaletteStoryProps {
+  id?: string;
+  placement?: 'left' | 'right' | 'top' | 'bottom';
+  orientation?: 'vertical' | 'horizontal';
+  tools?: Tool[];
+  toolGroups?: Array<{
+    id: string;
+    label: string;
+    tools: Tool[];
+  }>;
+  activeToolId?: string;
+  onToolSelect?: (toolId: string) => void;
+  showLabels?: boolean;
+}
+
+const meta = {
   title: 'Surfaces/Tool/ToolPalette',
   component: ToolPalette,
   tags: ['autodocs'],
-  argTypes: {
-    placement: { control: 'select', options: ['left', 'right', 'top', 'bottom'] },
-    orientation: { control: 'radio', options: ['vertical', 'horizontal'] },
-    // Add other controls as needed
-  },
-};
+  // Type argTypes as a generic Record to avoid type errors
+  argTypes: {} as Record<string, any>,
+} satisfies Meta<typeof ToolPalette>;
 
 export default meta;
-type Story = StoryObj<typeof ToolPalette>;
+type Story = StoryObj<ToolPaletteStoryProps>;
 
 export const Basic: Story = {
   args: {
@@ -28,7 +49,7 @@ export const Basic: Story = {
       { id: 'text', icon: 'type', label: 'Text', tooltip: 'Text tool' },
     ],
     activeToolId: 'select',
-    onToolSelect: (toolId) => console.log(`Selected tool: ${toolId}`),
+    onToolSelect: () => {},
   },
 };
 
@@ -66,7 +87,7 @@ export const WithGroups: Story = {
       },
     ],
     activeToolId: 'select',
-    onToolSelect: (toolId) => console.log(`Selected tool: ${toolId}`),
+    onToolSelect: () => {},
   },
 };
 
@@ -83,6 +104,6 @@ export const Horizontal: Story = {
     ],
     showLabels: true,
     activeToolId: 'home',
-    onToolSelect: (toolId) => console.log(`Selected tool: ${toolId}`),
+    onToolSelect: () => {},
   },
 }; 

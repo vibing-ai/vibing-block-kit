@@ -1,103 +1,60 @@
-import React from 'react';
+import * as React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 import { CanvasBlock } from '@vibing-ai/block-kit';
 
-const meta: Meta<typeof CanvasBlock> = {
+// Define a custom interface for story props based on the actual component props
+interface CanvasBlockStoryProps {
+  id?: string;
+  x: number;
+  y: number;
+  width?: number;
+  height?: number;
+  isSelected?: boolean;
+  isEditing?: boolean;
+  onSelect?: () => void;
+  onMove?: (x: number, y: number) => void;
+  onResize?: (width: number, height: number) => void;
+}
+
+const meta = {
   title: 'Surfaces/Canvas/CanvasBlock',
   component: CanvasBlock,
   tags: ['autodocs'],
-  argTypes: {
-    width: { control: 'text' },
-    height: { control: 'text' },
-    // Add other controls as needed
-  },
-};
+  // Type argTypes as a generic Record to avoid type errors
+  argTypes: {} as Record<string, any>,
+} satisfies Meta<typeof CanvasBlock>;
 
 export default meta;
-type Story = StoryObj<typeof CanvasBlock>;
+type Story = StoryObj<CanvasBlockStoryProps>;
 
-export const Empty: Story = {
+export const Basic: Story = {
   args: {
-    id: 'canvas-block-empty-example',
-    width: '100%',
-    height: '400px',
-    background: 'grid',
+    id: 'canvas-block-basic-example',
+    x: 50,
+    y: 50,
+    width: 200,
+    height: 100,
   },
 };
 
-export const WithElements: Story = {
+export const Selected: Story = {
   args: {
-    id: 'canvas-block-elements-example',
-    width: '100%',
-    height: '400px',
-    background: 'grid',
-    elements: [
-      {
-        id: 'rect-1',
-        type: 'rectangle',
-        x: 100,
-        y: 100,
-        width: 150,
-        height: 80,
-        fill: '#e2e8f0',
-        label: 'Rectangle',
-      },
-      {
-        id: 'circle-1',
-        type: 'circle',
-        x: 350,
-        y: 200,
-        radius: 50,
-        fill: '#cbd5e1',
-        label: 'Circle',
-      },
-      {
-        id: 'text-1',
-        type: 'text',
-        x: 250,
-        y: 300,
-        text: 'Canvas Text',
-        fontSize: 16,
-      },
-    ],
+    id: 'canvas-block-selected-example',
+    x: 100,
+    y: 100,
+    width: 250,
+    height: 150,
+    isSelected: true,
   },
 };
 
-export const Interactive: Story = {
+export const Editing: Story = {
   args: {
-    id: 'canvas-block-interactive-example',
-    width: '100%',
-    height: '400px',
-    background: 'grid',
-    elements: [
-      {
-        id: 'rect-1',
-        type: 'rectangle',
-        x: 100,
-        y: 100,
-        width: 150,
-        height: 80,
-        fill: '#e2e8f0',
-        label: 'Drag Me',
-      },
-      {
-        id: 'circle-1',
-        type: 'circle',
-        x: 350,
-        y: 200,
-        radius: 50,
-        fill: '#cbd5e1',
-        label: 'Drag Me Too',
-      },
-    ],
-    interactive: true,
-    allowPan: true,
-    allowZoom: true,
-    tools: [
-      { id: 'select', icon: 'cursor', label: 'Select' },
-      { id: 'rectangle', icon: 'square', label: 'Rectangle' },
-      { id: 'circle', icon: 'circle', label: 'Circle' },
-      { id: 'text', icon: 'type', label: 'Text' },
-    ],
+    id: 'canvas-block-editing-example',
+    x: 150,
+    y: 150,
+    width: 300,
+    height: 200,
+    isEditing: true,
   },
 }; 

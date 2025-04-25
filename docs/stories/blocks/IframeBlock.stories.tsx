@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 import { IframeBlock } from '@vibing-ai/block-kit';
 
@@ -11,7 +11,7 @@ const meta: Meta<typeof IframeBlock> = {
     title: { control: 'text' },
     width: { control: 'text' },
     height: { control: 'text' },
-    // Add other controls as needed
+    allowFullScreen: { control: 'boolean' },
   },
 };
 
@@ -28,24 +28,23 @@ export const Basic: Story = {
   },
 };
 
-export const WithBorder: Story = {
+export const WithAllowFullscreen: Story = {
   args: {
-    id: 'iframe-block-border-example',
+    id: 'iframe-block-fullscreen-example',
     src: 'https://www.example.com',
-    title: 'Example Website with Border',
+    title: 'Example Website with Fullscreen Option',
     width: '100%',
     height: '400px',
-    hasBorder: true,
+    allowFullScreen: true,
   },
 };
 
-export const Sandbox: Story = {
+export const CustomDimensions: Story = {
   args: {
-    id: 'iframe-block-sandbox-example',
+    id: 'iframe-block-dimensions-example',
     src: 'https://www.example.com',
-    title: 'Sandboxed Example',
-    width: '100%',
-    height: '400px',
-    sandbox: 'allow-scripts allow-same-origin',
+    title: 'Custom Sized Example',
+    width: '600px',
+    height: '300px',
   },
 }; 

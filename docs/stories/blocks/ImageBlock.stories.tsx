@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 import { ImageBlock } from '@vibing-ai/block-kit';
 
@@ -9,7 +9,11 @@ const meta: Meta<typeof ImageBlock> = {
   argTypes: {
     src: { control: 'text' },
     alt: { control: 'text' },
-    // Add other controls as needed
+    caption: { control: 'text' },
+    width: { control: 'text' },
+    height: { control: 'text' },
+    rounded: { control: 'boolean' },
+    loading: { control: 'radio', options: ['eager', 'lazy'] },
   },
 };
 
@@ -33,11 +37,11 @@ export const WithCaption: Story = {
   },
 };
 
-export const WithBorder: Story = {
+export const Rounded: Story = {
   args: {
-    id: 'image-block-border-example',
+    id: 'image-block-rounded-example',
     src: 'https://placehold.co/600x400',
-    alt: 'Example image with border',
-    hasBorder: true,
+    alt: 'Example image with rounded corners',
+    rounded: true,
   },
 }; 

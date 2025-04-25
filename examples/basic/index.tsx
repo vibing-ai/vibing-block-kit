@@ -1,13 +1,21 @@
 "use client";
 
-import { Button, ChatContainer } from "@block-kit/core";
+import { Button, BlockContainer, TextBlock, Surface, BlockKitProvider } from "@vibing-ai/block-kit";
 import { useState } from "react";
 
+// Define message type to accommodate all role types
+type Message = {
+  id: string;
+  role: "system" | "user" | "assistant";
+  content: string;
+  timestamp: Date;
+};
+
 export default function Home() {
-  const [messages, setMessages] = useState([
+  const [messages, setMessages] = useState<Message[]>([
     {
       id: "1",
-      role: "system" as const,
+      role: "system",
       content: "Hello! I'm the Block Kit assistant. How can I help you today?",
       timestamp: new Date(),
     },
@@ -19,9 +27,9 @@ export default function Home() {
     if (!message.trim()) return;
     
     // Add user message
-    const userMessage = {
+    const userMessage: Message = {
       id: Date.now().toString(),
-      role: "user" as const,
+      role: "user",
       content: message,
       timestamp: new Date(),
     };
@@ -31,9 +39,9 @@ export default function Home() {
     
     // Simulate assistant response
     setTimeout(() => {
-      const assistantMessage = {
+      const assistantMessage: Message = {
         id: (Date.now() + 1).toString(),
-        role: "assistant" as const,
+        role: "assistant",
         content: `I received your message: "${message}". This is a demo of the Block Kit components.`,
         timestamp: new Date(),
       };
@@ -44,24 +52,59 @@ export default function Home() {
   };
   
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <div className="z-10 w-full max-w-5xl items-center justify-between font-mono text-sm flex">
-        <p className="fixed left-0 top-0 flex w-full justify-center border-b bg-gradient-to-b pb-6 pt-8 backdrop-blur-2xl">
-          Block Kit Demo
-        </p>
-        <div className="fixed bottom-0 left-0 flex h-48 w-full items-end justify-center bg-gradient-to-t from-white via-white dark:from-black dark:via-black">
-          <Button variant="primary">HeroUI Button</Button>
-        </div>
-      </div>
-
-      <div className="w-full max-w-md">
-        <ChatContainer 
-          messages={messages}
-          onSendMessage={handleSendMessage}
-          isLoading={isLoading}
-          placeholder="Ask me something..."
-        />
-      </div>
-    </main>
+    <BlockKitProvider>
+      <Surface className="min-h-screen">
+        <BlockContainer id="main-container" className="p-6">
+          <TextBlock
+            id="title"
+            heading="Block Kit Demo"
+            content="Example chat interface with Block Kit components"
+          />
+          
+          {messages.map((msg) => (
+            <BlockContainer 
+              key={msg.id}
+              id={`message-${msg.id}`}
+              className={`my-2 p-3 rounded-lg ${
+                msg.role === "user" ? "bg-primary text-primary-foreground ml-12" : 
+                msg.role === "assistant" ? "bg-card border mr-12" : "bg-muted"
+              }`}
+            >
+              <TextBlock 
+                id={`text-${msg.id}`}
+                content={msg.content}
+              />
+            </BlockContainer>
+          ))}
+          
+          <BlockContainer id="input-container" className="mt-4 flex gap-2">
+            <input
+              type="text"
+              className="flex-1 p-2 border rounded-md"
+              placeholder={isLoading ? "Thinking..." : "Ask me something..."}
+              onKeyPress={(e) => {
+                if (e.key === 'Enter') {
+                  handleSendMessage(e.currentTarget.value);
+                  e.currentTarget.value = '';
+                }
+              }}
+              disabled={isLoading}
+            />
+            <Button 
+              onClick={() => {
+                const input = document.querySelector('input');
+                if (input) {
+                  handleSendMessage(input.value);
+                  input.value = '';
+                }
+              }}
+              disabled={isLoading}
+            >
+              Send
+            </Button>
+          </BlockContainer>
+        </BlockContainer>
+      </Surface>
+    </BlockKitProvider>
   );
 } 

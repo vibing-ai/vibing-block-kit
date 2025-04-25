@@ -1,31 +1,45 @@
-import React from 'react';
+import * as React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 import { Widget, TextBlock, CodeBlock } from '@vibing-ai/block-kit';
 
-const meta: Meta<typeof Widget> = {
+// Create a more complete props interface for storybook
+interface WidgetStoryProps {
+  id: string;
+  title: string;
+  children: React.ReactNode;
+  collapsible?: boolean;
+  defaultCollapsed?: boolean;
+  actions?: Array<{
+    id: string;
+    icon: string;
+    tooltip: string;
+    onClick: () => void;
+  }>;
+  statusIndicator?: {
+    status: 'success' | 'warning' | 'error' | 'info';
+    label: string;
+  };
+}
+
+const meta = {
   title: 'Surfaces/Widget/Widget',
   component: Widget,
   tags: ['autodocs'],
-  argTypes: {
-    title: { control: 'text' },
-    collapsible: { control: 'boolean' },
-    // Add other controls as needed
-  },
-};
+  // Type argTypes as a generic Record to avoid type errors
+  argTypes: {} as Record<string, any>,
+} satisfies Meta<typeof Widget>;
 
 export default meta;
-type Story = StoryObj<typeof Widget>;
+type Story = StoryObj<WidgetStoryProps>;
 
 export const Basic: Story = {
   args: {
     id: 'widget-example',
     title: 'Information Widget',
-    children: (
-      <TextBlock 
-        id="widget-text" 
-        content="This is a basic widget that can contain any Block Kit component. Widgets are useful for organizing content in a dashboard or sidebar."
-      />
-    ),
+    children: React.createElement(TextBlock, {
+      id: "widget-text",
+      content: "This is a basic widget that can contain any Block Kit component. Widgets are useful for organizing content in a dashboard or sidebar."
+    }),
   },
 };
 
@@ -34,18 +48,16 @@ export const WithActions: Story = {
     id: 'widget-actions-example',
     title: 'Quick Actions',
     actions: [
-      { id: 'refresh', icon: 'refresh', tooltip: 'Refresh', onClick: () => console.log('Refresh clicked') },
-      { id: 'settings', icon: 'settings', tooltip: 'Settings', onClick: () => console.log('Settings clicked') },
+      { id: 'refresh', icon: 'refresh', tooltip: 'Refresh', onClick: () => {} },
+      { id: 'settings', icon: 'settings', tooltip: 'Settings', onClick: () => {} },
     ],
-    children: (
-      <div style={{ padding: '12px' }}>
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px' }}>
-          <button style={{ padding: '8px', background: '#f1f5f9', borderRadius: '4px', border: 'none' }}>New Project</button>
-          <button style={{ padding: '8px', background: '#f1f5f9', borderRadius: '4px', border: 'none' }}>Import Data</button>
-          <button style={{ padding: '8px', background: '#f1f5f9', borderRadius: '4px', border: 'none' }}>Export Report</button>
-          <button style={{ padding: '8px', background: '#f1f5f9', borderRadius: '4px', border: 'none' }}>Share Link</button>
-        </div>
-      </div>
+    children: React.createElement('div', { style: { padding: '12px' } },
+      React.createElement('div', { style: { display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px' } },
+        React.createElement('button', { style: { padding: '8px', background: '#f1f5f9', borderRadius: '4px', border: 'none' } }, 'New Project'),
+        React.createElement('button', { style: { padding: '8px', background: '#f1f5f9', borderRadius: '4px', border: 'none' } }, 'Import Data'),
+        React.createElement('button', { style: { padding: '8px', background: '#f1f5f9', borderRadius: '4px', border: 'none' } }, 'Export Report'),
+        React.createElement('button', { style: { padding: '8px', background: '#f1f5f9', borderRadius: '4px', border: 'none' } }, 'Share Link')
+      )
     ),
   },
 };
@@ -56,11 +68,10 @@ export const Collapsible: Story = {
     title: 'Code Snippet',
     collapsible: true,
     defaultCollapsed: false,
-    children: (
-      <CodeBlock 
-        id="widget-code"
-        language="javascript"
-        code={`function calculateTotal(items) {
+    children: React.createElement(CodeBlock, {
+      id: "widget-code",
+      language: "javascript",
+      code: `function calculateTotal(items) {
   return items.reduce((sum, item) => {
     return sum + item.price * item.quantity;
   }, 0);
@@ -73,9 +84,9 @@ const items = [
 ];
 
 const total = calculateTotal(items);
-console.log(\`Total: \$\${total}\`); // Output: Total: $50`}
-      />
-    ),
+// Format and return the total
+return \`Total: \$\${total}\`; // Outputs: Total: $50`
+    }),
   },
 };
 
@@ -87,27 +98,25 @@ export const WithStatus: Story = {
       status: 'success',
       label: 'Operational',
     },
-    children: (
-      <div style={{ padding: '12px' }}>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-            <span>API Service</span>
-            <span style={{ color: '#10b981' }}>Online</span>
-          </div>
-          <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-            <span>Database</span>
-            <span style={{ color: '#10b981' }}>Online</span>
-          </div>
-          <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-            <span>Storage</span>
-            <span style={{ color: '#10b981' }}>Online</span>
-          </div>
-          <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-            <span>Authentication</span>
-            <span style={{ color: '#10b981' }}>Online</span>
-          </div>
-        </div>
-      </div>
+    children: React.createElement('div', { style: { padding: '12px' } },
+      React.createElement('div', { style: { display: 'flex', flexDirection: 'column', gap: '8px' } },
+        React.createElement('div', { style: { display: 'flex', justifyContent: 'space-between' } },
+          React.createElement('span', null, 'API Service'),
+          React.createElement('span', { style: { color: '#10b981' } }, 'Online')
+        ),
+        React.createElement('div', { style: { display: 'flex', justifyContent: 'space-between' } },
+          React.createElement('span', null, 'Database'),
+          React.createElement('span', { style: { color: '#10b981' } }, 'Online')
+        ),
+        React.createElement('div', { style: { display: 'flex', justifyContent: 'space-between' } },
+          React.createElement('span', null, 'Storage'),
+          React.createElement('span', { style: { color: '#10b981' } }, 'Online')
+        ),
+        React.createElement('div', { style: { display: 'flex', justifyContent: 'space-between' } },
+          React.createElement('span', null, 'Authentication'),
+          React.createElement('span', { style: { color: '#10b981' } }, 'Online')
+        )
+      )
     ),
   },
 }; 

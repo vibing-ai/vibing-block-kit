@@ -98,20 +98,26 @@ export default function ResponsiveExample() {
           </div>
           
           {/* Responsive Call to Action */}
-          <ActionBlock
+          <BlockContainer
             id="cta"
             className="w-full p-6 bg-muted rounded-lg text-center"
-            heading="Ready to build responsive interfaces?"
-            content="Get started with Block Kit and create beautiful, responsive UIs for your applications."
-            actions={
+            spacing="md"
+          >
+            <TextBlock
+              id="cta-text"
+              heading="Ready to build responsive interfaces?"
+              content="Get started with Block Kit and create beautiful, responsive UIs for your applications."
+              headingClassName="text-xl md:text-2xl font-bold"
+              contentClassName="max-w-2xl mx-auto"
+            />
+            
+            <ActionBlock id="cta-actions">
               <div className="flex flex-col sm:flex-row justify-center gap-3">
                 <Button size="lg" className="w-full sm:w-auto">Get Started</Button>
                 <Button variant="outline" size="lg" className="w-full sm:w-auto">View Documentation</Button>
               </div>
-            }
-            headingClassName="text-xl md:text-2xl font-bold"
-            contentClassName="max-w-2xl mx-auto"
-          />
+            </ActionBlock>
+          </BlockContainer>
         </BlockContainer>
       </Surface>
     </BlockKitProvider>

@@ -1,20 +1,34 @@
-import React from 'react';
+import * as React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 import { ContextPanel, TextBlock } from '@vibing-ai/block-kit';
 
-const meta: Meta<typeof ContextPanel> = {
+// Define a custom interface for the story props
+interface ContextPanelStoryProps {
+  id?: string;
+  title?: string;
+  placement?: 'left' | 'right';
+  width?: string;
+  children?: React.ReactNode;
+  sections?: Array<{
+    id: string;
+    title: string;
+    content: string;
+    isCollapsible?: boolean;
+    defaultCollapsed?: boolean;
+  }>;
+  isCollapsible?: boolean;
+}
+
+const meta = {
   title: 'Surfaces/Context/ContextPanel',
   component: ContextPanel,
   tags: ['autodocs'],
-  argTypes: {
-    title: { control: 'text' },
-    placement: { control: 'select', options: ['left', 'right'] },
-    // Add other controls as needed
-  },
-};
+  // Type argTypes as a generic Record to avoid type errors
+  argTypes: {} as Record<string, any>,
+} satisfies Meta<typeof ContextPanel>;
 
 export default meta;
-type Story = StoryObj<typeof ContextPanel>;
+type Story = StoryObj<ContextPanelStoryProps>;
 
 export const Basic: Story = {
   args: {
@@ -22,12 +36,10 @@ export const Basic: Story = {
     title: 'Documentation',
     placement: 'right',
     width: '300px',
-    children: (
-      <TextBlock 
-        id="context-text" 
-        content="This is contextual information that provides additional details about the current task or topic. It can include references, documentation, or related content."
-      />
-    ),
+    children: React.createElement(TextBlock, {
+      id: "context-text",
+      content: "This is contextual information that provides additional details about the current task or topic. It can include references, documentation, or related content."
+    }),
   },
 };
 

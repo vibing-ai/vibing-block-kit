@@ -1,5 +1,5 @@
 import React from 'react';
-import { Card, ScrollArea } from '@heroui/react';
+import { Card } from '@heroui/react';
 import { motion } from 'framer-motion';
 import { Icon } from '@iconify/react';
 import { BlockProps } from '../../types';
@@ -133,9 +133,10 @@ export const CodeBlock: React.FC<CodeBlockProps> = ({
           </div>
         </div>
         
-        <ScrollArea 
+        <div 
           style={{ 
             maxHeight: typeof maxHeight === 'number' ? `${maxHeight}px` : maxHeight,
+            overflow: 'auto'
           }}
         >
           <pre style={{ 
@@ -151,7 +152,7 @@ export const CodeBlock: React.FC<CodeBlockProps> = ({
               {showLineNumbers ? formatCodeWithLineNumbers() : code}
             </code>
           </pre>
-        </ScrollArea>
+        </div>
       </div>
     </Card>
   );

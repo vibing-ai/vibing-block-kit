@@ -1,21 +1,32 @@
-import React from 'react';
+import * as React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 import { NotificationToast } from '@vibing-ai/block-kit';
 
-const meta: Meta<typeof NotificationToast> = {
+// Define interface for the story props
+interface NotificationToastStoryProps {
+  id?: string;
+  title?: string;
+  message?: string;
+  type?: 'info' | 'success' | 'warning' | 'error';
+  isVisible?: boolean;
+  duration?: number;
+  onClose?: () => void;
+  action?: {
+    label: string;
+    onClick: () => void;
+  };
+}
+
+const meta = {
   title: 'Surfaces/Notification/NotificationToast',
   component: NotificationToast,
   tags: ['autodocs'],
-  argTypes: {
-    title: { control: 'text' },
-    message: { control: 'text' },
-    type: { control: 'select', options: ['info', 'success', 'warning', 'error'] },
-    // Add other controls as needed
-  },
-};
+  // Type argTypes as a generic Record to avoid type errors
+  argTypes: {} as Record<string, any>,
+} satisfies Meta<typeof NotificationToast>;
 
 export default meta;
-type Story = StoryObj<typeof NotificationToast>;
+type Story = StoryObj<NotificationToastStoryProps>;
 
 export const Info: Story = {
   args: {
@@ -25,7 +36,7 @@ export const Info: Story = {
     type: 'info',
     isVisible: true,
     duration: 5000,
-    onClose: () => console.log('Notification closed'),
+    onClose: () => {},
   },
 };
 
@@ -37,7 +48,7 @@ export const Success: Story = {
     type: 'success',
     isVisible: true,
     duration: 5000,
-    onClose: () => console.log('Notification closed'),
+    onClose: () => {},
   },
 };
 
@@ -49,7 +60,7 @@ export const Warning: Story = {
     type: 'warning',
     isVisible: true,
     duration: 5000,
-    onClose: () => console.log('Notification closed'),
+    onClose: () => {},
   },
 };
 
@@ -61,7 +72,7 @@ export const Error: Story = {
     type: 'error',
     isVisible: true,
     duration: 5000,
-    onClose: () => console.log('Notification closed'),
+    onClose: () => {},
   },
 };
 
@@ -75,8 +86,8 @@ export const WithAction: Story = {
     duration: 8000,
     action: {
       label: 'View File',
-      onClick: () => console.log('Action clicked'),
+      onClick: () => {},
     },
-    onClose: () => console.log('Notification closed'),
+    onClose: () => {},
   },
 }; 

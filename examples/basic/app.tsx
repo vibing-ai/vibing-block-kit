@@ -1,10 +1,8 @@
-import React from 'react';
-import { BlockKitProvider, blockKitLightTheme, blockKitDarkTheme } from '@vibing-ai/block-kit';
+import React, { useState } from 'react';
+import { BlockKitProvider, createCustomTheme } from '@vibing-ai/block-kit';
 import Home from './index';
 
 // Example of a custom theme
-import { createCustomTheme } from '@vibing-ai/block-kit';
-
 const customTheme = createCustomTheme({
   type: 'light',
   // Example of customizing the primary color
@@ -15,28 +13,45 @@ const customTheme = createCustomTheme({
 
 export default function App() {
   // You can use state to manage theme changes in your app
-  const [theme, setTheme] = React.useState('light');
+  const [themeMode, setThemeMode] = useState<'light' | 'dark' | 'custom' | 'system'>('light');
   
   // Handle theme toggling
   const toggleTheme = () => {
-    setTheme(prev => prev === 'light' ? 'dark' : 'light');
+    setThemeMode(prev => {
+      if (prev === 'light') return 'dark';
+      if (prev === 'dark') return 'custom';
+      if (prev === 'custom') return 'system';
+      return 'light';
+    });
   };
   
+  // Determine which theme configuration to use
+  const getThemeConfig = () => {
+    switch (themeMode) {
+      case 'light':
+      case 'dark':
+        return { theme: themeMode, useSystemTheme: false };
+      case 'custom':
+        return { theme: customTheme, useSystemTheme: false };
+      case 'system':
+        return { useSystemTheme: true };
+    }
+  };
+
+  const themeConfig = getThemeConfig();
+  
   return (
-    // Option 1: Use basic light/dark theme
-    <BlockKitProvider theme={theme as 'light' | 'dark'}>
+    <BlockKitProvider 
+      theme={themeConfig.theme} 
+      useSystemTheme={themeConfig.useSystemTheme}
+    >
       <Home />
-      <button onClick={toggleTheme}>Toggle Theme</button>
+      <button 
+        onClick={toggleTheme}
+        className="fixed bottom-4 right-4 px-4 py-2 bg-primary text-primary-foreground rounded-md"
+      >
+        Current: {themeMode} (Click to change)
+      </button>
     </BlockKitProvider>
-    
-    // Option 2: Use system theme preference
-    // <BlockKitProvider useSystemTheme>
-    //   <Home />
-    // </BlockKitProvider>
-    
-    // Option 3: Use custom theme
-    // <BlockKitProvider theme={customTheme}>
-    //   <Home />
-    // </BlockKitProvider>
   );
 } 

@@ -1,20 +1,49 @@
-import React from 'react';
+import * as React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 import { CommandBar } from '@vibing-ai/block-kit';
 
-const meta: Meta<typeof CommandBar> = {
+// Define interfaces for commands
+interface Command {
+  id: string;
+  label: string;
+  icon?: string;
+  description?: string;
+  keywords?: string[];
+}
+
+// Define interface for the story props
+interface CommandBarStoryProps {
+  id?: string;
+  placeholder?: string;
+  isOpen?: boolean;
+  commands?: Command[];
+  commandGroups?: Array<{
+    id: string;
+    label: string;
+    commands: Command[];
+  }>;
+  showSearch?: boolean;
+  onSearch?: (query: string) => void;
+  searchResults?: Array<{
+    id: string;
+    label: string;
+    icon?: string;
+    description?: string;
+    matchedTerms?: string[];
+  }>;
+  onSelect?: (item: any) => void;
+}
+
+const meta = {
   title: 'Surfaces/Command/CommandBar',
   component: CommandBar,
   tags: ['autodocs'],
-  argTypes: {
-    placeholder: { control: 'text' },
-    isOpen: { control: 'boolean' },
-    // Add other controls as needed
-  },
-};
+  // Type argTypes as a generic Record to avoid type errors
+  argTypes: {} as Record<string, any>,
+} satisfies Meta<typeof CommandBar>;
 
 export default meta;
-type Story = StoryObj<typeof CommandBar>;
+type Story = StoryObj<CommandBarStoryProps>;
 
 export const Basic: Story = {
   args: {
@@ -51,7 +80,7 @@ export const Basic: Story = {
         keywords: ['export', 'download'],
       },
     ],
-    onSelect: (command) => console.log(`Selected command: ${command.id}`),
+    onSelect: () => {},
   },
 };
 
@@ -104,7 +133,7 @@ export const WithGroups: Story = {
         ],
       },
     ],
-    onSelect: (command) => console.log(`Selected command: ${command.id}`),
+    onSelect: () => {},
   },
 };
 
@@ -114,7 +143,7 @@ export const WithSearch: Story = {
     placeholder: 'Search documents...',
     isOpen: true,
     showSearch: true,
-    onSearch: (query) => console.log(`Search query: ${query}`),
+    onSearch: () => {},
     searchResults: [
       {
         id: 'doc-1',
@@ -138,6 +167,6 @@ export const WithSearch: Story = {
         matchedTerms: ['style', 'customize', 'appearance'],
       },
     ],
-    onSelect: (result) => console.log(`Selected result: ${result.id}`),
+    onSelect: () => {},
   },
 }; 

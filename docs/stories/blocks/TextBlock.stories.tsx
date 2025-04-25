@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 import { TextBlock } from '@vibing-ai/block-kit';
 
@@ -8,7 +8,18 @@ const meta: Meta<typeof TextBlock> = {
   tags: ['autodocs'],
   argTypes: {
     content: { control: 'text' },
-    // Add other controls as needed
+    variant: { 
+      control: 'select', 
+      options: ['paragraph', 'heading', 'subheading', 'caption']
+    },
+    weight: {
+      control: 'select',
+      options: ['normal', 'medium', 'semibold', 'bold']
+    },
+    size: {
+      control: 'select',
+      options: ['xs', 'sm', 'md', 'lg', 'xl', '2xl', '3xl', '4xl']
+    }
   },
 };
 
@@ -26,7 +37,8 @@ export const Formatted: Story = {
   args: {
     id: 'formatted-text-block-example',
     content: 'This text has **bold** and *italic* formatting',
-    allowFormatting: true,
+    variant: 'paragraph',
+    weight: 'medium',
   },
 };
 
@@ -34,6 +46,7 @@ export const WithHeading: Story = {
   args: {
     id: 'heading-text-block-example',
     content: 'Text block with a heading',
-    heading: 'Section Title',
+    variant: 'heading',
+    size: '2xl',
   },
 }; 

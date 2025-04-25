@@ -1,20 +1,70 @@
-import React from 'react';
+import * as React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 import { FormBuilder } from '@vibing-ai/block-kit';
 
-const meta: Meta<typeof FormBuilder> = {
+// Define a custom interface for the story props
+interface FormBuilderStoryProps {
+  id?: string;
+  schema?: {
+    title?: string;
+    description?: string;
+    fields?: Array<{
+      id: string;
+      label: string;
+      type: string;
+      placeholder?: string;
+      required?: boolean;
+      validation?: {
+        minLength?: number;
+        maxLength?: number;
+        message?: string;
+      };
+      min?: number;
+      step?: number;
+      options?: Array<{
+        value: string;
+        label: string;
+      }>;
+      defaultValue?: any;
+      rows?: number;
+      itemTemplate?: {
+        type: string;
+        placeholder?: string;
+      };
+      addButtonLabel?: string;
+      minItems?: number;
+      maxItems?: number;
+    }>;
+    sections?: Array<{
+      title?: string;
+      fields: Array<{
+        id: string;
+        label: string;
+        type: string;
+        placeholder?: string;
+        required?: boolean;
+        options?: Array<{
+          value: string;
+          label: string;
+        }>;
+        defaultValue?: any;
+      }>;
+    }>;
+  };
+  submitLabel?: string;
+  resetLabel?: string;
+}
+
+const meta = {
   title: 'Surfaces/Form/FormBuilder',
   component: FormBuilder,
   tags: ['autodocs'],
-  argTypes: {
-    schema: { control: 'object' },
-    onSubmit: { action: 'submitted' },
-    // Add other controls as needed
-  },
-};
+  // Type argTypes as a generic Record to avoid type errors
+  argTypes: {} as Record<string, any>,
+} satisfies Meta<typeof FormBuilder>;
 
 export default meta;
-type Story = StoryObj<typeof FormBuilder>;
+type Story = StoryObj<FormBuilderStoryProps>;
 
 export const Basic: Story = {
   args: {
