@@ -58,7 +58,7 @@ export default function FormExample() {
   return (
     <BlockKitProvider>
       <Surface className="min-h-screen p-4">
-        <BlockContainer className="max-w-2xl mx-auto py-8" spacing="xl">
+        <BlockContainer id="form-container" className="max-w-2xl mx-auto py-8" spacing="xl">
           <TextBlock
             id="form-title"
             heading="Contact Form Example"

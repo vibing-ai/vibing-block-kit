@@ -5,18 +5,14 @@ import {
   TextBlock, 
   BlockContainer, 
   CodeBlock,
-  createCustomTheme,
-  createBrandTheme,
-  useCompatibleTheme
+  createCustomTheme
 } from '@vibing-ai/block-kit';
 
 // Create a custom brand theme
-const brandTheme = createBrandTheme({
-  name: 'acme-corp',
+const brandTheme = createCustomTheme({
   type: 'light',
-  primaryColor: '#6366f1', // indigo
-  secondaryColor: '#ec4899', // pink
-  accentColor: '#f59e0b' // amber
+  primary: '#6366f1', // indigo
+  secondary: '#ec4899' // pink
 });
 
 // Sample code to display
@@ -42,16 +38,22 @@ export default function ThemeExample() {
   
   // Demo component that uses the theme
   const ThemeDemo = () => {
-    const { heroTheme, isDarkMode } = useCompatibleTheme();
+    // Access theme from context or props instead
+    const isDarkMode = currentTheme === 'dark';
+    const theme = {
+      type: currentTheme === 'brand' ? 'light' : currentTheme,
+      primary: currentTheme === 'brand' ? brandTheme.primary : undefined,
+      secondary: currentTheme === 'brand' ? brandTheme.secondary : undefined
+    };
     
     return (
       <div className="p-4 rounded-lg border bg-card shadow-sm">
         <h3 className="text-lg font-medium mb-2">Current Theme Details</h3>
         <pre className="p-3 bg-muted rounded text-sm overflow-auto">
           {JSON.stringify({ 
-            type: heroTheme.type,
+            type: theme.type,
             isDarkMode,
-            primary: heroTheme.colors?.primary,
+            primary: theme.primary,
           }, null, 2)}
         </pre>
       </div>
@@ -80,8 +82,12 @@ export default function ThemeExample() {
         <BlockContainer id="theme-example" spacing="lg">
           <TextBlock 
             id="title"
-            heading="HeroUI Theme Integration"
-            content="This example demonstrates how to use the HeroUI theming system with Block Kit."
+            content="Block Kit Theme Integration"
+            variant="heading"
+          />
+          <TextBlock
+            id="subtitle"
+            content="This example demonstrates how to use the theming system with Block Kit."
           />
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -89,7 +95,11 @@ export default function ThemeExample() {
               <BlockContainer id="theme-controls" spacing="md" className="p-4 bg-card rounded-lg border shadow-sm">
                 <TextBlock
                   id="controls-title"
-                  heading="Theme Controls"
+                  content="Theme Controls"
+                  variant="subheading"
+                />
+                <TextBlock
+                  id="controls-description"
                   content="Try different theme options:"
                 />
                 
@@ -145,8 +155,12 @@ export default function ThemeExample() {
               <BlockContainer id="theme-docs" spacing="md" className="p-4 bg-card rounded-lg border shadow-sm">
                 <TextBlock
                   id="docs-title"
-                  heading="Theme Documentation"
-                  content="HeroUI provides a flexible theming system that integrates with Block Kit. Here's how to create and use custom themes:"
+                  content="Theme Documentation"
+                  variant="subheading"
+                />
+                <TextBlock
+                  id="docs-description"
+                  content="Block Kit provides a flexible theming system. Here's how to create and use custom themes:"
                 />
                 
                 <CodeBlock
@@ -161,7 +175,11 @@ export default function ThemeExample() {
           <BlockContainer id="components-demo" spacing="md" className="p-4 bg-card rounded-lg border shadow-sm">
             <TextBlock
               id="components-title"
-              heading="Themed Components"
+              content="Themed Components"
+              variant="subheading"
+            />
+            <TextBlock
+              id="components-description"
               content="All Block Kit components automatically use the current theme:"
             />
             

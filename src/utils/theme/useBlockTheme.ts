@@ -1,21 +1,20 @@
 import { useContext } from 'react';
 import { useTheme as useHeroTheme } from '@heroui/react';
 import { BlockTheme, lightTheme, darkTheme } from './blockTheme';
-import { useTheme } from '../../BlockKitProvider';
 
 /**
- * @deprecated Use useTheme from BlockKitProvider instead
+ * @deprecated Use useTheme from '@vibing-ai/block-kit' instead
  */
 export function useBlockTheme(): BlockTheme {
-  const heroTheme = useTheme();
+  const heroTheme = useHeroTheme();
   return heroTheme.type === 'dark' ? darkTheme : lightTheme;
 }
 
 /**
- * @deprecated Use useTheme from BlockKitProvider instead
+ * @deprecated Use useTheme from '@vibing-ai/block-kit' instead
  */
 export function useCompatibleTheme() {
-  const heroTheme = useTheme();
+  const heroTheme = useHeroTheme();
   const blockTheme = heroTheme.type === 'dark' ? darkTheme : lightTheme;
   const isDarkMode = heroTheme.type === 'dark';
   
@@ -42,10 +41,10 @@ export interface UseThemeDetectorOptions {
 }
 
 /**
- * @deprecated Use useTheme from BlockKitProvider instead
+ * @deprecated Use useTheme from '@vibing-ai/block-kit' instead
  */
 export function useThemeDetector(options: UseThemeDetectorOptions = {}) {
-  const { type } = useTheme();
+  const { type } = useHeroTheme();
   const isDarkMode = type === 'dark';
   const theme = isDarkMode ? darkTheme : lightTheme;
   
@@ -53,7 +52,7 @@ export function useThemeDetector(options: UseThemeDetectorOptions = {}) {
 }
 
 /**
- * @deprecated Use HeroUI theme customization instead
+ * @deprecated Use createTheme from '@heroui/react' instead
  */
 export function useCustomBlockTheme(
   baseTheme: 'light' | 'dark' | BlockTheme,
