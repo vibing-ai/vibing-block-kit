@@ -4,7 +4,20 @@ Thank you for considering contributing to Vibing Block Kit! This document outlin
 
 ## Code of Conduct
 
-By participating in this project, you agree to abide by our [Code of Conduct](CODE_OF_CONDUCT.md). Please read it before contributing.
+We are committed to providing a friendly, safe, and welcoming environment for all contributors. We expect everyone participating in the Vibing Block Kit project to be respectful and considerate of others. 
+
+Key principles:
+- Be kind and courteous to others
+- Be respectful of differing opinions and experiences
+- Gracefully accept constructive criticism
+- Focus on what's best for the community
+- Show empathy toward community members
+
+Unacceptable behavior includes:
+- The use of offensive language or imagery
+- Harassment of any kind
+- Publishing others' private information without permission
+- Any conduct that could reasonably be considered inappropriate in a professional setting
 
 ## Getting Started
 

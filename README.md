@@ -128,7 +128,7 @@ function App() {
 
 ## Documentation
 
-For full documentation, visit the [Storybook](https://vibing.github.io/vibing-block-kit).
+For full documentation, visit the [Storybook](https://vibing-ai.github.io/vibing-block-kit/).
 
 ## Development
 
