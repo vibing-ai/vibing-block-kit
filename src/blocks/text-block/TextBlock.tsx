@@ -9,6 +9,8 @@ export interface TextBlockProps extends BlockProps {
   size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl' | '2xl' | '3xl' | '4xl';
 }
 
+type HTMLTag = 'p' | 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'span' | 'div';
+
 export const TextBlock: React.FC<TextBlockProps> = ({
   id,
   content,
@@ -24,11 +26,11 @@ export const TextBlock: React.FC<TextBlockProps> = ({
     heading: 'h2',
     subheading: 'h3',
     caption: 'span'
-  };
+  } as const;
 
   return (
     <Text 
-      as={variantMap[variant]}
+      as={variantMap[variant] as keyof JSX.IntrinsicElements}
       size={size}
       weight={weight}
       className={className}

@@ -1,5 +1,4 @@
 import React from 'react';
-import { Box } from '@heroui/react';
 import { Text } from '../../components/Text';
 import { motion } from 'framer-motion';
 import { BlockProps } from '../../types';
@@ -28,7 +27,7 @@ export const ImageBlock: React.FC<ImageBlockProps> = ({
   ...props
 }) => {
   return (
-    <Box 
+    <div 
       className={className}
       data-block-id={id}
       {...props}
@@ -39,13 +38,12 @@ export const ImageBlock: React.FC<ImageBlockProps> = ({
         transition={{ duration: 0.5 }}
         style={{ margin: 0 }}
       >
-        <Box 
-          as="img"
+        <img
           src={src} 
           alt={alt || ''} 
           width={width || '100%'}
           height={height}
-          borderRadius={rounded ? 'md' : undefined}
+          className={rounded ? 'rounded-md' : ''}
           loading={loading}
           style={{ maxWidth: '100%' }}
         />
@@ -60,6 +58,6 @@ export const ImageBlock: React.FC<ImageBlockProps> = ({
           </Text>
         )}
       </motion.figure>
-    </Box>
+    </div>
   );
 }; 

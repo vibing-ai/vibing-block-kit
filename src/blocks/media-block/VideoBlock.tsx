@@ -1,5 +1,4 @@
 import React from 'react';
-import { Box } from '@heroui/react';
 import { Text } from '../../components/Text';
 import { motion } from 'framer-motion';
 import { BlockProps } from '../../types';
@@ -34,7 +33,7 @@ export const VideoBlock: React.FC<VideoBlockProps> = ({
   ...props
 }) => {
   return (
-    <Box 
+    <div 
       className={className}
       data-block-id={id}
       {...props}
@@ -45,8 +44,7 @@ export const VideoBlock: React.FC<VideoBlockProps> = ({
         transition={{ duration: 0.5 }}
         style={{ margin: 0 }}
       >
-        <Box 
-          as="video"
+        <video 
           src={src}
           poster={poster}
           autoPlay={autoPlay}
@@ -55,7 +53,7 @@ export const VideoBlock: React.FC<VideoBlockProps> = ({
           muted={muted}
           width={width}
           height={height}
-          borderRadius={rounded ? 'md' : undefined}
+          className={rounded ? 'rounded-md' : ''}
           style={{ maxWidth: '100%' }}
         />
         {caption && (
@@ -69,6 +67,6 @@ export const VideoBlock: React.FC<VideoBlockProps> = ({
           </Text>
         )}
       </motion.figure>
-    </Box>
+    </div>
   );
 }; 

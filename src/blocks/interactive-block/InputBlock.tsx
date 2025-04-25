@@ -4,13 +4,8 @@ import {
   Textarea, 
   Select, 
   Checkbox, 
-  Radio, 
-  FormControl, 
-  FormLabel, 
-  FormHelperText,
-  RadioGroup,
-  Box,
-  Flex
+  Radio,
+  Form
 } from '@heroui/react';
 import { BlockProps } from '../../types';
 
@@ -63,12 +58,12 @@ export const InputBlock: React.FC<InputBlockProps> = ({
             id={`input-${id}`}
             name={name}
             placeholder={placeholder}
-            defaultValue={value as string}
+            value={value as string}
             required={required}
-            isDisabled={disabled}
+            disabled={disabled}
             size={size}
             variant={variant}
-            fullWidth={fullWidth}
+            className={fullWidth ? 'w-full' : ''}
             onChange={(e) => handleChange(e.target.value)}
           />
         );
@@ -78,12 +73,12 @@ export const InputBlock: React.FC<InputBlockProps> = ({
           <Select
             id={`input-${id}`}
             name={name}
-            defaultValue={value as string}
+            value={value as string}
             required={required}
-            isDisabled={disabled}
+            disabled={disabled}
             size={size}
             variant={variant}
-            fullWidth={fullWidth}
+            className={fullWidth ? 'w-full' : ''}
             onChange={(e) => handleChange(e.target.value)}
           >
             {options.map((option, index) => (
@@ -96,43 +91,40 @@ export const InputBlock: React.FC<InputBlockProps> = ({
       
       case 'checkbox':
         return (
-          <Flex direction="column" gap="2">
+          <div className="flex flex-col gap-2">
             {options.map((option, index) => (
               <Checkbox
                 key={index}
                 id={`${name}-${option.value}`}
                 name={name}
                 value={option.value}
-                isChecked={value === option.value}
-                isDisabled={disabled}
+                checked={value === option.value}
+                disabled={disabled}
                 onChange={(e) => handleChange(e.target.checked ? option.value : '')}
               >
                 {option.label}
               </Checkbox>
             ))}
-          </Flex>
+          </div>
         );
       
       case 'radio':
         return (
-          <RadioGroup
-            value={value as string}
-            onChange={handleChange}
-            name={name}
-          >
-            <Flex direction="column" gap="2">
-              {options.map((option, index) => (
-                <Radio
-                  key={index}
-                  id={`${name}-${option.value}`}
-                  value={option.value}
-                  isDisabled={disabled}
-                >
-                  {option.label}
-                </Radio>
-              ))}
-            </Flex>
-          </RadioGroup>
+          <div className="flex flex-col gap-2" role="radiogroup">
+            {options.map((option, index) => (
+              <Radio
+                key={index}
+                id={`${name}-${option.value}`}
+                name={name}
+                value={option.value}
+                checked={value === option.value}
+                disabled={disabled}
+                onChange={() => handleChange(option.value)}
+              >
+                {option.label}
+              </Radio>
+            ))}
+          </div>
         );
       
       default:
@@ -142,12 +134,12 @@ export const InputBlock: React.FC<InputBlockProps> = ({
             type={type}
             name={name}
             placeholder={placeholder}
-            defaultValue={value as string}
+            value={value as string}
             required={required}
-            isDisabled={disabled}
+            disabled={disabled}
             size={size}
             variant={variant}
-            fullWidth={fullWidth}
+            className={fullWidth ? 'w-full' : ''}
             onChange={(e) => handleChange(e.target.value)}
           />
         );
@@ -155,32 +147,32 @@ export const InputBlock: React.FC<InputBlockProps> = ({
   };
 
   return (
-    <Box 
-      className={className}
+    <div 
+      className={`${className || ''} ${fullWidth ? 'w-full' : ''}`}
       data-block-id={id}
-      width={fullWidth ? '100%' : undefined}
       {...props}
     >
-      <FormControl
+      <Form
         id={`form-${id}`}
-        isRequired={required}
-        isDisabled={disabled}
-        isInvalid={!!error}
+        validationBehavior="aria"
+        validationErrors={error ? {[name]: error} : undefined}
       >
         {label && (
-          <FormLabel htmlFor={`input-${id}`}>{label}</FormLabel>
+          <label htmlFor={`input-${id}`} className={`block mb-2 ${required ? 'after:content-["*"] after:ml-0.5 after:text-red-500' : ''}`}>
+            {label}
+          </label>
         )}
         
         {renderInput()}
         
-        {helperText && (
-          <FormHelperText>{helperText}</FormHelperText>
+        {helperText && !error && (
+          <p className="text-sm text-gray-500 mt-1">{helperText}</p>
         )}
         
         {error && (
-          <FormHelperText color="danger">{error}</FormHelperText>
+          <p className="text-sm text-red-500 mt-1">{error}</p>
         )}
-      </FormControl>
-    </Box>
+      </Form>
+    </div>
   );
 }; 

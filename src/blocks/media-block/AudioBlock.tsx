@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, Card } from '@heroui/react';
+import { Card } from '@heroui/react';
 import { Text } from '../../components/Text';
 import { Icon } from '@iconify/react';
 import { motion } from 'framer-motion';
@@ -48,7 +48,7 @@ export const AudioBlock: React.FC<AudioBlockProps> = ({
       data-block-id={id}
       {...props}
     >
-      <Box display="flex" alignItems="center" gap="2" p="3">
+      <div className="flex items-center gap-2 p-3">
         {displayPlayIcon && (
           <motion.div
             whileHover={{ scale: 1.1 }}
@@ -65,21 +65,20 @@ export const AudioBlock: React.FC<AudioBlockProps> = ({
           </motion.div>
         )}
         
-        <Box flex="1">
-          <Box 
-            as="audio"
+        <div className="flex-1">
+          <audio
             ref={audioRef}
             src={src}
             autoPlay={autoPlay}
             controls={controls}
             loop={loop}
             muted={muted}
-            width="100%"
+            style={{ width: '100%' }}
             onPlay={() => setIsPlaying(true)}
             onPause={() => setIsPlaying(false)}
           />
-        </Box>
-      </Box>
+        </div>
+      </div>
       
       {caption && (
         <Text 
