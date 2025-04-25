@@ -1,5 +1,5 @@
 import React from 'react';
-import { Card, Box } from '@heroui/react';
+import { Card } from '@heroui/react';
 import { Text } from '../../components/Text';
 import { 
   ResponsiveContainer, 
@@ -36,7 +36,6 @@ export interface ChartBlockProps extends BlockProps {
     showTooltip?: boolean;
     showLegend?: boolean;
     title?: string;
-    aspectRatio?: number;
   };
   height?: number | string;
   width?: number | string;
@@ -62,22 +61,23 @@ export const ChartBlock: React.FC<ChartBlockProps> = ({
     showGrid = true,
     showTooltip = true,
     showLegend = true,
-    title,
-    aspectRatio = 16/9
+    title
   } = options;
 
   const renderChart = () => {
     if (!data || data.length === 0) {
       return (
-        <Box 
-          height="100%" 
-          display="flex" 
-          alignItems="center" 
-          justifyContent="center"
-          color="foreground-muted"
+        <div 
+          style={{
+            height: '100%',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            color: 'var(--hero-color-foreground-muted)'
+          }}
         >
           No data to display
-        </Box>
+        </div>
       );
     }
 
@@ -182,13 +182,15 @@ export const ChartBlock: React.FC<ChartBlockProps> = ({
         </Text>
       )}
       
-      <Box 
-        height={typeof height === 'number' ? `${height}px` : height}
-        width={typeof width === 'number' ? `${width}px` : width}
-        padding="3"
+      <div 
+        style={{
+          height: typeof height === 'number' ? `${height}px` : height,
+          width: typeof width === 'number' ? `${width}px` : width,
+          padding: 'var(--hero-spacing-3)'
+        }}
       >
         {renderChart()}
-      </Box>
+      </div>
     </Card>
   );
 }; 

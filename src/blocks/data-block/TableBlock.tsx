@@ -1,5 +1,5 @@
 import React from 'react';
-import { Card, Box, Table, Tbody, Thead, Tr, Th, Td } from '@heroui/react';
+import { Card } from '@heroui/react';
 import { Text } from '../../components/Text';
 import { BlockProps } from '../../types';
 
@@ -55,10 +55,10 @@ export const TableBlock: React.FC<TableBlockProps> = ({
         </Text>
       )}
       
-      <Box overflowX="auto">
-        <Table
-          width="100%"
+      <div style={{ overflowX: 'auto' }}>
+        <table
           style={{
+            width: '100%',
             borderCollapse: 'collapse',
             ...(compact ? { fontSize: 'var(--hero-font-size-sm)' } : {})
           }}
@@ -72,10 +72,10 @@ export const TableBlock: React.FC<TableBlockProps> = ({
           )}
           
           {showHeader && (
-            <Thead>
-              <Tr>
+            <thead>
+              <tr>
                 {columns.map((column, index) => (
-                  <Th 
+                  <th 
                     key={index}
                     style={{
                       textAlign: 'left',
@@ -86,15 +86,15 @@ export const TableBlock: React.FC<TableBlockProps> = ({
                     }}
                   >
                     {column.header}
-                  </Th>
+                  </th>
                 ))}
-              </Tr>
-            </Thead>
+              </tr>
+            </thead>
           )}
           
-          <Tbody>
+          <tbody>
             {data.map((row, rowIndex) => (
-              <Tr 
+              <tr 
                 key={rowIndex}
                 style={{
                   ...(striped && rowIndex % 2 === 1 ? { backgroundColor: 'var(--hero-color-muted-50)' } : {}),
@@ -102,7 +102,7 @@ export const TableBlock: React.FC<TableBlockProps> = ({
                 }}
               >
                 {columns.map((column, colIndex) => (
-                  <Td 
+                  <td 
                     key={colIndex}
                     style={{
                       padding: compact ? 'var(--hero-spacing-1)' : 'var(--hero-spacing-2)',
@@ -112,26 +112,28 @@ export const TableBlock: React.FC<TableBlockProps> = ({
                     }}
                   >
                     {column.cell ? column.cell(row) : row[column.accessorKey]}
-                  </Td>
+                  </td>
                 ))}
-              </Tr>
+              </tr>
             ))}
             
             {data.length === 0 && (
-              <Tr>
-                <Td 
+              <tr>
+                <td 
                   colSpan={columns.length}
-                  textAlign="center"
-                  p="4"
-                  color="foreground-muted"
+                  style={{
+                    textAlign: 'center',
+                    padding: 'var(--hero-spacing-4)',
+                    color: 'var(--hero-color-foreground-muted)'
+                  }}
                 >
                   No data to display
-                </Td>
-              </Tr>
+                </td>
+              </tr>
             )}
-          </Tbody>
-        </Table>
-      </Box>
+          </tbody>
+        </table>
+      </div>
     </Card>
   );
 }; 

@@ -1,8 +1,8 @@
-import React, { useState, useMemo } from 'react';
-import { Card, Box, Input, Button, Table, Thead, Tbody, Tr, Th, Td, Select } from '@heroui/react';
+import React, { useMemo } from 'react';
+import { Card, Input, Button, Select } from '@heroui/react';
 import { Text } from '../../components/Text';
 import { Icon } from '@iconify/react';
-import { useTable, useSortBy, useGlobalFilter, usePagination } from 'react-table';
+import { useTable, useSortBy, useGlobalFilter, usePagination, TableInstance, Row, Cell, TableState } from 'react-table';
 import { BlockProps } from '../../types';
 
 export interface DataGridColumn {
@@ -25,10 +25,32 @@ export interface DataGridBlockProps extends BlockProps {
   hoverable?: boolean;
 }
 
+// Extended TableState with pagination properties
+interface TableStateWithPagination<D extends object> extends TableState<D> {
+  pageIndex: number;
+  pageSize: number;
+  globalFilter: string;
+}
+
+// Extended table instance with pagination
+interface TableInstanceWithPagination<D extends object> extends TableInstance<D> {
+  page: Row<D>[];
+  canPreviousPage: boolean;
+  canNextPage: boolean;
+  pageOptions: number[];
+  pageCount: number;
+  gotoPage: (updater: ((pageIndex: number) => number) | number) => void;
+  nextPage: () => void;
+  previousPage: () => void;
+  setPageSize: (pageSize: number) => void;
+  setGlobalFilter: (filterValue: string) => void;
+  state: TableStateWithPagination<D>;
+}
+
 export const DataGridBlock: React.FC<DataGridBlockProps> = ({
   id,
   columns,
-  rows,
+  rows = [],
   title,
   pageSizeOptions = [10, 25, 50, 100],
   defaultPageSize = 10,
@@ -72,12 +94,15 @@ export const DataGridBlock: React.FC<DataGridBlockProps> = ({
     { 
       columns: tableColumns, 
       data: rows,
-      initialState: { pageSize: defaultPageSize }
+      initialState: { 
+        // Type assertion here to tell TypeScript this is correct
+        pageSize: defaultPageSize
+      } as Partial<TableState<object>>
     },
     useGlobalFilter,
     useSortBy,
     usePagination
-  );
+  ) as TableInstanceWithPagination<object>;
 
   return (
     <Card
@@ -98,8 +123,13 @@ export const DataGridBlock: React.FC<DataGridBlockProps> = ({
         </Text>
       )}
 
-      <Box p="3" display="flex" alignItems="center" justifyContent="space-between">
-        <Box>
+      <div style={{ 
+        padding: 'var(--hero-spacing-3)',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between'
+      }}>
+        <div>
           <Input
             placeholder="Search..."
             value={globalFilter || ''}
@@ -107,9 +137,13 @@ export const DataGridBlock: React.FC<DataGridBlockProps> = ({
             size="sm"
             className="max-w-sm"
           />
-        </Box>
+        </div>
         
-        <Box display="flex" alignItems="center" gap="2">
+        <div style={{
+          display: 'flex',
+          alignItems: 'center',
+          gap: 'var(--hero-spacing-2)'
+        }}>
           <Text size="sm" color="foreground-muted">
             Show
           </Text>
@@ -127,55 +161,63 @@ export const DataGridBlock: React.FC<DataGridBlockProps> = ({
           <Text size="sm" color="foreground-muted">
             entries
           </Text>
-        </Box>
-      </Box>
+        </div>
+      </div>
 
-      <Box overflowX="auto">
-        <Table {...getTableProps()} width="100%" style={{ borderCollapse: 'collapse' }}>
-          <Thead>
+      <div style={{ overflowX: 'auto' }}>
+        <table {...getTableProps()} style={{ width: '100%', borderCollapse: 'collapse' }}>
+          <thead>
             {headerGroups.map(headerGroup => (
-              <Tr {...headerGroup.getHeaderGroupProps()} key={headerGroup.id}>
-                {headerGroup.headers.map(column => (
-                  <Th 
-                    {...column.getHeaderProps(column.getSortByToggleProps())}
-                    key={column.id}
-                    style={{
-                      width: column.width,
-                      padding: 'var(--hero-spacing-2)',
-                      textAlign: 'left',
-                      borderBottom: '2px solid var(--hero-color-border)',
-                      backgroundColor: 'var(--hero-color-muted)',
-                      ...(bordered ? { border: '1px solid var(--hero-color-border)' } : {}),
-                      userSelect: 'none',
-                      cursor: column.disableSortBy ? 'default' : 'pointer'
-                    }}
-                  >
-                    <Box display="flex" alignItems="center" gap="1">
-                      {column.render('Header')}
-                      <Box>
-                        {!column.disableSortBy && (
-                          column.isSorted ? (
-                            column.isSortedDesc ? (
-                              <Icon icon="heroicons:arrow-down" width={14} />
+              <tr {...headerGroup.getHeaderGroupProps()} key={headerGroup.id}>
+                {headerGroup.headers.map(column => {
+                  // Cast column to any to handle custom properties
+                  const columnAny = column as any;
+                  return (
+                    <th 
+                      {...column.getHeaderProps(columnAny.getSortByToggleProps ? columnAny.getSortByToggleProps() : undefined)}
+                      key={column.id}
+                      style={{
+                        width: columnAny.width,
+                        padding: 'var(--hero-spacing-2)',
+                        textAlign: 'left',
+                        borderBottom: '2px solid var(--hero-color-border)',
+                        backgroundColor: 'var(--hero-color-muted)',
+                        ...(bordered ? { border: '1px solid var(--hero-color-border)' } : {}),
+                        userSelect: 'none',
+                        cursor: columnAny.disableSortBy ? 'default' : 'pointer'
+                      }}
+                    >
+                      <div style={{ 
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: 'var(--hero-spacing-1)'
+                      }}>
+                        {column.render('Header')}
+                        <div>
+                          {!columnAny.disableSortBy && (
+                            columnAny.isSorted ? (
+                              columnAny.isSortedDesc ? (
+                                <Icon icon="heroicons:arrow-down" width={14} />
+                              ) : (
+                                <Icon icon="heroicons:arrow-up" width={14} />
+                              )
                             ) : (
-                              <Icon icon="heroicons:arrow-up" width={14} />
+                              <Icon icon="heroicons:arrows-up-down" width={14} opacity={0.3} />
                             )
-                          ) : (
-                            <Icon icon="heroicons:arrows-up-down" width={14} opacity={0.3} />
-                          )
-                        )}
-                      </Box>
-                    </Box>
-                  </Th>
-                ))}
-              </Tr>
+                          )}
+                        </div>
+                      </div>
+                    </th>
+                  );
+                })}
+              </tr>
             ))}
-          </Thead>
-          <Tbody {...getTableBodyProps()}>
-            {page.map((row, rowIndex) => {
+          </thead>
+          <tbody {...getTableBodyProps()}>
+            {page.map((row: Row<object>, rowIndex: number) => {
               prepareRow(row);
               return (
-                <Tr 
+                <tr 
                   {...row.getRowProps()}
                   key={row.id}
                   style={{
@@ -183,8 +225,8 @@ export const DataGridBlock: React.FC<DataGridBlockProps> = ({
                     ...(hoverable ? { ':hover': { backgroundColor: 'var(--hero-color-muted-100)' } } : {})
                   }}
                 >
-                  {row.cells.map(cell => (
-                    <Td 
+                  {row.cells.map((cell: Cell<object>) => (
+                    <td 
                       {...cell.getCellProps()}
                       key={cell.column.id}
                       style={{
@@ -195,35 +237,46 @@ export const DataGridBlock: React.FC<DataGridBlockProps> = ({
                       }}
                     >
                       {cell.render('Cell')}
-                    </Td>
+                    </td>
                   ))}
-                </Tr>
+                </tr>
               );
             })}
             
             {page.length === 0 && (
-              <Tr>
-                <Td 
+              <tr>
+                <td 
                   colSpan={tableColumns.length}
-                  textAlign="center"
-                  p="4"
-                  color="foreground-muted"
+                  style={{
+                    textAlign: 'center',
+                    padding: 'var(--hero-spacing-4)',
+                    color: 'var(--hero-color-foreground-muted)'
+                  }}
                 >
                   No data to display
-                </Td>
-              </Tr>
+                </td>
+              </tr>
             )}
-          </Tbody>
-        </Table>
-      </Box>
+          </tbody>
+        </table>
+      </div>
 
       {showFooter && (
-        <Box p="3" display="flex" alignItems="center" justifyContent="space-between">
+        <div style={{ 
+          padding: 'var(--hero-spacing-3)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between'
+        }}>
           <Text size="sm" color="foreground-muted">
             Showing {page.length > 0 ? pageIndex * pageSize + 1 : 0} to {Math.min((pageIndex + 1) * pageSize, rows.length)} of {rows.length} entries
           </Text>
           
-          <Box display="flex" alignItems="center" gap="1">
+          <div style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: 'var(--hero-spacing-1)'
+          }}>
             <Button
               size="sm"
               variant="ghost"
@@ -265,8 +318,8 @@ export const DataGridBlock: React.FC<DataGridBlockProps> = ({
             >
               <Icon icon="heroicons:chevron-double-right" />
             </Button>
-          </Box>
-        </Box>
+          </div>
+        </div>
       )}
     </Card>
   );

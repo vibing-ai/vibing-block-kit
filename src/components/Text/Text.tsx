@@ -58,7 +58,7 @@ export interface TextProps extends React.HTMLAttributes<HTMLElement> {
 }
 
 export const Text: React.FC<TextProps> = ({
-  as: Component = 'p',
+  as = 'p',
   size = 'md',
   weight = 'normal',
   color,
@@ -105,6 +105,9 @@ export const Text: React.FC<TextProps> = ({
     textAlign ? `text-${textAlign}` : '',
     className,
   ].filter(Boolean).join(' ');
+  
+  // Dynamically create the component to avoid TypeScript errors
+  const Component = as as React.ElementType;
   
   return (
     <Component className={classes} {...props}>

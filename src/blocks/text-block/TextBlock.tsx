@@ -1,43 +1,43 @@
 import React from 'react';
-import { Text } from '../../components/Text';
 import { BlockProps } from '../../types';
+import { Text } from '../../components/Text';
 
 export interface TextBlockProps extends BlockProps {
-  content: string;
-  variant?: 'paragraph' | 'heading' | 'subheading' | 'caption';
-  weight?: 'normal' | 'medium' | 'semibold' | 'bold';
-  size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl' | '2xl' | '3xl' | '4xl';
+  text: string;
+  type?: 'paragraph' | 'heading1' | 'heading2' | 'heading3' | 'heading4' | 'heading5' | 'heading6';
+  className?: string;
 }
 
-type HTMLTag = 'p' | 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'span' | 'div';
+// Map text block type to HTML element
+const typeToElement = {
+  paragraph: 'p',
+  heading1: 'h1',
+  heading2: 'h2',
+  heading3: 'h3',
+  heading4: 'h4',
+  heading5: 'h5',
+  heading6: 'h6'
+} as const;
 
 export const TextBlock: React.FC<TextBlockProps> = ({
   id,
-  content,
+  text,
+  type = 'paragraph',
   className,
-  variant = 'paragraph',
-  weight = 'normal',
-  size = 'md',
-  onChange: _onChange,
+  onChange, // Destructure but don't use to avoid passing to DOM
   ...props
 }) => {
-  const variantMap = {
-    paragraph: 'p',
-    heading: 'h2',
-    subheading: 'h3',
-    caption: 'span'
-  } as const;
+  // Get the appropriate HTML element
+  const element = typeToElement[type];
 
   return (
     <Text 
-      as={variantMap[variant] as keyof JSX.IntrinsicElements}
-      size={size}
-      weight={weight}
+      as={element}
       className={className}
       data-block-id={id}
       {...props}
     >
-      {content}
+      {text}
     </Text>
   );
 }; 

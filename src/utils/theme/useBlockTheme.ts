@@ -1,26 +1,54 @@
-import { useContext } from 'react';
-import { useTheme as useHeroTheme } from '@heroui/react';
+import { useState, useEffect } from 'react';
 import { BlockTheme, lightTheme, darkTheme } from './blockTheme';
 
 /**
  * @deprecated Use useTheme from '@vibing-ai/block-kit' instead
  */
 export function useBlockTheme(): BlockTheme {
-  const heroTheme = useHeroTheme();
-  return heroTheme.type === 'dark' ? darkTheme : lightTheme;
+  const [theme, setTheme] = useState<'light' | 'dark'>('light');
+  
+  useEffect(() => {
+    // Get current theme from data-theme attribute
+    const currentTheme = document.documentElement.getAttribute('data-theme') as 'light' | 'dark';
+    if (currentTheme) {
+      setTheme(currentTheme);
+    }
+    
+    // Set up an observer to watch for theme changes
+    const observer = new MutationObserver((mutations) => {
+      mutations.forEach((mutation) => {
+        if (
+          mutation.type === 'attributes' &&
+          mutation.attributeName === 'data-theme'
+        ) {
+          const newTheme = document.documentElement.getAttribute('data-theme') as 'light' | 'dark';
+          setTheme(newTheme || 'light');
+        }
+      });
+    });
+    
+    observer.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ['data-theme'],
+    });
+    
+    return () => {
+      observer.disconnect();
+    };
+  }, []);
+  
+  return theme === 'dark' ? darkTheme : lightTheme;
 }
 
 /**
  * @deprecated Use useTheme from '@vibing-ai/block-kit' instead
  */
 export function useCompatibleTheme() {
-  const heroTheme = useHeroTheme();
-  const blockTheme = heroTheme.type === 'dark' ? darkTheme : lightTheme;
-  const isDarkMode = heroTheme.type === 'dark';
+  const theme = useBlockTheme();
+  const isDarkMode = theme === darkTheme;
   
   return {
-    blockTheme,
-    heroTheme,
+    blockTheme: theme,
     isDarkMode
   };
 }
@@ -30,25 +58,36 @@ export function useCompatibleTheme() {
  */
 export interface UseThemeDetectorOptions {
   /**
-   * Default theme to use
+   * Default theme to use if system preference is not available
    */
   defaultTheme?: 'light' | 'dark';
-  
-  /**
-   * Whether to observe system theme changes
-   */
-  observeSystem?: boolean;
 }
 
 /**
- * @deprecated Use useTheme from '@vibing-ai/block-kit' instead
+ * Hook to get current theme (light or dark)
  */
 export function useThemeDetector(options: UseThemeDetectorOptions = {}) {
-  const { type } = useHeroTheme();
-  const isDarkMode = type === 'dark';
-  const theme = isDarkMode ? darkTheme : lightTheme;
+  const { defaultTheme = 'light' } = options;
+  const [systemTheme, setSystemTheme] = useState<'light' | 'dark'>(defaultTheme);
   
-  return { theme, isDarkMode };
+  useEffect(() => {
+    // Check if window is available (for SSR)
+    if (typeof window === 'undefined') return;
+    
+    // Get initial system preference
+    const darkModeQuery = window.matchMedia('(prefers-color-scheme: dark)');
+    setSystemTheme(darkModeQuery.matches ? 'dark' : 'light');
+    
+    // Listen for changes
+    const listener = (e: MediaQueryListEvent) => {
+      setSystemTheme(e.matches ? 'dark' : 'light');
+    };
+    
+    darkModeQuery.addEventListener('change', listener);
+    return () => darkModeQuery.removeEventListener('change', listener);
+  }, [defaultTheme]);
+  
+  return systemTheme;
 }
 
 /**

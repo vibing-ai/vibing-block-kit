@@ -1,30 +1,36 @@
-import { createTheme, Theme } from '@heroui/react';
+/**
+ * Simple theme type definition
+ */
+export interface ThemeConfig {
+  type?: 'light' | 'dark';
+  colors?: Record<string, any>;
+  [key: string]: any;
+}
 
 /**
- * Generate a custom HeroUI theme with specified options
+ * Generate a custom theme with specified options
  */
 export function createCustomTheme(options: {
   type?: 'light' | 'dark';
-  primary?: string;
-  secondary?: string;
-  accent?: string;
-  neutral?: string;
+  primary?: string | Record<string, string>;
+  secondary?: string | Record<string, string>;
+  accent?: string | Record<string, string>;
+  neutral?: string | Record<string, string>;
   [key: string]: any;
-}): Theme {
+}): ThemeConfig {
   const { type = 'light', ...colorOptions } = options;
   
-  return createTheme({
+  return {
     type,
     colors: {
       // Allow custom colors to be passed in
       ...colorOptions
     }
-  });
+  };
 }
 
 /**
  * Default light theme with Block Kit branding
- * @deprecated Use createTheme from HeroUI directly
  */
 export const blockKitLightTheme = createCustomTheme({
   type: 'light',
@@ -46,7 +52,6 @@ export const blockKitLightTheme = createCustomTheme({
 
 /**
  * Default dark theme with Block Kit branding
- * @deprecated Use createTheme from HeroUI directly
  */
 export const blockKitDarkTheme = createCustomTheme({
   type: 'dark',
@@ -68,25 +73,23 @@ export const blockKitDarkTheme = createCustomTheme({
 
 /**
  * Get a theme based on a name
- * @deprecated Use createTheme from HeroUI directly
  */
-export function getThemeByName(themeName: string | undefined): Theme {
-  return { type: themeName as 'light' | 'dark' || 'light' };
+export function getThemeByName(themeName: string | undefined): ThemeConfig {
+  return { type: (themeName as 'light' | 'dark') || 'light' };
 }
 
 /**
  * Create a theme for a specific brand or client
- * @deprecated Use createTheme from HeroUI directly
  */
 export function createBrandTheme(options: {
-  name: string;
+  name?: string;
   type?: 'light' | 'dark';
-  primaryColor: string;
-  secondaryColor?: string;
-  accentColor?: string;
+  primaryColor: string | Record<string, string>;
+  secondaryColor?: string | Record<string, string>;
+  accentColor?: string | Record<string, string>;
   [key: string]: any;
-}): Theme {
-  const { name, type = 'light', primaryColor, secondaryColor, accentColor, ...rest } = options;
+}): ThemeConfig {
+  const { type = 'light', primaryColor, secondaryColor, accentColor, ...rest } = options;
   
   return createCustomTheme({
     type,

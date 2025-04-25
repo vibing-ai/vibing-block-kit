@@ -1,7 +1,7 @@
 import React from 'react';
 import { ContainerBlockProps } from '../../types';
 
-export interface BlockGroupProps extends ContainerBlockProps {
+export interface BlockGroupProps extends Omit<ContainerBlockProps, 'onChange'> {
   /**
    * Title of the group
    */
@@ -36,6 +36,11 @@ export interface BlockGroupProps extends ContainerBlockProps {
    * Optional actions to display with the group
    */
   actions?: React.ReactNode;
+  
+  /**
+   * Custom callback for when blocks in this group change
+   */
+  onChangeBlock?: (id: string, data: any) => void;
 }
 
 /**

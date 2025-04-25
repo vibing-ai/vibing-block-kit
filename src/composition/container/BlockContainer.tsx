@@ -1,8 +1,7 @@
 import React from 'react';
-import { Box, Container } from '@heroui/react';
 import { ContainerBlockProps } from '../../types';
 
-export interface BlockContainerProps extends ContainerBlockProps {
+export interface BlockContainerProps extends Omit<ContainerBlockProps, 'onChange'> {
   /**
    * Layout direction for the container
    */
@@ -42,6 +41,11 @@ export interface BlockContainerProps extends ContainerBlockProps {
    * Optional callback when a block is dropped into the container
    */
   onDrop?: (e: React.DragEvent) => void;
+  
+  /**
+   * Custom callback for when the block changes
+   */
+  onChangeBlock?: (id: string, data: any) => void;
 }
 
 /**
@@ -59,6 +63,7 @@ export const BlockContainer: React.FC<BlockContainerProps> = ({
   background = false,
   onDrop,
   className = '',
+  onChangeBlock,
   ...props
 }) => {
   // Mapping for layout styles
@@ -122,26 +127,28 @@ export const BlockContainer: React.FC<BlockContainerProps> = ({
   };
   
   return (
-    <Box
+    <div
       className={className}
-      display={isGrid ? 'grid' : 'flex'}
-      flexDirection={!isGrid ? getFlexDirection() : undefined}
-      flexWrap={layout === 'horizontal' ? 'wrap' : undefined}
-      gridTemplateColumns={isGrid ? `repeat(${columns}, 1fr)` : undefined}
-      gap={spacingMap[spacing]}
-      padding={paddingValue}
-      height={fullHeight ? '100%' : undefined}
-      borderWidth={bordered ? '1px' : undefined}
-      borderStyle={bordered ? 'solid' : undefined}
-      borderColor={bordered ? 'var(--hero-color-border)' : undefined}
-      borderRadius={bordered ? 'var(--hero-border-radius)' : undefined}
-      backgroundColor={getBackgroundColor()}
+      style={{
+        display: isGrid ? 'grid' : 'flex',
+        flexDirection: !isGrid ? getFlexDirection() as any : undefined,
+        flexWrap: layout === 'horizontal' ? 'wrap' : undefined,
+        gridTemplateColumns: isGrid ? `repeat(${columns}, 1fr)` : undefined,
+        gap: spacingMap[spacing],
+        padding: paddingValue,
+        height: fullHeight ? '100%' : undefined,
+        borderWidth: bordered ? '1px' : undefined,
+        borderStyle: bordered ? 'solid' : undefined,
+        borderColor: bordered ? 'var(--hero-color-border)' : undefined,
+        borderRadius: bordered ? 'var(--hero-border-radius)' : undefined,
+        backgroundColor: getBackgroundColor()
+      }}
       data-container-id={id}
       onDragOver={handleDragOver}
       onDrop={onDrop}
       {...props}
     >
       {children}
-    </Box>
+    </div>
   );
 }; 
