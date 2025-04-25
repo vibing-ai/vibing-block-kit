@@ -52,9 +52,9 @@ jobs:
           echo "Coverage report would appear here" > coverage/README.md
           ls -la coverage/
 
-      # Use v3 of upload-artifact (stable and recommended version)
+      # Use v4 of upload-artifact (latest stable version)
       - name: Upload test coverage
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: coverage
           path: coverage
@@ -63,9 +63,9 @@ jobs:
       - name: Build Storybook
         run: npm run build-storybook
         
-      # Also use v3 for Storybook artifacts
+      # Also use v4 for Storybook artifacts
       - name: Upload Storybook artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: storybook-static
           path: storybook-static
@@ -82,9 +82,9 @@ jobs:
       id-token: write
 
     steps:
-      # Use v3 for consistency
+      # Use v4 for consistency
       - name: Download Storybook artifact
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: storybook-static
           path: storybook-static
