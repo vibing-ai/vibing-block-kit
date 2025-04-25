@@ -14,6 +14,8 @@ export interface VideoBlockProps extends BlockProps {
   width?: string | number;
   height?: string | number;
   rounded?: boolean;
+  captionSrc?: string;
+  captionLang?: string;
 }
 
 export const VideoBlock: React.FC<VideoBlockProps> = ({
@@ -28,6 +30,8 @@ export const VideoBlock: React.FC<VideoBlockProps> = ({
   width = '100%',
   height,
   rounded = false,
+  captionSrc,
+  captionLang = 'en',
   className,
   onChange,
   ...props
@@ -55,7 +59,15 @@ export const VideoBlock: React.FC<VideoBlockProps> = ({
           height={height}
           className={rounded ? 'rounded-md' : ''}
           style={{ maxWidth: '100%' }}
-        />
+        >
+          {captionSrc && (
+            <track kind="captions" src={captionSrc} srcLang={captionLang} label={`${captionLang} captions`} />
+          )}
+          {!captionSrc && caption && (
+            <track kind="captions" label="No captions available" />
+          )}
+          Your browser does not support the video element.
+        </video>
         {caption && (
           <Text 
             as="figcaption"

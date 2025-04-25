@@ -13,6 +13,8 @@ export interface AudioBlockProps extends BlockProps {
   loop?: boolean;
   muted?: boolean;
   displayPlayIcon?: boolean;
+  captionSrc?: string;
+  captionLang?: string;
 }
 
 export const AudioBlock: React.FC<AudioBlockProps> = ({
@@ -24,6 +26,8 @@ export const AudioBlock: React.FC<AudioBlockProps> = ({
   loop = false,
   muted = false,
   displayPlayIcon = true,
+  captionSrc,
+  captionLang = 'en',
   className,
   onChange,
   ...props
@@ -76,7 +80,15 @@ export const AudioBlock: React.FC<AudioBlockProps> = ({
             style={{ width: '100%' }}
             onPlay={() => setIsPlaying(true)}
             onPause={() => setIsPlaying(false)}
-          />
+          >
+            {captionSrc && (
+              <track kind="captions" src={captionSrc} srcLang={captionLang} label={`${captionLang} captions`} />
+            )}
+            {!captionSrc && caption && (
+              <track kind="captions" label="No captions available" />
+            )}
+            Your browser does not support the audio element.
+          </audio>
         </div>
       </div>
       
