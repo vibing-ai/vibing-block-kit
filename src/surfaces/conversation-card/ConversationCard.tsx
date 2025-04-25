@@ -31,7 +31,7 @@ export interface Message {
   /**
    * Optional metadata for the message
    */
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
   
   /**
    * Optional status of the message
@@ -95,6 +95,11 @@ export const ConversationCard: React.FC<ConversationCardProps> = ({
   assistantAvatarUrl,
   inputPlaceholder = 'Type your message...',
   className,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  
+  
+  /* eslint-disable-next-line @typescript-eslint/no-unused-vars */
   onChange,
   ...props
 }) => {

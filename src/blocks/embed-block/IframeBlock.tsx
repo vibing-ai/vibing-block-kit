@@ -18,6 +18,11 @@ export const IframeBlock: React.FC<IframeBlockProps> = ({
   height = 400,
   allowFullscreen = true,
   className,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  
+  
+  /* eslint-disable-next-line @typescript-eslint/no-unused-vars */
   onChange,
   ...props
 }) => {

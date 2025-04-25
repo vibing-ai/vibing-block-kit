@@ -10,6 +10,11 @@ export const MarkdownBlock: React.FC<MarkdownBlockProps> = ({
   id,
   content,
   className,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  
+  
+  /* eslint-disable-next-line @typescript-eslint/no-unused-vars */
   onChange,
   ...props
 }) => {

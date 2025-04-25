@@ -5,7 +5,7 @@ export interface FlowNode {
   id: string;
   type: string;
   position: { x: number; y: number };
-  data: Record<string, any>;
+  data: Record<string, unknown>;
 }
 
 export interface FlowEdge {
@@ -13,7 +13,7 @@ export interface FlowEdge {
   source: string;
   target: string;
   type?: string;
-  data?: Record<string, any>;
+  data?: Record<string, unknown>;
 }
 
 export interface FlowBlockProps extends BlockProps {
@@ -28,9 +28,12 @@ export const FlowBlock: React.FC<FlowBlockProps> = ({
   id,
   nodes,
   edges,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   onNodesChange,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   onEdgesChange,
   className,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   onChange,
   ...props
 }) => {

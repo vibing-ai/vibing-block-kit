@@ -17,6 +17,11 @@ export const PanelSection: React.FC<PanelSectionProps> = ({
   onToggleCollapse,
   children,
   className,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  
+  
+  /* eslint-disable-next-line @typescript-eslint/no-unused-vars */
   onChange,
   ...props
 }) => {

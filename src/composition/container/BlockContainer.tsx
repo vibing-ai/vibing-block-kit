@@ -45,7 +45,7 @@ export interface BlockContainerProps extends Omit<ContainerBlockProps, 'onChange
   /**
    * Custom callback for when the block changes
    */
-  onChangeBlock?: (id: string, data: any) => void;
+  onChangeBlock?: (id: string, data: Record<string, unknown>) => void;
 }
 
 /**
@@ -63,6 +63,11 @@ export const BlockContainer: React.FC<BlockContainerProps> = ({
   background = false,
   onDrop,
   className = '',
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  
+  
+  /* eslint-disable-next-line @typescript-eslint/no-unused-vars */
   onChangeBlock,
   ...props
 }) => {
@@ -131,7 +136,7 @@ export const BlockContainer: React.FC<BlockContainerProps> = ({
       className={className}
       style={{
         display: isGrid ? 'grid' : 'flex',
-        flexDirection: !isGrid ? getFlexDirection() as any : undefined,
+        flexDirection: !isGrid ? getFlexDirection() as React.CSSProperties['flexDirection'] : undefined,
         flexWrap: layout === 'horizontal' ? 'wrap' : undefined,
         gridTemplateColumns: isGrid ? `repeat(${columns}, 1fr)` : undefined,
         gap: spacingMap[spacing],

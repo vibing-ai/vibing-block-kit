@@ -67,7 +67,7 @@ export function useAIStream(prompt: string, options: AIStreamOptions = {}) {
   }, []);
   
   // Mock generator function for simulated responses
-  async function* mockStreamGenerator(mockPrompt: string): AsyncGenerator<string, void, unknown> {
+  const mockStreamGenerator = useCallback(async function* (mockPrompt: string): AsyncGenerator<string, void, unknown> {
     // Simulated response based on prompt
     const words = `This is a simulated AI response to demonstrate streaming text. Your prompt was: "${mockPrompt}". In a real implementation, this would connect to an actual AI service API.`.split(' ');
     
@@ -76,10 +76,10 @@ export function useAIStream(prompt: string, options: AIStreamOptions = {}) {
       await new Promise(resolve => setTimeout(resolve, 100));
       yield word + ' ';
     }
-  }
+  }, []);
   
-  // Default fetch implementation (placeholder - would be replaced with actual implementation)
-  async function* defaultFetchCompletions(streamPrompt: string, streamOptions: AIStreamOptions): AsyncGenerator<string, void, unknown> {
+  // Wrap defaultFetchCompletions in useCallback to avoid recreation on each render
+  const defaultFetchCompletions = useCallback(async function* (streamPrompt: string, streamOptions: AIStreamOptions): AsyncGenerator<string, void, unknown> {
     if (streamOptions.useMockResponse) {
       yield* mockStreamGenerator(streamPrompt);
       return;
@@ -87,7 +87,7 @@ export function useAIStream(prompt: string, options: AIStreamOptions = {}) {
     
     // This would be replaced with an actual API call in a real implementation
     throw new Error('No fetchCompletions implementation provided. Either provide an implementation or set useMockResponse to true.');
-  }
+  }, [mockStreamGenerator]);
   
   useEffect(() => {
     if (!prompt) return;
@@ -146,7 +146,7 @@ export function useAIStream(prompt: string, options: AIStreamOptions = {}) {
         abortControllerRef.current = null;
       }
     };
-  }, [prompt, options]);
+  }, [prompt, options, defaultFetchCompletions]);
   
   return { text, isComplete, isLoading, error, stop };
 } 

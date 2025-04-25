@@ -1,11 +1,17 @@
 import React, { useState } from 'react';
-import { FieldType, FieldConfig } from './FieldTypes';
+import {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+   FieldType, FieldConfig } from './FieldTypes';
+
+// Define a proper type for form values
+export type FormValue = string | number | boolean | string[] | null;
+export type FormValues = Record<string, FormValue>;
 
 interface FormBuilderProps {
   fields: FieldConfig[];
-  onSubmit?: (data: Record<string, any>) => void;
-  onChange?: (data: Record<string, any>) => void;
-  initialValues?: Record<string, any>;
+  onSubmit?: (data: FormValues) => void;
+  onChange?: (data: FormValues) => void;
+  initialValues?: FormValues;
   submitLabel?: string;
   cancelLabel?: string;
   onCancel?: () => void;
@@ -25,10 +31,10 @@ export const FormBuilder: React.FC<FormBuilderProps> = ({
   onCancel,
   className = '',
 }) => {
-  const [formData, setFormData] = useState<Record<string, any>>(initialValues);
+  const [formData, setFormData] = useState<FormValues>(initialValues);
   const [errors, setErrors] = useState<Record<string, string>>({});
   
-  const handleFieldChange = (fieldId: string, value: any) => {
+  const handleFieldChange = (fieldId: string, value: FormValue) => {
     const newFormData = {
       ...formData,
       [fieldId]: value,
@@ -95,7 +101,7 @@ export const FormBuilder: React.FC<FormBuilderProps> = ({
             id={field.id}
             name={field.id}
             value={formData[field.id] || ''}
-            onChange={(e) => handleFieldChange(field.id, e.target.value)}
+            onChange={(e) => handleFieldChange(field.id, e.target.value as FormValue)}
             className={`
               block w-full px-3 py-2 border rounded-md shadow-sm 
               ${errors[field.id] ? 'border-red-500' : 'border-gray-300'}

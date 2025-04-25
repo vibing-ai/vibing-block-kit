@@ -1,23 +1,39 @@
 /**
+ * Type definitions for color values
+ */
+export type ColorValue = string;
+export type ColorScale = Record<string | number, ColorValue>;
+export type ColorObject = ColorValue | ColorScale;
+
+/**
+ * Type for theme additional properties
+ */
+export type ThemeAdditionalProps = Record<string, unknown>;
+
+/**
  * Simple theme type definition
  */
 export interface ThemeConfig {
   type?: 'light' | 'dark';
-  colors?: Record<string, any>;
-  [key: string]: any;
+  colors?: Record<string, ColorObject>;
+  [key: string]: unknown;
+}
+
+/**
+ * Options for creating a custom theme
+ */
+export interface CustomThemeOptions extends ThemeAdditionalProps {
+  type?: 'light' | 'dark';
+  primary?: ColorObject;
+  secondary?: ColorObject;
+  accent?: ColorObject;
+  neutral?: ColorObject;
 }
 
 /**
  * Generate a custom theme with specified options
  */
-export function createCustomTheme(options: {
-  type?: 'light' | 'dark';
-  primary?: string | Record<string, string>;
-  secondary?: string | Record<string, string>;
-  accent?: string | Record<string, string>;
-  neutral?: string | Record<string, string>;
-  [key: string]: any;
-}): ThemeConfig {
+export function createCustomTheme(options: CustomThemeOptions): ThemeConfig {
   const { type = 'light', ...colorOptions } = options;
   
   return {
@@ -79,16 +95,20 @@ export function getThemeByName(themeName: string | undefined): ThemeConfig {
 }
 
 /**
- * Create a theme for a specific brand or client
+ * Options for creating a brand theme
  */
-export function createBrandTheme(options: {
+export interface BrandThemeOptions extends ThemeAdditionalProps {
   name?: string;
   type?: 'light' | 'dark';
-  primaryColor: string | Record<string, string>;
-  secondaryColor?: string | Record<string, string>;
-  accentColor?: string | Record<string, string>;
-  [key: string]: any;
-}): ThemeConfig {
+  primaryColor: ColorObject;
+  secondaryColor?: ColorObject;
+  accentColor?: ColorObject;
+}
+
+/**
+ * Create a theme for a specific brand or client
+ */
+export function createBrandTheme(options: BrandThemeOptions): ThemeConfig {
   const { type = 'light', primaryColor, secondaryColor, accentColor, ...rest } = options;
   
   return createCustomTheme({

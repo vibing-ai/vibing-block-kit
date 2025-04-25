@@ -29,7 +29,9 @@ export const AudioBlock: React.FC<AudioBlockProps> = ({
   captionSrc,
   captionLang = 'en',
   className,
-  onChange: _onChange,
+  onChange:
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+   _onChange,
   ...props
 }) => {
   const audioRef = React.useRef<HTMLAudioElement>(null);

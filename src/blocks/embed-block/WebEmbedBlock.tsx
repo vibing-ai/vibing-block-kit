@@ -20,6 +20,11 @@ export const WebEmbedBlock: React.FC<WebEmbedBlockProps> = ({
   width = '100%',
   height = 'auto',
   className,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  
+  
+  /* eslint-disable-next-line @typescript-eslint/no-unused-vars */
   onChange,
   ...props
 }) => {

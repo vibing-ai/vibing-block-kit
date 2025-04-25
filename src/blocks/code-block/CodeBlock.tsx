@@ -42,6 +42,7 @@ export const CodeBlock: React.FC<CodeBlockProps> = ({
   maxHeight = '400px',
   copyable = true,
   className,
+  /* eslint-disable-next-line @typescript-eslint/no-unused-vars */
   onChange,
   ...props
 }) => {

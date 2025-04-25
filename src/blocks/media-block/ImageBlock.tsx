@@ -23,7 +23,9 @@ export const ImageBlock: React.FC<ImageBlockProps> = ({
   rounded = false,
   loading = 'lazy',
   className,
-  onChange: _onChange,
+  onChange:
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+   _onChange,
   ...props
 }) => {
   return (

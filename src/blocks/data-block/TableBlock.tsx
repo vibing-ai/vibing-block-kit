@@ -3,15 +3,17 @@ import { Card } from '@heroui/react';
 import { Text } from '../../components/Text';
 import { BlockProps } from '../../types';
 
+export type TableRowData = Record<string, string | number | boolean | null | undefined>;
+
 export interface TableColumn {
   header: string;
   accessorKey: string;
-  cell?: (info: any) => React.ReactNode;
+  cell?: (info: TableRowData) => React.ReactNode;
 }
 
 export interface TableBlockProps extends BlockProps {
   columns: TableColumn[];
-  data: Record<string, any>[];
+  data: TableRowData[];
   caption?: string;
   striped?: boolean;
   bordered?: boolean;
@@ -33,6 +35,11 @@ export const TableBlock: React.FC<TableBlockProps> = ({
   title,
   showHeader = true,
   className,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  
+  
+  /* eslint-disable-next-line @typescript-eslint/no-unused-vars */
   onChange,
   ...props
 }) => {

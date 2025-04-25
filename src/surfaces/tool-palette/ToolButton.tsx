@@ -21,7 +21,9 @@ export const ToolButton: React.FC<ToolButtonProps> = ({
   className = '',
   isActive = false,
 }) => {
-  const { id, label, icon, disabled, action } = tool;
+  const {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+   id, label, icon, disabled, action } = tool;
   
   const handleClick = () => {
     if (disabled) return;

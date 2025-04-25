@@ -1,6 +1,9 @@
 import React from 'react';
 import { HeroUIProvider } from '@heroui/react';
 
+// Define a more specific type for theme objects
+export type ThemeObject = Record<string, string | number | boolean | ThemeObject>;
+
 export interface BlockKitProviderProps {
   /**
    * Children to render
@@ -10,7 +13,7 @@ export interface BlockKitProviderProps {
   /**
    * Theme to use - can be 'light', 'dark', or a custom HeroUI theme
    */
-  theme?: 'light' | 'dark' | Record<string, any>;
+  theme?: 'light' | 'dark' | ThemeObject;
   
   /**
    * Whether to use system preferred color scheme

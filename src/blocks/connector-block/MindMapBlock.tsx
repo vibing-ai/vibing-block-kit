@@ -5,7 +5,7 @@ export interface MindMapNode {
   id: string;
   label: string;
   children?: MindMapNode[];
-  data?: Record<string, any>;
+  data?: Record<string, unknown>;
 }
 
 export interface MindMapBlockProps extends BlockProps {
@@ -18,9 +18,12 @@ export interface MindMapBlockProps extends BlockProps {
 export const MindMapBlock: React.FC<MindMapBlockProps> = ({
   id,
   rootNode,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   onNodeClick,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   onNodeUpdate,
   className,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   onChange,
   ...props
 }) => {

@@ -6,7 +6,6 @@ interface BlockModalProps {
   title?: string;
   children?: React.ReactNode;
   size?: 'sm' | 'md' | 'lg' | 'xl' | 'full';
-  position?: 'center' | 'top' | 'right' | 'bottom' | 'left';
 }
 
 /**
@@ -18,7 +17,6 @@ export const BlockModal: React.FC<BlockModalProps> = ({
   title = '',
   children,
   size = 'md',
-  position = 'center',
 }) => {
   if (!isOpen) return null;
   

@@ -3,15 +3,25 @@ import { BlockProps } from '../../types';
 
 export interface RichTextBlockProps extends BlockProps {
   content: string;
-  formatting?: Record<string, any>;
+  formatting?: Record<string, unknown>;
   // Add other props as needed
 }
 
 export const RichTextBlock: React.FC<RichTextBlockProps> = ({
   id,
   content,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  
+  
+  /* eslint-disable-next-line @typescript-eslint/no-unused-vars */
   formatting,
   className,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  
+  
+  /* eslint-disable-next-line @typescript-eslint/no-unused-vars */
   onChange,
   ...props
 }) => {

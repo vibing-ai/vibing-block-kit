@@ -25,6 +25,11 @@ interface BoardViewProps {
 export const BoardView: React.FC<BoardViewProps> = ({
   items,
   onItemMove,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  
+  
+  /* eslint-disable-next-line @typescript-eslint/no-unused-vars */
   onItemResize,
   onItemAdd,
   onItemDelete,

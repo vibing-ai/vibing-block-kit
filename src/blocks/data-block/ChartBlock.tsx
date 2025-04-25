@@ -23,9 +23,13 @@ import { BlockProps } from '../../types';
 
 export type ChartType = 'bar' | 'line' | 'pie' | 'area' | 'scatter';
 
+export type ChartDataPoint = {
+  [key: string]: string | number | null | undefined;
+};
+
 export interface ChartBlockProps extends BlockProps {
   type: ChartType;
-  data: any[];
+  data: ChartDataPoint[];
   options?: {
     xAxisDataKey?: string;
     yAxisDataKey?: string;
@@ -49,6 +53,11 @@ export const ChartBlock: React.FC<ChartBlockProps> = ({
   height = 300,
   width = '100%',
   className,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  
+  
+  /* eslint-disable-next-line @typescript-eslint/no-unused-vars */
   onChange,
   ...props
 }) => {

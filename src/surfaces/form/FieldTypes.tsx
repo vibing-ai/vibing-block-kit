@@ -1,4 +1,5 @@
 import React from 'react';
+import { FormValue } from './FormBuilder';
 
 export enum FieldType {
   Text = 'text',
@@ -32,7 +33,7 @@ export interface FieldValidation {
   min?: number;
   max?: number;
   pattern?: string;
-  customValidator?: (value: any) => string | null;
+  customValidator?: (value: FormValue) => string | null;
 }
 
 export interface FieldConfig {
@@ -44,17 +45,17 @@ export interface FieldConfig {
   required?: boolean;
   disabled?: boolean;
   readOnly?: boolean;
-  defaultValue?: any;
+  defaultValue?: FormValue;
   options?: FieldOption[]; // For select, multiselect, radio, checkbox
   validation?: FieldValidation;
   dependencies?: string[]; // Fields that this field depends on
-  conditionalDisplay?: (formData: Record<string, any>) => boolean;
+  conditionalDisplay?: (formData: Record<string, FormValue>) => boolean;
 }
 
 interface FieldProps {
   field: FieldConfig;
-  value: any;
-  onChange: (value: any) => void;
+  value: FormValue;
+  onChange: (value: FormValue) => void;
   error?: string;
 }
 
@@ -71,7 +72,7 @@ export const TextField: React.FC<FieldProps> = ({
     <input
       type="text"
       id={field.id}
-      value={value || ''}
+      value={value?.toString() || ''}
       onChange={(e) => onChange(e.target.value)}
       placeholder={field.placeholder}
       disabled={field.disabled}
@@ -98,7 +99,7 @@ export const TextAreaField: React.FC<FieldProps> = ({
   return (
     <textarea
       id={field.id}
-      value={value || ''}
+      value={value?.toString() || ''}
       onChange={(e) => onChange(e.target.value)}
       placeholder={field.placeholder}
       disabled={field.disabled}
@@ -126,7 +127,7 @@ export const SelectField: React.FC<FieldProps> = ({
   return (
     <select
       id={field.id}
-      value={value || ''}
+      value={value?.toString() || ''}
       onChange={(e) => onChange(e.target.value)}
       disabled={field.disabled}
       className={`

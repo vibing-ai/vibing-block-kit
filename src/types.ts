@@ -1,6 +1,11 @@
 import React from 'react';
 
 /**
+ * Type for block data that can be passed to onChange
+ */
+export type BlockData = Record<string, string | number | boolean | null | undefined | BlockData | Array<unknown>>;
+
+/**
  * Base properties for all blocks
  */
 export interface BlockProps {
@@ -17,7 +22,7 @@ export interface BlockProps {
   /**
    * Callback fired when the block data changes
    */
-  onChange?: (id: string, data: any) => void;
+  onChange?: (id: string, data: BlockData) => void;
 }
 
 /**
@@ -49,5 +54,5 @@ export type BlockType =
 export interface SerializedBlock {
   id: string;
   type: BlockType;
-  data: Record<string, any>;
+  data: BlockData;
 } 

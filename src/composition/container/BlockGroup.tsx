@@ -40,7 +40,7 @@ export interface BlockGroupProps extends Omit<ContainerBlockProps, 'onChange'> {
   /**
    * Custom callback for when blocks in this group change
    */
-  onChangeBlock?: (id: string, data: any) => void;
+  onChangeBlock?: (id: string, data: Record<string, unknown>) => void;
 }
 
 /**

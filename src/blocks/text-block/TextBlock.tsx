@@ -24,7 +24,12 @@ export const TextBlock: React.FC<TextBlockProps> = ({
   text,
   type = 'paragraph',
   className,
-  onChange, // Destructure but don't use to avoid passing to DOM
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  
+  
+  /* eslint-disable-next-line @typescript-eslint/no-unused-vars */
+  onChange,
   ...props
 }) => {
   // Get the appropriate HTML element

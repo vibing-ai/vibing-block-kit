@@ -16,6 +16,11 @@ export const ExecutableCodeBlock: React.FC<ExecutableCodeBlockProps> = ({
   output = '',
   isRunning = false,
   className,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  
+  
+  /* eslint-disable-next-line @typescript-eslint/no-unused-vars */
   onChange,
   ...props
 }) => {

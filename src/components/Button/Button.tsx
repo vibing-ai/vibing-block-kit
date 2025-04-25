@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button as HeroButton, ButtonProps as HeroButtonProps } from '@heroui/react';
+import { Button as HeroButton } from '@heroui/react';
 
 // We'll create our own button props that don't extend HeroButtonProps to avoid conflicts
 export interface ButtonProps {
@@ -17,8 +17,12 @@ export interface ButtonProps {
   'aria-label'?: string;
 }
 
+// Define HeroUI variant and size types to avoid using any
+type HeroVariant = 'solid' | 'bordered' | 'flat' | 'ghost' | 'light';
+type HeroSize = 'sm' | 'md' | 'lg';
+
 // Map our variant to HeroUI variant
-const variantMap: Record<string, string> = {
+const variantMap: Record<string, HeroVariant> = {
   'default': 'solid',
   'destructive': 'solid',
   'outline': 'bordered',
@@ -28,7 +32,7 @@ const variantMap: Record<string, string> = {
 };
 
 // Map our size to HeroUI size
-const sizeMap: Record<string, string> = {
+const sizeMap: Record<string, HeroSize> = {
   'default': 'md',
   'sm': 'sm',
   'lg': 'lg',
@@ -54,8 +58,8 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     return (
       <HeroButton
         ref={ref}
-        variant={heroVariant as any}
-        size={heroSize as any}
+        variant={heroVariant}
+        size={heroSize}
         className={`${fullWidth ? 'w-full' : ''} ${className || ''}`}
         data-testid={testId}
         {...props}

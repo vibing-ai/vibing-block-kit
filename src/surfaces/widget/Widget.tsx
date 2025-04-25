@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 
 interface WidgetProps {
-  id: string;
   title?: string;
   icon?: React.ReactNode;
   children: React.ReactNode;
@@ -21,7 +20,6 @@ interface WidgetProps {
  * Widget component for displaying blocks in a dashboard-like interface
  */
 export const Widget: React.FC<WidgetProps> = ({
-  id,
   title,
   icon,
   children,

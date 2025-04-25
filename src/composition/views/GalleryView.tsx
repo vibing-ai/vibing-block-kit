@@ -55,7 +55,7 @@ export const GalleryView: React.FC<GalleryViewProps> = ({
             className="flex transition-transform duration-300"
             style={{ transform: `translateX(-${activeIndex * 100}%)` }}
           >
-            {items.map((item, index) => (
+            {items.map((item) => (
               <div 
                 key={item.id} 
                 className="w-full flex-shrink-0"
@@ -64,11 +64,13 @@ export const GalleryView: React.FC<GalleryViewProps> = ({
               >
                 <div 
                   className="bg-white border border-gray-200 rounded-md shadow-sm overflow-hidden"
-                  onClick={() => onItemClick && onItemClick(item.id)}
+                  onClick={() => {
+                    if (onItemClick) onItemClick(item.id);
+                  }}
                   onKeyDown={(e) => {
                     if (e.key === 'Enter' || e.key === ' ') {
                       e.preventDefault();
-                      onItemClick && onItemClick(item.id);
+                      if (onItemClick) onItemClick(item.id);
                     }
                   }}
                   tabIndex={0}
@@ -91,7 +93,7 @@ export const GalleryView: React.FC<GalleryViewProps> = ({
                         className="text-xs text-blue-600 hover:text-blue-800 mr-2"
                         onClick={(e) => {
                           e.stopPropagation();
-                          onItemEdit && onItemEdit(item.id);
+                          if (onItemEdit) onItemEdit(item.id);
                         }}
                       >
                         Edit
@@ -100,7 +102,7 @@ export const GalleryView: React.FC<GalleryViewProps> = ({
                         className="text-xs text-red-600 hover:text-red-800"
                         onClick={(e) => {
                           e.stopPropagation();
-                          onItemDelete && onItemDelete(item.id);
+                          if (onItemDelete) onItemDelete(item.id);
                         }}
                       >
                         Delete
@@ -166,11 +168,13 @@ export const GalleryView: React.FC<GalleryViewProps> = ({
           >
             <div 
               className="bg-white border border-gray-200 rounded-md shadow-sm overflow-hidden h-full"
-              onClick={() => onItemClick && onItemClick(item.id)}
+              onClick={() => {
+                if (onItemClick) onItemClick(item.id);
+              }}
               onKeyDown={(e) => {
                 if (e.key === 'Enter' || e.key === ' ') {
                   e.preventDefault();
-                  onItemClick && onItemClick(item.id);
+                  if (onItemClick) onItemClick(item.id);
                 }
               }}
               tabIndex={0}
@@ -201,7 +205,7 @@ export const GalleryView: React.FC<GalleryViewProps> = ({
                   className="p-1 bg-white rounded-full shadow-sm text-blue-600 hover:text-blue-800"
                   onClick={(e) => {
                     e.stopPropagation();
-                    onItemEdit && onItemEdit(item.id);
+                    if (onItemEdit) onItemEdit(item.id);
                   }}
                 >
                   ✏️
@@ -210,7 +214,7 @@ export const GalleryView: React.FC<GalleryViewProps> = ({
                   className="p-1 bg-white rounded-full shadow-sm text-red-600 hover:text-red-800"
                   onClick={(e) => {
                     e.stopPropagation();
-                    onItemDelete && onItemDelete(item.id);
+                    if (onItemDelete) onItemDelete(item.id);
                   }}
                 >
                   🗑️
@@ -225,7 +229,9 @@ export const GalleryView: React.FC<GalleryViewProps> = ({
         <div className="mt-4 text-center">
           <button
             className="px-4 py-2 text-gray-500 border border-gray-300 rounded-md hover:bg-gray-50"
-            onClick={onItemAdd}
+            onClick={() => {
+              if (onItemAdd) onItemAdd();
+            }}
           >
             + Add Item
           </button>

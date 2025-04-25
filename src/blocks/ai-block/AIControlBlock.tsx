@@ -7,13 +7,20 @@ export interface AIModel {
   description?: string;
 }
 
+// Define a specific type for AI settings
+export interface AISettings {
+  temperature?: number;
+  maxTokens?: number;
+  [key: string]: string | number | boolean | undefined;
+}
+
 export interface AIControlBlockProps extends BlockProps {
   models?: AIModel[];
   selectedModel?: string;
   temperature?: number;
   maxTokens?: number;
   onModelChange?: (modelId: string) => void;
-  onSettingsChange?: (settings: Record<string, any>) => void;
+  onSettingsChange?: (settings: AISettings) => void;
   // Add other props as needed
 }
 

@@ -19,6 +19,11 @@ interface NotificationToastProps {
  * Toast notification component
  */
 export const NotificationToast: React.FC<NotificationToastProps> = ({
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  
+  
+  /* eslint-disable-next-line @typescript-eslint/no-unused-vars */
   id,
   type = 'info',
   title,

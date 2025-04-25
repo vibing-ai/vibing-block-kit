@@ -5,8 +5,7 @@ import { useState, useCallback } from 'react';
  */
 export function useBlockState<T>(
   initialState: T, 
-  onChange?: (data: T) => void,
-  id?: string
+  onChange?: (data: T) => void
 ) {
   const [state, setState] = useState<T>(initialState);
   

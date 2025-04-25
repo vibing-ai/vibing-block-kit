@@ -33,7 +33,9 @@ export const VideoBlock: React.FC<VideoBlockProps> = ({
   captionSrc,
   captionLang = 'en',
   className,
-  onChange: _onChange,
+  onChange:
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+   _onChange,
   ...props
 }) => {
   return (

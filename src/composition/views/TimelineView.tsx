@@ -85,11 +85,13 @@ export const TimelineView: React.FC<TimelineViewProps> = ({
               {/* Content */}
               <div 
                 className="mt-4 bg-white border border-gray-200 rounded-md shadow-sm p-4 w-60"
-                onClick={() => onItemClick && onItemClick(item.id)}
+                onClick={() => {
+                  if (onItemClick) onItemClick(item.id);
+                }}
                 onKeyDown={(e) => {
                   if (e.key === 'Enter' || e.key === ' ') {
                     e.preventDefault();
-                    onItemClick && onItemClick(item.id);
+                    if (onItemClick) onItemClick(item.id);
                   }
                 }}
                 tabIndex={0}
@@ -106,7 +108,7 @@ export const TimelineView: React.FC<TimelineViewProps> = ({
                       className="text-xs text-blue-600 hover:text-blue-800 mr-2"
                       onClick={(e) => {
                         e.stopPropagation();
-                        onItemEdit && onItemEdit(item.id);
+                        if (onItemEdit) onItemEdit(item.id);
                       }}
                     >
                       Edit
@@ -115,7 +117,7 @@ export const TimelineView: React.FC<TimelineViewProps> = ({
                       className="text-xs text-red-600 hover:text-red-800"
                       onClick={(e) => {
                         e.stopPropagation();
-                        onItemDelete && onItemDelete(item.id);
+                        if (onItemDelete) onItemDelete(item.id);
                       }}
                     >
                       Delete
@@ -156,11 +158,13 @@ export const TimelineView: React.FC<TimelineViewProps> = ({
               
               <div 
                 className="bg-white border border-gray-200 rounded-md shadow-sm p-4"
-                onClick={() => onItemClick && onItemClick(item.id)}
+                onClick={() => {
+                  if (onItemClick) onItemClick(item.id);
+                }}
                 onKeyDown={(e) => {
                   if (e.key === 'Enter' || e.key === ' ') {
                     e.preventDefault();
-                    onItemClick && onItemClick(item.id);
+                    if (onItemClick) onItemClick(item.id);
                   }
                 }}
                 tabIndex={0}
@@ -177,7 +181,7 @@ export const TimelineView: React.FC<TimelineViewProps> = ({
                       className="text-xs text-blue-600 hover:text-blue-800 mr-2"
                       onClick={(e) => {
                         e.stopPropagation();
-                        onItemEdit && onItemEdit(item.id);
+                        if (onItemEdit) onItemEdit(item.id);
                       }}
                     >
                       Edit
@@ -186,7 +190,7 @@ export const TimelineView: React.FC<TimelineViewProps> = ({
                       className="text-xs text-red-600 hover:text-red-800"
                       onClick={(e) => {
                         e.stopPropagation();
-                        onItemDelete && onItemDelete(item.id);
+                        if (onItemDelete) onItemDelete(item.id);
                       }}
                     >
                       Delete
@@ -203,7 +207,9 @@ export const TimelineView: React.FC<TimelineViewProps> = ({
         <div className="mt-4 text-center">
           <button
             className="px-4 py-2 text-gray-500 border border-gray-300 rounded-md hover:bg-gray-50"
-            onClick={() => onItemAdd && onItemAdd(new Date())}
+            onClick={() => {
+              if (onItemAdd) onItemAdd(new Date());
+            }}
           >
             + Add Event
           </button>

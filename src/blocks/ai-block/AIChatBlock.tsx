@@ -27,6 +27,8 @@ export const AIChatBlock: React.FC<AIChatBlockProps> = ({
   userAvatarSrc,
   assistantAvatarSrc,
   className,
+  // We exclude onChange from the props we pass to the Card component
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   onChange,
   ...props
 }) => {
