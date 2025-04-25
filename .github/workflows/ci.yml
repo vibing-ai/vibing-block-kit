@@ -45,13 +45,24 @@ jobs:
       - name: Test
         run: npm run test || echo "No tests found"
         
+      - name: Check for coverage files
+        id: check_coverage
+        run: |
+          if [ -d "coverage" ] && [ "$(find coverage -type f | wc -l)" -gt 0 ]; then
+            echo "has_coverage=true" >> $GITHUB_OUTPUT
+            echo "Coverage files found, will upload artifacts"
+          else
+            echo "has_coverage=false" >> $GITHUB_OUTPUT
+            echo "No coverage files found, skipping artifact upload"
+          fi
+        
       - name: Upload test coverage
         uses: actions/upload-artifact@v3
         with:
           name: coverage
           path: coverage/
           retention-days: 7
-        if: hashFiles('coverage/**/*') != ''
+        if: steps.check_coverage.outputs.has_coverage == 'true'
 
       - name: Build Storybook
         run: npm run build-storybook
