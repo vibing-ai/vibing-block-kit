@@ -7,11 +7,12 @@ on:
     types: [opened, synchronize]
 
 jobs:
+# ────────────────────────────────────────────────────────────────────────────────
   build:
     name: Build and Test
     timeout-minutes: 15
     runs-on: ubuntu-latest
-    
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -23,18 +24,17 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 18
-          cache: 'npm'
-          
+          cache: npm
+
       - name: Install dependencies
         run: npm ci
-        
+
       - name: Build design tokens
         run: npm run tokens:build
-        
-      - name: Build
+
+      - name: Build package
         run: npm run build
 
-      # Size limit check disabled until we can optimize the bundle
       - name: Display Package Size
         run: |
           echo "Package size information:"
@@ -42,36 +42,33 @@ jobs:
 
       - name: Lint
         run: npm run lint
-        
+
       - name: Test
         run: npm run test || echo "No tests found"
-        
-      # Prepare coverage directory regardless of whether tests generated it
+
       - name: Prepare coverage directory
         run: |
           mkdir -p coverage
           echo "Coverage report would appear here" > coverage/README.md
           ls -la coverage/
 
-      # Upload test coverage to artifacts
+      # ── 1️⃣ Upload code-coverage (generic artifact) ───────────────────────────
       - name: Upload test coverage
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v3   # or v4 if on GitHub-cloud
         with:
           name: coverage
           path: coverage
-        continue-on-error: true  # Don't fail the workflow if this step fails
+        continue-on-error: true
 
+      # ── 2️⃣ Build Storybook and package it for GitHub Pages ───────────────────
       - name: Build Storybook
-        run: npm run build-storybook
-        
-      # Upload Storybook to artifacts
-      - name: Upload Storybook artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: storybook-static
-          path: storybook-static
-        continue-on-error: true  # Don't fail the workflow if this step fails
+        run: npm run build-storybook -- --output-dir storybook-static
 
+      - name: Upload Storybook to Pages artifact
+        uses: actions/upload-pages-artifact@v2
+        with:
+          path: storybook-static        # .nojekyll added automatically
+# ────────────────────────────────────────────────────────────────────────────────
   deploy-storybook:
     name: Deploy Storybook
     needs: build
@@ -83,18 +80,7 @@ jobs:
       id-token: write
 
     steps:
-      # Download the Storybook artifact from the build job
-      - name: Download Storybook artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: storybook-static
-          path: storybook-static
-
-      - name: Upload to GitHub Pages
-        uses: actions/upload-pages-artifact@v2
-        with:
-          path: storybook-static
-
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v2 
+        uses: actions/deploy-pages@v4
+ 

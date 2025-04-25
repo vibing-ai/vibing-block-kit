@@ -1,4 +1,3 @@
-import * as React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 import { ToolPalette } from '@vibing-ai/block-kit';
 
@@ -31,7 +30,7 @@ const meta = {
   component: ToolPalette,
   tags: ['autodocs'],
   // Type argTypes as a generic Record to avoid type errors
-  argTypes: {} as Record<string, any>,
+  argTypes: {} as Record<string, unknown>,
 } satisfies Meta<typeof ToolPalette>;
 
 export default meta;

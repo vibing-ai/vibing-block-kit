@@ -1,4 +1,3 @@
-import * as React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 import { FormBuilder } from '@vibing-ai/block-kit';
 
@@ -25,7 +24,7 @@ interface FormBuilderStoryProps {
         value: string;
         label: string;
       }>;
-      defaultValue?: any;
+      defaultValue?: unknown;
       rows?: number;
       itemTemplate?: {
         type: string;
@@ -47,7 +46,7 @@ interface FormBuilderStoryProps {
           value: string;
           label: string;
         }>;
-        defaultValue?: any;
+        defaultValue?: unknown;
       }>;
     }>;
   };
@@ -60,7 +59,7 @@ const meta = {
   component: FormBuilder,
   tags: ['autodocs'],
   // Type argTypes as a generic Record to avoid type errors
-  argTypes: {} as Record<string, any>,
+  argTypes: {} as Record<string, unknown>,
 } satisfies Meta<typeof FormBuilder>;
 
 export default meta;

@@ -26,7 +26,7 @@ const meta = {
   component: Widget,
   tags: ['autodocs'],
   // Type argTypes as a generic Record to avoid type errors
-  argTypes: {} as Record<string, any>,
+  argTypes: {} as Record<string, unknown>,
 } satisfies Meta<typeof Widget>;
 
 export default meta;
@@ -85,7 +85,7 @@ const items = [
 
 const total = calculateTotal(items);
 // Format and return the total
-return \`Total: \$\${total}\`; // Outputs: Total: $50`
+return \`Total: $\${total}\`; // Outputs: Total: $50`
     }),
   },
 };

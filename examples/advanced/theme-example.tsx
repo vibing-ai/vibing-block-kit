@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { 
   BlockKitProvider, 
   Button, 
@@ -117,9 +117,9 @@ export default function ThemeExample() {
                   
                   <div className={`space-y-2 ${useSystem ? 'opacity-50 pointer-events-none' : ''}`}>
                     <div>
-                      <label className="text-sm font-medium">Select Theme:</label>
+                      <label htmlFor="theme-select" className="text-sm font-medium">Select Theme:</label>
                     </div>
-                    <div className="flex flex-wrap gap-2">
+                    <div id="theme-select" className="flex flex-wrap gap-2">
                       <Button 
                         variant={currentTheme === 'light' ? 'default' : 'outline'}
                         size="sm"

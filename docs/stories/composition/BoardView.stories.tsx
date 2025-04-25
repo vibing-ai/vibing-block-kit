@@ -1,5 +1,5 @@
 import React from 'react';
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta } from '@storybook/react';
 // The BoardView component doesn't exist in '@vibing-ai/block-kit'
 // import { BoardView } from '@vibing-ai/block-kit';
 
@@ -41,7 +41,7 @@ export const ProjectDashboard: Story = {
 export default {
   title: 'Composition/Views/BoardView',
   component: () => null,
-} as Meta<any>;
+} as Meta<unknown>;
 
 // Using React.createElement to avoid JSX issues
 export const Placeholder = {

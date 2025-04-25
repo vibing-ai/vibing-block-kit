@@ -17,7 +17,7 @@ const meta = {
   component: BlockModal,
   tags: ['autodocs'],
   // Type argTypes as a generic Record to avoid type errors
-  argTypes: {} as Record<string, any>,
+  argTypes: {} as Record<string, unknown>,
 } satisfies Meta<typeof BlockModal>;
 
 export default meta;
@@ -45,7 +45,7 @@ export const WithForm: Story = {
     size: 'md',
     children: React.createElement(FormBlock, {
       id: "modal-form",
-      children: React.createElement('div', null, [
+      children: [
         React.createElement('div', { key: 'field-1', className: 'form-field' }, [
           React.createElement('label', { htmlFor: 'projectName' }, 'Project Name'),
           React.createElement('input', { 
@@ -72,7 +72,7 @@ export const WithForm: Story = {
             React.createElement('option', { value: 'ai' }, 'Artificial Intelligence')
           ])
         ])
-      ])
+      ]
     })
   },
 };

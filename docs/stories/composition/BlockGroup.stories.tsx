@@ -1,5 +1,5 @@
 import * as React from 'react';
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta } from '@storybook/react';
 // The BlockGroup component doesn't exist in '@vibing-ai/block-kit'
 // import { BlockGroup } from '@vibing-ai/block-kit';
 
@@ -54,7 +54,7 @@ export const WithActions: Story = {
 export default {
   title: 'Composition/Container/BlockGroup',
   component: () => null,
-} as Meta<any>;
+} as Meta<unknown>;
 
 export const Placeholder = {
   render: () => React.createElement('div', null, 'BlockGroup component is not yet implemented')

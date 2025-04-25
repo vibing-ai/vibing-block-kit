@@ -1,4 +1,3 @@
-import * as React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 import { CommandBar } from '@vibing-ai/block-kit';
 
@@ -31,7 +30,7 @@ interface CommandBarStoryProps {
     description?: string;
     matchedTerms?: string[];
   }>;
-  onSelect?: (item: any) => void;
+  onSelect?: (item: unknown) => void;
 }
 
 const meta = {
@@ -39,7 +38,7 @@ const meta = {
   component: CommandBar,
   tags: ['autodocs'],
   // Type argTypes as a generic Record to avoid type errors
-  argTypes: {} as Record<string, any>,
+  argTypes: {} as Record<string, unknown>,
 } satisfies Meta<typeof CommandBar>;
 
 export default meta;

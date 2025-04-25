@@ -24,7 +24,7 @@ const meta = {
   component: ContextPanel,
   tags: ['autodocs'],
   // Type argTypes as a generic Record to avoid type errors
-  argTypes: {} as Record<string, any>,
+  argTypes: {} as Record<string, unknown>,
 } satisfies Meta<typeof ContextPanel>;
 
 export default meta;

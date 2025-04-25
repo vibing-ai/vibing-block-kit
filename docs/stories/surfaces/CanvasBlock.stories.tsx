@@ -1,4 +1,3 @@
-import * as React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 import { CanvasBlock } from '@vibing-ai/block-kit';
 
@@ -21,7 +20,7 @@ const meta = {
   component: CanvasBlock,
   tags: ['autodocs'],
   // Type argTypes as a generic Record to avoid type errors
-  argTypes: {} as Record<string, any>,
+  argTypes: {} as Record<string, unknown>,
 } satisfies Meta<typeof CanvasBlock>;
 
 export default meta;

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta } from '@storybook/react';
 // Import commented out since it seems the component has a different interface
 // import { BlockContainer } from '@vibing-ai/block-kit';
 
@@ -7,7 +7,7 @@ import type { Meta, StoryObj } from '@storybook/react';
 // The actual BlockContainer component exists but has interface mismatches
 
 // Temporary placeholder for the component
-const BlockContainer = (props: any) => {
+const BlockContainer = () => {
   return React.createElement('div', null, 'BlockContainer Placeholder');
 };
 
@@ -16,11 +16,10 @@ const meta = {
   component: BlockContainer,
   tags: ['autodocs'],
   // Type argTypes as a generic Record to avoid type errors
-  argTypes: {} as Record<string, any>,
+  argTypes: {} as Record<string, unknown>,
 } satisfies Meta<typeof BlockContainer>;
 
 export default meta;
-type Story = StoryObj<typeof BlockContainer>;
 
 export const Placeholder = {
   render: () => React.createElement('div', null, 'BlockContainer stories need to be updated to match the component interface')

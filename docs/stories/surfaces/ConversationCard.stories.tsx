@@ -1,4 +1,3 @@
-import * as React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 import { ConversationCard } from '@vibing-ai/block-kit';
 
@@ -11,7 +10,7 @@ interface ConversationCardStoryProps {
     role: 'user' | 'assistant' | 'system';
     content: string;
     timestamp?: Date;
-    metadata?: Record<string, any>;
+    metadata?: Record<string, unknown>;
     status?: 'sending' | 'sent' | 'error' | 'streaming';
   }>;
   isGenerating?: boolean;  // Using proper prop name from component
@@ -25,7 +24,7 @@ const meta = {
   component: ConversationCard,
   tags: ['autodocs'],
   // Type argTypes as a generic Record to avoid type errors
-  argTypes: {} as Record<string, any>,
+  argTypes: {} as Record<string, unknown>,
 } satisfies Meta<typeof ConversationCard>;
 
 export default meta;

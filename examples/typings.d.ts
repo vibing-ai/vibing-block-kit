@@ -35,7 +35,7 @@ declare module '@vibing-ai/block-kit' {
     children?: ReactNode;
     className?: string;
     spacing?: 'sm' | 'md' | 'lg' | 'xl';
-    as?: keyof JSX.IntrinsicElements | React.ComponentType<any>;
+    as?: keyof JSX.IntrinsicElements | React.ComponentType<unknown>;
     onSubmit?: (e: FormEvent) => void;
   }
 
@@ -71,7 +71,7 @@ declare module '@vibing-ai/block-kit' {
     placeholder?: string;
     value?: string;
     checked?: boolean;
-    onChange?: (value: any) => void;
+    onChange?: (value: unknown) => void;
     required?: boolean;
     className?: string;
   }
@@ -115,7 +115,7 @@ declare module '@vibing-ai/block-kit' {
   interface FormBlockProps {
     id: string;
     children?: ReactNode;
-    onSubmit?: (data: any) => void;
+    onSubmit?: (data: unknown) => void;
     className?: string;
   }
 
@@ -132,7 +132,7 @@ declare module '@vibing-ai/block-kit' {
 
   interface TableBlockProps {
     id: string;
-    data: Array<Record<string, any>>;
+    data: Array<Record<string, unknown>>;
     columns: Array<{
       header: string;
       accessor: string;
@@ -148,7 +148,7 @@ declare module '@vibing-ai/block-kit' {
       id: string;
       type: string;
       position: { x: number; y: number };
-      data: any;
+      data: unknown;
     }>;
     edges: Array<{
       id: string;
@@ -250,7 +250,7 @@ declare module '@vibing-ai/block-kit' {
       required?: boolean;
       options?: Array<{ label: string; value: string }>;
     }>;
-    onSubmit?: (data: any) => void;
+    onSubmit?: (data: unknown) => void;
   }
 
   interface ConversationCardProps {

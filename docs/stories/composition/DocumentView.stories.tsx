@@ -1,5 +1,5 @@
 import React from 'react';
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta } from '@storybook/react';
 // The DocumentView component doesn't exist in '@vibing-ai/block-kit'
 // import { DocumentView } from '@vibing-ai/block-kit';
 // import { ReactNode } from 'react';
@@ -49,7 +49,7 @@ export const WithMetadata: Story = {
 export default {
   title: 'Composition/Views/DocumentView',
   component: () => null,
-} as Meta<any>;
+} as Meta<unknown>;
 
 export const Placeholder = {
   render: () => React.createElement('div', null, 'DocumentView component is not yet implemented')

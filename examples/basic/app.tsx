@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { BlockKitProvider, createCustomTheme } from '@vibing-ai/block-kit';
 import Home from './index';
 
