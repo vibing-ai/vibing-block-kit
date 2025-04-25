@@ -54,7 +54,7 @@ jobs:
 
       # ── 1️⃣ Upload code-coverage (generic artifact) ───────────────────────────
       - name: Upload test coverage
-        uses: actions/upload-artifact@v4   # or v4 if on GitHub-cloud
+        uses: actions/upload-artifact@v4
         with:
           name: coverage
           path: coverage
@@ -65,7 +65,7 @@ jobs:
         run: npm run build-storybook -- --output-dir storybook-static
 
       - name: Upload Storybook to Pages artifact
-        uses: actions/upload-pages-artifact@v2
+        uses: actions/upload-pages-artifact@v3
         with:
           path: storybook-static        # .nojekyll added automatically
 # ────────────────────────────────────────────────────────────────────────────────
@@ -82,5 +82,4 @@ jobs:
     steps:
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v4
- 
+        uses: actions/deploy-pages@v4 
