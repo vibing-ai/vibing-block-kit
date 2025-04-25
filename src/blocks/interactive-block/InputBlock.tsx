@@ -51,99 +51,100 @@ export const InputBlock: React.FC<InputBlockProps> = ({
     onChange?.(id, { value: newValue });
   };
 
+  const renderTextarea = () => (
+    <Textarea
+      id={`input-${id}`}
+      name={name}
+      placeholder={placeholder}
+      value={value as string}
+      required={required}
+      disabled={disabled}
+      size={size}
+      variant={variant}
+      className={fullWidth ? 'w-full' : ''}
+      onChange={(e) => handleChange(e.target.value)}
+    />
+  );
+  
+  const renderSelect = () => (
+    <Select
+      id={`input-${id}`}
+      name={name}
+      value={value as string}
+      required={required}
+      disabled={disabled}
+      size={size}
+      variant={variant}
+      className={fullWidth ? 'w-full' : ''}
+      onChange={(e) => handleChange(e.target.value)}
+    >
+      {options.map((option, index) => (
+        <option key={index} value={option.value}>
+          {option.label}
+        </option>
+      ))}
+    </Select>
+  );
+  
+  const renderCheckbox = () => (
+    <div className="flex flex-col gap-2">
+      {options.map((option, index) => (
+        <Checkbox
+          key={index}
+          id={`${name}-${option.value}`}
+          name={name}
+          value={option.value}
+          checked={value === option.value}
+          disabled={disabled}
+          onChange={(e) => handleChange(e.target.checked ? option.value : '')}
+        >
+          {option.label}
+        </Checkbox>
+      ))}
+    </div>
+  );
+  
+  const renderRadio = () => (
+    <div className="flex flex-col gap-2" role="radiogroup">
+      {options.map((option, index) => (
+        <Radio
+          key={index}
+          id={`${name}-${option.value}`}
+          name={name}
+          value={option.value}
+          checked={value === option.value}
+          disabled={disabled}
+          onChange={() => handleChange(option.value)}
+        >
+          {option.label}
+        </Radio>
+      ))}
+    </div>
+  );
+  
+  const renderDefaultInput = () => (
+    <Input
+      id={`input-${id}`}
+      type={type}
+      name={name}
+      placeholder={placeholder}
+      value={value as string}
+      required={required}
+      disabled={disabled}
+      size={size}
+      variant={variant}
+      className={fullWidth ? 'w-full' : ''}
+      onChange={(e) => handleChange(e.target.value)}
+    />
+  );
+
   const renderInput = () => {
     switch (type) {
-      case 'textarea':
-        return (
-          <Textarea
-            id={`input-${id}`}
-            name={name}
-            placeholder={placeholder}
-            value={value as string}
-            required={required}
-            disabled={disabled}
-            size={size}
-            variant={variant}
-            className={fullWidth ? 'w-full' : ''}
-            onChange={(e) => handleChange(e.target.value)}
-          />
-        );
-      
-      case 'select':
-        return (
-          <Select
-            id={`input-${id}`}
-            name={name}
-            value={value as string}
-            required={required}
-            disabled={disabled}
-            size={size}
-            variant={variant}
-            className={fullWidth ? 'w-full' : ''}
-            onChange={(e) => handleChange(e.target.value)}
-          >
-            {options.map((option, index) => (
-              <option key={index} value={option.value}>
-                {option.label}
-              </option>
-            ))}
-          </Select>
-        );
-      
-      case 'checkbox':
-        return (
-          <div className="flex flex-col gap-2">
-            {options.map((option, index) => (
-              <Checkbox
-                key={index}
-                id={`${name}-${option.value}`}
-                name={name}
-                value={option.value}
-                checked={value === option.value}
-                disabled={disabled}
-                onChange={(e) => handleChange(e.target.checked ? option.value : '')}
-              >
-                {option.label}
-              </Checkbox>
-            ))}
-          </div>
-        );
-      
-      case 'radio':
-        return (
-          <div className="flex flex-col gap-2" role="radiogroup">
-            {options.map((option, index) => (
-              <Radio
-                key={index}
-                id={`${name}-${option.value}`}
-                name={name}
-                value={option.value}
-                checked={value === option.value}
-                disabled={disabled}
-                onChange={() => handleChange(option.value)}
-              >
-                {option.label}
-              </Radio>
-            ))}
-          </div>
-        );
-      
-      default:
-        return (
-          <Input
-            id={`input-${id}`}
-            type={type}
-            name={name}
-            placeholder={placeholder}
-            value={value as string}
-            required={required}
-            disabled={disabled}
-            size={size}
-            variant={variant}
-            className={fullWidth ? 'w-full' : ''}
-            onChange={(e) => handleChange(e.target.value)}
-          />
-        );
+      case 'textarea': return renderTextarea();
+      case 'select': return renderSelect();
+      case 'checkbox': return renderCheckbox();
+      case 'radio': return renderRadio();
+      default: return renderDefaultInput();
     }
   };
 
