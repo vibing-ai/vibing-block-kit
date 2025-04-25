@@ -1,6 +1,6 @@
 {
   "name": "@vibing-ai/block-kit",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Composable React + Tailwind component library for building Vibing apps, agents and plugins",
   "main": "dist/index.js",
   "module": "dist/index.esm.js",
