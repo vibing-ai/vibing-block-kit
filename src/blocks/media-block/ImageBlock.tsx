@@ -23,7 +23,7 @@ export const ImageBlock: React.FC<ImageBlockProps> = ({
   rounded = false,
   loading = 'lazy',
   className,
-  onChange,
+  onChange: _onChange,
   ...props
 }) => {
   return (

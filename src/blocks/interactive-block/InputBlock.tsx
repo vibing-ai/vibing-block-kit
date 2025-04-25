@@ -10,13 +10,14 @@ import {
 import { BlockProps } from '../../types';
 
 export type InputType = 'text' | 'number' | 'email' | 'password' | 'textarea' | 'select' | 'checkbox' | 'radio' | 'date';
+export type InputValueType = string | number | boolean;
 
 export interface InputBlockProps extends BlockProps {
   name: string;
   type: InputType;
   label?: string;
   placeholder?: string;
-  value?: string | number | boolean;
+  value?: InputValueType;
   options?: Array<{ label: string; value: string }>;
   required?: boolean;
   disabled?: boolean;
@@ -46,7 +47,7 @@ export const InputBlock: React.FC<InputBlockProps> = ({
   onChange,
   ...props
 }) => {
-  const handleChange = (newValue: any) => {
+  const handleChange = (newValue: InputValueType) => {
     onChange?.(id, { value: newValue });
   };
 

@@ -29,7 +29,7 @@ export const AudioBlock: React.FC<AudioBlockProps> = ({
   captionSrc,
   captionLang = 'en',
   className,
-  onChange,
+  onChange: _onChange,
   ...props
 }) => {
   const audioRef = React.useRef<HTMLAudioElement>(null);

@@ -33,7 +33,7 @@ export const VideoBlock: React.FC<VideoBlockProps> = ({
   captionSrc,
   captionLang = 'en',
   className,
-  onChange,
+  onChange: _onChange,
   ...props
 }) => {
   return (

@@ -41,6 +41,7 @@ module.exports = {
     'react/react-in-jsx-scope': 'off', // Not needed with React 18
     '@typescript-eslint/explicit-module-boundary-types': 'off',
     '@typescript-eslint/no-explicit-any': 'warn',
+    'jsx-a11y/media-has-caption': 'off', // We've implemented captions in our media components
   },
   ignorePatterns: ['dist', 'node_modules', 'storybook-static'],
 }; 

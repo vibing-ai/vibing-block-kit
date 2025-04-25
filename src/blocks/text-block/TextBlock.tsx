@@ -18,7 +18,7 @@ export const TextBlock: React.FC<TextBlockProps> = ({
   variant = 'paragraph',
   weight = 'normal',
   size = 'md',
-  onChange,
+  onChange: _onChange,
   ...props
 }) => {
   const variantMap = {
