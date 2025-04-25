@@ -54,7 +54,7 @@ jobs:
 
       # ── 1️⃣ Upload code-coverage (generic artifact) ───────────────────────────
       - name: Upload test coverage
-        uses: actions/upload-artifact@v3   # or v4 if on GitHub-cloud
+        uses: actions/upload-artifact@v4   # or v4 if on GitHub-cloud
         with:
           name: coverage
           path: coverage
