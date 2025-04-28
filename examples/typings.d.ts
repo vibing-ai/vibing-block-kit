@@ -266,6 +266,21 @@ declare module '@vibing-ai/block-kit' {
     isActive?: boolean;
     onClick?: () => void;
   }
+
+  interface TabBlockProps {
+    id: string;
+    tabs: Array<{
+      id: string;
+      label: string;
+      icon?: string;
+      content: React.ReactNode;
+    }>;
+    defaultTab?: string;
+    layout?: 'horizontal' | 'vertical';
+    mobileMode?: 'tabs' | 'accordion';
+    syncWithUrl?: boolean;
+    onChange?: (tabId: string) => void;
+  }
   
   // Component exports
   export function BlockKitProvider(props: BlockKitProviderProps): JSX.Element;
@@ -292,6 +307,7 @@ declare module '@vibing-ai/block-kit' {
   export function CanvasBlock(props: CanvasBlockProps): JSX.Element;
   export function FormBuilder(props: FormBuilderProps): JSX.Element;
   export function ConversationCard(props: ConversationCardProps): JSX.Element;
+  export function TabBlock(props: TabBlockProps): JSX.Element;
 
   // Theme utilities
   export function createCustomTheme(options: CustomTheme): CustomTheme;
