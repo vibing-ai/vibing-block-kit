@@ -23,7 +23,7 @@ module.exports = {
     },
     ecmaVersion: 'latest',
     sourceType: 'module',
-    project: './tsconfig.json',
+    project: ['./tsconfig.json', './docs/tsconfig.json'],
     tsconfigRootDir: __dirname,
     warnOnUnsupportedTypeScriptVersion: false
   },
