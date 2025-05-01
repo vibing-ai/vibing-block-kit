@@ -76,61 +76,61 @@ const minimalSafeFields: FormField[] = [
 ];
 
 // For reference only - not used in stories
-const allFormFields: FormField[] = [
-  ...minimalSafeFields,
-  {
-    id: 'phone',
-    type: 'tel',
-    label: 'Phone Number',
-    placeholder: '(123) 456-7890',
-    pattern: '^\\(\\d{3}\\)\\s\\d{3}-\\d{4}$',
-    patternMessage: 'Please enter a phone number in the format (123) 456-7890',
-  },
-  {
-    id: 'birthdate',
-    type: 'date',
-    label: 'Birth Date',
-    required: true,
-  },
-  {
-    id: 'department',
-    type: 'select',
-    label: 'Department',
-    placeholder: 'Select a department',
-    required: true,
-    options: [
-      { label: 'Marketing', value: 'marketing' },
-      { label: 'Sales', value: 'sales' },
-      { label: 'Engineering', value: 'engineering' },
-      { label: 'Human Resources', value: 'hr' },
-      { label: 'Customer Support', value: 'support' },
-    ],
-  },
-  {
-    id: 'interests',
-    type: 'checkbox',
-    label: 'Areas of Interest',
-    options: [
-      { label: 'Product Updates', value: 'products' },
-      { label: 'Industry News', value: 'news' },
-      { label: 'Company Events', value: 'events' },
-      { label: 'Training Opportunities', value: 'training' },
-    ],
-    multiple: true,
-  },
-  {
-    id: 'experience',
-    type: 'radio',
-    label: 'Years of Experience',
-    required: true,
-    options: [
-      { label: 'Less than 1 year', value: '<1' },
-      { label: '1-3 years', value: '1-3' },
-      { label: '3-5 years', value: '3-5' },
-      { label: '5+ years', value: '5+' },
-    ],
-  },
-];
+// const allFormFields: FormField[] = [
+//   ...minimalSafeFields,
+//   {
+//     id: 'phone',
+//     type: 'tel',
+//     label: 'Phone Number',
+//     placeholder: '(123) 456-7890',
+//     pattern: '^\\(\\d{3}\\)\\s\\d{3}-\\d{4}$',
+//     patternMessage: 'Please enter a phone number in the format (123) 456-7890',
+//   },
+//   {
+//     id: 'birthdate',
+//     type: 'date',
+//     label: 'Birth Date',
+//     required: true,
+//   },
+//   {
+//     id: 'department',
+//     type: 'select',
+//     label: 'Department',
+//     placeholder: 'Select a department',
+//     required: true,
+//     options: [
+//       { label: 'Marketing', value: 'marketing' },
+//       { label: 'Sales', value: 'sales' },
+//       { label: 'Engineering', value: 'engineering' },
+//       { label: 'Human Resources', value: 'hr' },
+//       { label: 'Customer Support', value: 'support' },
+//     ],
+//   },
+//   {
+//     id: 'interests',
+//     type: 'checkbox',
+//     label: 'Areas of Interest',
+//     options: [
+//       { label: 'Product Updates', value: 'products' },
+//       { label: 'Industry News', value: 'news' },
+//       { label: 'Company Events', value: 'events' },
+//       { label: 'Training Opportunities', value: 'training' },
+//     ],
+//     multiple: true,
+//   },
+//   {
+//     id: 'experience',
+//     type: 'radio',
+//     label: 'Years of Experience',
+//     required: true,
+//     options: [
+//       { label: 'Less than 1 year', value: '<1' },
+//       { label: '1-3 years', value: '1-3' },
+//       { label: '3-5 years', value: '3-5' },
+//       { label: '5+ years', value: '5+' },
+//     ],
+//   },
+// ];
 
 // Basic form
 export const BasicForm: Story = {

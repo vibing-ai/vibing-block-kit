@@ -125,7 +125,7 @@ export const FormBlock: React.FC<FormBlockProps> = ({
   const [formData, setFormData] = useState<Record<string, unknown>>(initialValues);
   const [formErrors, setFormErrors] = useState<Record<string, string>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isSubmitted, setIsSubmitted] = useState(false);
+  // const [isSubmitted, setIsSubmitted] = useState(false);
   const [formSuccess, setFormSuccess] = useState(false);
   
   // Reset form state when initial values change
