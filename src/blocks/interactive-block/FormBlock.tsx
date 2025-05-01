@@ -144,7 +144,21 @@ export const FormBlock: React.FC<FormBlockProps> = ({
     
     // Clear field error if validation mode is onChange
     if (validationMode === 'onChange') {
-      validateField(fieldId, value);
+      const field = fields.find(f => f.id === fieldId);
+      if (field) {
+        const errorMessage = validateField(field, value, formData);
+        
+        // Update form errors
+        setFormErrors(prev => {
+          const newErrors = { ...prev };
+          if (errorMessage) {
+            newErrors[fieldId] = errorMessage;
+          } else {
+            delete newErrors[fieldId];
+          }
+          return newErrors;
+        });
+      }
     }
     
     // Notify parent component of changes
@@ -153,51 +167,16 @@ export const FormBlock: React.FC<FormBlockProps> = ({
     }
   };
   
-  // Validate a single field
-  const validateField = (fieldId: string, value: unknown): boolean => {
-    const field = fields.find(f => f.id === fieldId);
-    if (!field) return true;
-    
-    // Check required validation
-    if (field.required && (value === undefined || value === null || value === '')) {
-      setFormErrors(prev => ({
-        ...prev,
-        [fieldId]: 'This field is required'
-      }));
-      return false;
-    }
-    
-    // Check pattern validation
-    if (field.pattern && typeof value === 'string' && !new RegExp(field.pattern).test(value)) {
-      setFormErrors(prev => ({
-        ...prev,
-        [fieldId]: field.patternMessage || 'Invalid format'
-      }));
-      return false;
-    }
-    
-    // Custom validation
-    if (field.validate) {
-      const errorMessage = field.validate(value, formData);
-      if (errorMessage) {
-        setFormErrors(prev => ({
-          ...prev,
-          [fieldId]: errorMessage
-        }));
-        return false;
-      }
-    }
-    
-    // Clear error if validation passes
-    setFormErrors(prev => {
-      const newErrors = { ...prev };
-      delete newErrors[fieldId];
-      return newErrors;
-    });
-    
-    return true;
+  // Validate required field
+  const validateRequired = (value: unknown): boolean => {
+    return !(value === undefined || value === null || value === '');
   };
-  
+
+  // Validate pattern for string fields
+  const validatePattern = (pattern: string, value: unknown): boolean => {
+    return typeof value === 'string' && new RegExp(pattern).test(value);
+  };
+
   // Validate all fields
   const validateForm = (): boolean => {
     let isValid = true;
@@ -207,19 +186,19 @@ export const FormBlock: React.FC<FormBlockProps> = ({
       const value = formData[field.id];
       
       // Required validation
-      if (field.required && (value === undefined || value === null || value === '')) {
+      if (field.required && !validateRequired(value)) {
         newErrors[field.id] = 'This field is required';
         isValid = false;
       }
       
       // Pattern validation
-      if (field.pattern && typeof value === 'string' && !new RegExp(field.pattern).test(value)) {
+      else if (field.pattern && !validatePattern(field.pattern, value)) {
         newErrors[field.id] = field.patternMessage || 'Invalid format';
         isValid = false;
       }
       
       // Custom validation
-      if (field.validate) {
+      else if (field.validate) {
         const errorMessage = field.validate(value, formData);
         if (errorMessage) {
           newErrors[field.id] = errorMessage;
@@ -237,7 +216,6 @@ export const FormBlock: React.FC<FormBlockProps> = ({
     e.preventDefault();
     
     setIsSubmitting(true);
-    setIsSubmitted(true);
     
     // Validate all fields
     const isValid = validateForm();

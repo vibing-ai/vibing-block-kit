@@ -6,12 +6,26 @@ import '@testing-library/jest-dom';
 // Mock the component for fast tests with fixed ARIA attributes to avoid linter errors
 /* eslint-disable jsx-a11y/aria-role */
 vi.mock('./FormBlock', () => ({
-  FormBlock: (props: any) => {
+  FormBlock: (props: {
+    id: string;
+    fields: FormField[];
+    initialValues?: Record<string, unknown>;
+    error?: string;
+    successMessage?: string;
+    isLoading?: boolean;
+    layout?: string;
+    spacing?: string;
+    onChange?: (id: string, values: Record<string, unknown>) => void;
+    onSubmit?: (values: Record<string, unknown>) => void;
+    onCancel?: () => void;
+    submitLabel?: string;
+    cancelLabel?: string;
+  }) => {
     // Track validation errors for testing
     const errors: Record<string, string> = {};
     
     // Check for required fields and pattern validation
-    props.fields.forEach((field: any) => {
+    props.fields.forEach((field: FormField) => {
       // Required field validation
       if (field.required && !props.initialValues?.[field.id]) {
         errors[field.id] = 'This field is required';
@@ -56,7 +70,7 @@ vi.mock('./FormBlock', () => ({
         `}} />}
         
         {/* Form fields */}
-        {props.fields.map((field: any) => {
+        {props.fields.map((field: FormField) => {
           // Determine field component based on type
           let FieldComponent;
           
@@ -74,10 +88,10 @@ vi.mock('./FormBlock', () => ({
                   key={field.id}
                   data-testid={`field-${field.id}`}
                   onChange={(e) => props.onChange && props.onChange(props.id, { [field.id]: e.target.value })}
-                  defaultValue={props.initialValues?.[field.id] || ''}
+                  defaultValue={props.initialValues?.[field.id] as string || ''}
                   {...ariaProps}
                 >
-                  {field.options?.map((option: any) => (
+                  {field.options?.map((option) => (
                     <option key={option.value} value={option.value}>{option.label}</option>
                   ))}
                 </select>
@@ -102,7 +116,7 @@ vi.mock('./FormBlock', () => ({
                   type={field.type || 'text'}
                   data-testid={`field-${field.id}`}
                   onChange={(e) => props.onChange && props.onChange(props.id, { [field.id]: e.target.value })}
-                  defaultValue={props.initialValues?.[field.id] || ''}
+                  defaultValue={props.initialValues?.[field.id] as string || ''}
                   {...ariaProps}
                 />
               );
