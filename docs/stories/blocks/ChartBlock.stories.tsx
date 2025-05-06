@@ -1,3 +1,5 @@
+// src/stories/ChartBlock.stories.tsx
+
 import type { Meta, StoryObj } from '@storybook/react';
 import { ChartBlock } from '@vibing-ai/block-kit';
 
@@ -13,13 +15,12 @@ The ChartBlock component provides powerful data visualization capabilities using
 
 ### Features
 
-- Multiple chart types (Bar, Line, Pie, Donut, Area, Scatter)
+- Multiple chart types (Bar, Line, Pie, Donut, Area)
 - Customizable axes, legends, tooltips, and labels
 - Responsive design with aspect ratio control
 - Animation support
 - Loading and error states
 - Accessibility considerations
-
         `,
       },
     },
@@ -37,18 +38,15 @@ const sampleData = [
 ];
 
 const pieData = [
-  { category: 'A', value: 400 },
-  { category: 'B', value: 300 },
-  { category: 'C', value: 300 },
-  { category: 'D', value: 200 },
+  { category: 'Apples',   value: 400 },
+  { category: 'Bananas',  value: 300 },
+  { category: 'Cherries', value: 300 },
+  { category: 'Dates',    value: 200 },
 ];
 
-const pieColors = ['#3498db', '#2ecc71', '#e74c3c', '#f1c40f'];
+const pieColors   = ['#3498db', '#2ecc71', '#e74c3c', '#f1c40f'];
 const donutColors = ['#9b59b6', '#e67e22', '#1abc9c', '#34495e'];
 
-/**
- * A line chart showing monthly revenue with actual vs projected values.
- */
 export const LineChart: Story = {
   args: {
     id: 'line-chart',
@@ -56,10 +54,10 @@ export const LineChart: Story = {
     type: 'line',
     data: sampleData,
     xAxis: { dataKey: 'month', label: 'Month' },
-    yAxis: { label: 'Revenue', tickFormatter: (v: number) => `$${v}` },
+    yAxis: { label: 'Revenue', tickFormatter: (v: number) => `\$${v}` },
     series: [
-      { dataKey: 'actual', name: 'Actual', color: '#3498db' },
-      { dataKey: 'projected', name: 'Projected', color: '#2ecc71', strokeDasharray: '5 5' },
+      { dataKey: 'actual',    name: 'Actual',    color: pieColors[0] },
+      { dataKey: 'projected', name: 'Projected', color: pieColors[1], strokeDasharray: '5 5' },
     ],
     tooltip: true,
     legend: true,
@@ -71,34 +69,30 @@ export const LineChart: Story = {
   },
 };
 
-/**
- * A vertical bar chart comparing actual vs projected revenue.
- */
 export const BarChart: Story = {
   args: {
     ...LineChart.args,
     id: 'bar-chart',
     type: 'bar',
     title: 'Revenue Comparison',
-    yAxis: { label: 'Revenue', tickFormatter: (v: number) => `$${v}` },
+    yAxis: { label: 'Revenue', tickFormatter: (v: number) => `\$${v}` },
   },
 };
 
-/**
- * A horizontal bar chart for easier comparison of longer labels.
- */
 export const HorizontalBarChart: Story = {
   args: {
     id: 'horizontal-bar',
-    type: 'bar',
     title: 'Horizontal Revenue Comparison',
+    type: 'bar',
     data: sampleData,
     horizontal: true,
-    xAxis: { dataKey: 'month', label: 'Month' },
-    yAxis: { label: 'Revenue', tickFormatter: (v: number) => `$${v}` },
+
+    xAxis: { dataKey: 'actual', label: 'Revenue' },
+    yAxis: { label: 'Month' },
+
     series: [
-      { dataKey: 'actual', name: 'Actual', color: '#3498db' },
-      { dataKey: 'projected', name: 'Projected', color: '#2ecc71' },
+      { dataKey: 'actual',    name: 'Actual',    color: pieColors[0] },
+      { dataKey: 'projected', name: 'Projected', color: pieColors[1] },
     ],
     tooltip: true,
     legend: true,
@@ -110,22 +104,16 @@ export const HorizontalBarChart: Story = {
   },
 };
 
-/**
- * An area chart showing revenue trends over time.
- */
 export const AreaChart: Story = {
   args: {
     ...LineChart.args,
     id: 'area-chart',
     type: 'area',
     title: 'Revenue Trends',
-    yAxis: { label: 'Revenue', tickFormatter: (v: number) => `$${v}` },
+    yAxis: { label: 'Revenue', tickFormatter: (v: number) => `\$${v}` },
   },
 };
 
-/**
- * A pie chart showing market distribution with a different color per slice.
- */
 export const PieChart: Story = {
   args: {
     id: 'pie-chart',
@@ -134,19 +122,16 @@ export const PieChart: Story = {
     data: pieData,
     series: pieData.map((d, i) => ({
       dataKey: 'value',
-      name: d.category,
-      color: pieColors[i],
+      name:    d.category,
+      color:   pieColors[i],
     })),
-    height: 400,
-    width: 600,
     tooltip: true,
     legend: true,
+    height: 400,
+    width: 600,
   },
 };
 
-/**
- * A donut chart showing category distribution with a different color per slice.
- */
 export const DonutChart: Story = {
   args: {
     id: 'donut-chart',
@@ -155,12 +140,12 @@ export const DonutChart: Story = {
     data: pieData,
     series: pieData.map((d, i) => ({
       dataKey: 'value',
-      name: d.category,
-      color: donutColors[i],
+      name:    d.category,
+      color:   donutColors[i],
     })),
-    height: 400,
-    width: 600,
     tooltip: true,
     legend: true,
+    height: 400,
+    width: 600,
   },
 };

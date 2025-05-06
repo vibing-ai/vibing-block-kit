@@ -1,3 +1,5 @@
+// src/components/ChartBlock.tsx
+
 import React from 'react';
 import {
   ResponsiveContainer,
@@ -5,7 +7,6 @@ import {
   LineChart, Line,
   PieChart, Pie,
   AreaChart, Area,
-  ScatterChart, Scatter,
   XAxis,
   YAxis as RechartsYAxis,
   CartesianGrid, Tooltip, Legend,
@@ -22,6 +23,8 @@ export interface XAxisProps {
   label?: string;
 }
 export interface YAxisProps {
+  // for horizontal bars: which field to use for the category labels 
+  dataKey?: string;
   label?: string;
   tickFormatter?: (value: number) => string;
 }
@@ -75,33 +78,28 @@ export const ChartBlock: React.FC<ChartBlockProps> = ({
   if (!data || data.length === 0)
     return <div style={{ color: '#666' }}>No data to display</div>;
 
-  // Prepare the rotated Y-axis label
+  // axis labels
   const yLabel = yAxis?.label
-    ? {
-        value: yAxis.label,
-        angle: -90,
-        position: 'insideLeft' as const,
-        dx: -30,
-      }
+    ? { value: yAxis.label, angle: -90, position: 'insideLeft' as const, dx: -30 }
     : undefined;
-
-  // Prepare the X-axis label
   const xLabel = xAxis?.label
-    ? {
-        value: xAxis.label,
-        position: 'insideBottom' as const,
-        dy: 10,
-      }
+    ? { value: xAxis.label, position: 'insideBottom' as const, dy: 10 }
     : undefined;
 
-  // Legend props to nudge it lower
-  const legendProps = {
-    verticalAlign: 'bottom' as const,
-    align: 'center' as const,
-    wrapperStyle: { transform: 'translateY(30px)' },
+  // legend placement
+  const isPie = type === 'pie' || type === 'donut';
+  const legendProps = isPie
+    ? { layout: 'vertical' as const, align: 'right' as const, verticalAlign: 'middle' as const }
+    : { verticalAlign: 'bottom' as const, align: 'center' as const, wrapperStyle: { transform: 'translateY(10px)' } };
+
+  // margin (give room for rotated Y-label on horizontal)
+  const margin = {
+    top: 5,
+    right: 20,
+    bottom: 5,
+    left: horizontal ? 80 : 80,
   };
 
-  // Common sizing props for ResponsiveContainer
   const chartProps = {
     width,
     height,
@@ -112,30 +110,32 @@ export const ChartBlock: React.FC<ChartBlockProps> = ({
     switch (type) {
       case 'bar':
         return (
-          <BarChart
-            data={data}
-            layout={horizontal ? 'vertical' : 'horizontal'}
-            margin={{
-              top: 5,
-              right: 20,
-              bottom: 5,
-              left: horizontal ? 20 : 80,
-            }}
-          >
+          <BarChart data={data} layout={horizontal ? 'vertical' : 'horizontal'} margin={margin}>
             {grid && <CartesianGrid strokeDasharray="3 3" />}
+
             {horizontal ? (
               <>
-                <XAxis type="number" label={xLabel} />
-                <RechartsYAxis {...xAxis} type="category" />
+                {/* numeric X-axis */}
+                <XAxis type="number" {...xAxis} label={xLabel} />
+                {/* category Y-axis */}
+                <RechartsYAxis
+                  type="category"
+                  dataKey={yAxis?.dataKey}
+                  tickFormatter={yAxis?.tickFormatter}
+                  label={yLabel}
+                />
               </>
             ) : (
               <>
+                {/* category X-axis */}
                 <XAxis {...xAxis} label={xLabel} />
+                {/* numeric Y-axis */}
                 <RechartsYAxis {...yAxis} label={yLabel} />
               </>
             )}
+
             {tooltip && <Tooltip />}
-            {legend  && <Legend {...legendProps} />}
+            {legend && <Legend {...legendProps} />}
             {series.map(s => (
               <Bar
                 key={s.dataKey}
@@ -151,15 +151,12 @@ export const ChartBlock: React.FC<ChartBlockProps> = ({
 
       case 'line':
         return (
-          <LineChart
-            data={data}
-            margin={{ top: 5, right: 20, bottom: 5, left: 80 }}
-          >
-            {grid   && <CartesianGrid strokeDasharray="3 3" />}
-            {xAxis  && <XAxis {...xAxis} label={xLabel} />}
-            {yAxis  && <RechartsYAxis {...yAxis} label={yLabel} />}
+          <LineChart data={data} margin={{ top: 5, right: 20, bottom: 5, left: 80 }}>
+            {grid && <CartesianGrid strokeDasharray="3 3" />}
+            {xAxis && <XAxis {...xAxis} label={xLabel} />}
+            {yAxis && <RechartsYAxis {...yAxis} label={yLabel} />}
             {tooltip && <Tooltip />}
-            {legend  && <Legend {...legendProps} />}
+            {legend && <Legend {...legendProps} />}
             {series.map(s => (
               <Line
                 key={s.dataKey}
@@ -175,15 +172,12 @@ export const ChartBlock: React.FC<ChartBlockProps> = ({
 
       case 'area':
         return (
-          <AreaChart
-            data={data}
-            margin={{ top: 5, right: 20, bottom: 5, left: 80 }}
-          >
-            {grid   && <CartesianGrid strokeDasharray="3 3" />}
-            {xAxis  && <XAxis {...xAxis} label={xLabel} />}
-            {yAxis  && <RechartsYAxis {...yAxis} label={yLabel} />}
+          <AreaChart data={data} margin={{ top: 5, right: 20, bottom: 5, left: 80 }}>
+            {grid && <CartesianGrid strokeDasharray="3 3" />}
+            {xAxis && <XAxis {...xAxis} label={xLabel} />}
+            {yAxis && <RechartsYAxis {...yAxis} label={yLabel} />}
             {tooltip && <Tooltip />}
-            {legend  && <Legend {...legendProps} />}
+            {legend && <Legend {...legendProps} />}
             {series.map(s => (
               <Area
                 key={s.dataKey}
@@ -202,11 +196,20 @@ export const ChartBlock: React.FC<ChartBlockProps> = ({
         return (
           <PieChart>
             {tooltip && <Tooltip />}
-            {legend  && <Legend {...legendProps} />}
+            {legend && (
+              <Legend
+                {...legendProps}
+                payload={series.map((s, i) => ({
+                  id:    `${s.dataKey}-${i}`,
+                  value: s.name || s.dataKey,
+                  type:  'square' as const,
+                  color: s.color,
+                }))}
+              />
+            )}
             <Pie
               data={data}
               dataKey={series[0].dataKey}
-              nameKey={series[0].name || series[0].dataKey}
               innerRadius={type === 'donut' ? 60 : 0}
               outerRadius={80}
               isAnimationActive={animation}

@@ -291,7 +291,7 @@ declare module '@vibing-ai/block-kit' {
 
   interface ChartBlockProps {
     id: string;
-    type: 'bar' | 'line' | 'pie' | 'donut' | 'area' | 'scatter';
+    type: 'bar' | 'line' | 'pie' | 'donut' | 'area';
     data: ChartDataPoint[];
     xAxis?: XAxisProps;
     yAxis?: YAxisProps;
