@@ -1,3 +1,6 @@
+// Storybook preview configuration for Block Kit
+// Make sure everything is properly imported
+
 import type { Preview } from '@storybook/react';
 import { withThemeByClassName } from '@storybook/addon-themes';
 import '../styles.css';
