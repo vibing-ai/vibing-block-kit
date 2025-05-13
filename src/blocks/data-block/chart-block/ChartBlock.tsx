@@ -106,122 +106,122 @@ export const ChartBlock: React.FC<ChartBlockProps> = ({
     ...(aspectRatio ? { aspect: aspectRatio } : {}),
   };
 
+  // Helper functions for each chart type
+  const renderBarChart = () => (
+    <BarChart data={data} layout={horizontal ? 'vertical' : 'horizontal'} margin={margin}>
+      {grid && <CartesianGrid strokeDasharray="3 3" />}
+      {horizontal ? (
+        <>
+          <XAxis type="number" {...xAxis} label={xLabel} />
+          <RechartsYAxis
+            type="category"
+            dataKey={yAxis?.dataKey}
+            tickFormatter={yAxis?.tickFormatter}
+            label={yLabel}
+          />
+        </>
+      ) : (
+        <>
+          <XAxis {...xAxis} label={xLabel} />
+          <RechartsYAxis {...yAxis} label={yLabel} />
+        </>
+      )}
+      {tooltip && <Tooltip />}
+      {legend && <Legend {...legendProps} />}
+      {series.map(s => (
+        <Bar
+          key={s.dataKey}
+          dataKey={s.dataKey}
+          name={s.name}
+          fill={s.color}
+          strokeDasharray={s.strokeDasharray}
+          isAnimationActive={animation}
+        />
+      ))}
+    </BarChart>
+  );
+
+  const renderLineChart = () => (
+    <LineChart data={data} margin={{ top: 5, right: 20, bottom: 5, left: 80 }}>
+      {grid && <CartesianGrid strokeDasharray="3 3" />}
+      {xAxis && <XAxis {...xAxis} label={xLabel} />}
+      {yAxis && <RechartsYAxis {...yAxis} label={yLabel} />}
+      {tooltip && <Tooltip />}
+      {legend && <Legend {...legendProps} />}
+      {series.map(s => (
+        <Line
+          key={s.dataKey}
+          dataKey={s.dataKey}
+          name={s.name}
+          stroke={s.color}
+          strokeDasharray={s.strokeDasharray}
+          isAnimationActive={animation}
+        />
+      ))}
+    </LineChart>
+  );
+
+  const renderAreaChart = () => (
+    <AreaChart data={data} margin={{ top: 5, right: 20, bottom: 5, left: 80 }}>
+      {grid && <CartesianGrid strokeDasharray="3 3" />}
+      {xAxis && <XAxis {...xAxis} label={xLabel} />}
+      {yAxis && <RechartsYAxis {...yAxis} label={yLabel} />}
+      {tooltip && <Tooltip />}
+      {legend && <Legend {...legendProps} />}
+      {series.map(s => (
+        <Area
+          key={s.dataKey}
+          dataKey={s.dataKey}
+          name={s.name}
+          stroke={s.color}
+          fill={s.color}
+          isAnimationActive={animation}
+        />
+      ))}
+    </AreaChart>
+  );
+
+  const renderPieOrDonutChart = () => (
+    <PieChart>
+      {tooltip && <Tooltip />}
+      {legend && (
+        <Legend
+          {...legendProps}
+          payload={series.map((s, i) => ({
+            id:    `${s.dataKey}-${i}`,
+            value: s.name || s.dataKey,
+            type:  'square',
+            color: s.color,
+          }))}
+        />
+      )}
+      <Pie
+        data={data}
+        dataKey={series[0].dataKey}
+        innerRadius={type === 'donut' ? 60 : 0}
+        outerRadius={80}
+        isAnimationActive={animation}
+        label
+      >
+        {data.map((_, i) => (
+          <Cell key={`cell-${i}`} fill={series[i % series.length].color} />
+        ))}
+      </Pie>
+    </PieChart>
+  );
+
+  // Main chart content renderer
   const renderChartContent = () => {
     switch (type) {
       case 'bar':
-        return (
-          <BarChart data={data} layout={horizontal ? 'vertical' : 'horizontal'} margin={margin}>
-            {grid && <CartesianGrid strokeDasharray="3 3" />}
-
-            {horizontal ? (
-              <>
-                {/* numeric X-axis */}
-                <XAxis type="number" {...xAxis} label={xLabel} />
-                {/* category Y-axis */}
-                <RechartsYAxis
-                  type="category"
-                  dataKey={yAxis?.dataKey}
-                  tickFormatter={yAxis?.tickFormatter}
-                  label={yLabel}
-                />
-              </>
-            ) : (
-              <>
-                {/* category X-axis */}
-                <XAxis {...xAxis} label={xLabel} />
-                {/* numeric Y-axis */}
-                <RechartsYAxis {...yAxis} label={yLabel} />
-              </>
-            )}
-
-            {tooltip && <Tooltip />}
-            {legend && <Legend {...legendProps} />}
-            {series.map(s => (
-              <Bar
-                key={s.dataKey}
-                dataKey={s.dataKey}
-                name={s.name}
-                fill={s.color}
-                strokeDasharray={s.strokeDasharray}
-                isAnimationActive={animation}
-              />
-            ))}
-          </BarChart>
-        );
-
+        return renderBarChart();
       case 'line':
-        return (
-          <LineChart data={data} margin={{ top: 5, right: 20, bottom: 5, left: 80 }}>
-            {grid && <CartesianGrid strokeDasharray="3 3" />}
-            {xAxis && <XAxis {...xAxis} label={xLabel} />}
-            {yAxis && <RechartsYAxis {...yAxis} label={yLabel} />}
-            {tooltip && <Tooltip />}
-            {legend && <Legend {...legendProps} />}
-            {series.map(s => (
-              <Line
-                key={s.dataKey}
-                dataKey={s.dataKey}
-                name={s.name}
-                stroke={s.color}
-                strokeDasharray={s.strokeDasharray}
-                isAnimationActive={animation}
-              />
-            ))}
-          </LineChart>
-        );
-
+        return renderLineChart();
       case 'area':
-        return (
-          <AreaChart data={data} margin={{ top: 5, right: 20, bottom: 5, left: 80 }}>
-            {grid && <CartesianGrid strokeDasharray="3 3" />}
-            {xAxis && <XAxis {...xAxis} label={xLabel} />}
-            {yAxis && <RechartsYAxis {...yAxis} label={yLabel} />}
-            {tooltip && <Tooltip />}
-            {legend && <Legend {...legendProps} />}
-            {series.map(s => (
-              <Area
-                key={s.dataKey}
-                dataKey={s.dataKey}
-                name={s.name}
-                stroke={s.color}
-                fill={s.color}
-                isAnimationActive={animation}
-              />
-            ))}
-          </AreaChart>
-        );
-
+        return renderAreaChart();
       case 'pie':
       case 'donut':
-        return (
-          <PieChart>
-            {tooltip && <Tooltip />}
-            {legend && (
-              <Legend
-                {...legendProps}
-                payload={series.map((s, i) => ({
-                  id:    `${s.dataKey}-${i}`,
-                  value: s.name || s.dataKey,
-                  type:  'square' as const,
-                  color: s.color,
-                }))}
-              />
-            )}
-            <Pie
-              data={data}
-              dataKey={series[0].dataKey}
-              innerRadius={type === 'donut' ? 60 : 0}
-              outerRadius={80}
-              isAnimationActive={animation}
-              label
-            >
-              {data.map((_, i) => (
-                <Cell key={`cell-${i}`} fill={series[i % series.length].color} />
-              ))}
-            </Pie>
-          </PieChart>
-        );
-
+        return renderPieOrDonutChart();
       default:
         return <div>Unsupported chart type</div>;
     }
