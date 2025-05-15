@@ -1,0 +1,15 @@
+{
+  "extends": "../tsconfig.json",
+  "compilerOptions": {
+    "jsx": "react-jsx",
+    "baseUrl": ".",
+    "paths": {
+      "@vibing-ai/block-kit": ["../src"],
+      "@vibing-ai/block-kit/*": ["../src/*"]
+    }
+  },
+  "include": [
+    "stories/**/*",
+    ".storybook/**/*"
+  ]
+} 

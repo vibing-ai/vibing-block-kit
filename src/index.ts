@@ -18,3 +18,6 @@ export * from './BlockKitProvider';
 
 // Export components
 export * from './components';
+
+// Export EnhancedCodeBlock
+export * from './blocks/code-block/EnhancedCodeBlock';
