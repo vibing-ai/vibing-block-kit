@@ -3,7 +3,10 @@ import { Icon } from '@iconify/react';
 import { BlockProps } from '../../types';
 import styles from './EnhancedCodeBlock.module.css';
 
-export interface EnhancedCodeBlockProps extends BlockProps {
+export interface EnhancedCodeBlockProps 
+  extends Omit<BlockProps, 'onChange' | 'children' | 'style'>, 
+          Omit<React.HTMLAttributes<HTMLDivElement>, 'id'>
+{
   /**
    * The code content
    */
@@ -29,8 +32,7 @@ export const EnhancedCodeBlock: React.FC<EnhancedCodeBlockProps> = ({
   language = 'javascript',
   showLineNumbers = true,
   className,
-  onChange,
-  ...props
+  ...rest
 }) => {
   const [currentLanguage, setCurrentLanguage] = useState(language);
   const [showPreview, setShowPreview] = useState(false);
@@ -102,7 +104,7 @@ export const EnhancedCodeBlock: React.FC<EnhancedCodeBlockProps> = ({
       className={`${styles.codeBlock} ${className || ''}`}
       data-block-id={id}
       data-language={currentLanguage}
-      {...props}
+      {...rest}
     >
       {/* Header toolbar */}
       <div className={styles.toolbar}>

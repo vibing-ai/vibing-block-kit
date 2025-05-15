@@ -1,6 +1,6 @@
-import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
-import { describe, it, expect, vi } from 'vitest';
+import '@testing-library/jest-dom';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { EnhancedCodeBlock } from '../EnhancedCodeBlock';
 
 describe('EnhancedCodeBlock', () => {
@@ -73,13 +73,15 @@ describe('EnhancedCodeBlock', () => {
     
     // Click collapse button
     const collapseButton = screen.getByText('Collapse').closest('button');
-    fireEvent.click(collapseButton);
+    expect(collapseButton).toBeInTheDocument(); // Ensure button is found
+    if (collapseButton) fireEvent.click(collapseButton);
     
     // Code should not be visible
     expect(screen.queryByText(/function example/)).not.toBeInTheDocument();
     
     // Click expand button again
-    fireEvent.click(collapseButton);
+    expect(collapseButton).toBeInTheDocument(); // Ensure button is found
+    if (collapseButton) fireEvent.click(collapseButton);
     
     // Code should be visible again
     expect(screen.getByText(/function example/)).toBeVisible();
@@ -95,7 +97,8 @@ describe('EnhancedCodeBlock', () => {
     );
     
     const copyButton = screen.getByText('Copy').closest('button');
-    fireEvent.click(copyButton);
+    expect(copyButton).toBeInTheDocument(); // Ensure button is found
+    if (copyButton) fireEvent.click(copyButton);
     
     expect(navigator.clipboard.writeText).toHaveBeenCalledWith(mockCode);
   });

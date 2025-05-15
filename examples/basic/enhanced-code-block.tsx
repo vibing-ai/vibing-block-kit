@@ -1,12 +1,39 @@
+import React from 'react';
 import { 
   BlockKitProvider,
   TextBlock,
   BlockContainer,
   Surface
 } from '@vibing-ai/block-kit';
-import { EnhancedCodeBlock } from '../../src/blocks/code-block/EnhancedCodeBlock';
+import { EnhancedCodeBlock, EnhancedCodeBlockProps } from '../../src/blocks/code-block/EnhancedCodeBlock';
 
-export default function EnhancedCodeBlockExample() {
+// Helper component for individual code examples
+interface CodeInstanceProps {
+  title: string;
+  idPrefix: string;
+  language: string;
+  code: string;
+  showLineNumbers?: boolean;
+}
+
+const CodeInstance: React.FC<CodeInstanceProps> = ({ title, idPrefix, language, code, showLineNumbers }) => (
+  <div>
+    <TextBlock
+      id={`${idPrefix}-title`}
+      content={title}
+      variant="subheading"
+    />
+    <EnhancedCodeBlock
+      id={`${idPrefix}-block`}
+      language={language}
+      code={code}
+      showLineNumbers={showLineNumbers}
+    />
+  </div>
+);
+
+// Main example component
+export default function EnhancedCodeBlockExamplePage() {
   const htmlCode = `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -69,58 +96,36 @@ if __name__ == "__main__":
   return (
     <BlockKitProvider>
       <Surface className="min-h-screen p-8 bg-background">
-        <BlockContainer id="enhanced-code-block-example" spacing="lg">
+        <BlockContainer id="enhanced-code-block-main-example" spacing="lg">
           <TextBlock
-            id="welcome"
+            id="main-welcome"
             content="Enhanced Code Block Examples"
             variant="heading"
           />
-          
           <TextBlock
-            id="description"
+            id="main-description"
             content="Below are examples of the enhanced code block component with different languages and options."
           />
-          
           <div className="grid grid-cols-1 gap-8">
-            <div>
-              <TextBlock
-                id="html-title"
-                content="HTML Example"
-                variant="subheading"
-              />
-              <EnhancedCodeBlock
-                id="html-code-example"
-                language="html"
-                code={htmlCode}
-              />
-            </div>
-            
-            <div>
-              <TextBlock
-                id="js-title"
-                content="JavaScript Example"
-                variant="subheading"
-              />
-              <EnhancedCodeBlock
-                id="js-code-example"
-                language="javascript"
-                code={jsCode}
-              />
-            </div>
-            
-            <div>
-              <TextBlock
-                id="python-title"
-                content="Python Example (Without Line Numbers)"
-                variant="subheading"
-              />
-              <EnhancedCodeBlock
-                id="python-code-example"
-                language="python"
-                code={pythonCode}
-                showLineNumbers={false}
-              />
-            </div>
+            <CodeInstance 
+              title="HTML Example"
+              idPrefix="html-example"
+              language="html"
+              code={htmlCode}
+            />
+            <CodeInstance 
+              title="JavaScript Example"
+              idPrefix="js-example"
+              language="javascript"
+              code={jsCode}
+            />
+            <CodeInstance 
+              title="Python Example (Without Line Numbers)"
+              idPrefix="python-example"
+              language="python"
+              code={pythonCode}
+              showLineNumbers={false}
+            />
           </div>
         </BlockContainer>
       </Surface>
