@@ -5,7 +5,7 @@ import {
   BlockContainer,
   Surface
 } from '@vibing-ai/block-kit';
-import { EnhancedCodeBlock, EnhancedCodeBlockProps } from '../../src/blocks/code-block/EnhancedCodeBlock';
+import { EnhancedCodeBlock} from '../../src/blocks/code-block/EnhancedCodeBlock';
 
 // Helper component for individual code examples
 interface CodeInstanceProps {
