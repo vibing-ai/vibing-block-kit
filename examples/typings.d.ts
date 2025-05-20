@@ -1,6 +1,7 @@
 // Type declarations for @vibing-ai/block-kit
 declare module '@vibing-ai/block-kit' {
   import { ReactNode, ComponentProps, HTMLAttributes, FormEvent } from 'react';
+  import { BlockProps } from './types';  // Import BlockProps from types.ts
 
   // Theme types
   export type ThemeType = 'light' | 'dark' | CustomTheme;
@@ -266,6 +267,47 @@ declare module '@vibing-ai/block-kit' {
     isActive?: boolean;
     onClick?: () => void;
   }
+
+  interface ChartDataPoint {
+    [key: string]: number | string | null | undefined;
+  }
+
+  interface XAxisProps {
+    dataKey: string;
+    label?: string;
+  }
+
+  interface YAxisProps {
+    label?: string;
+    tickFormatter?: (value: number) => string;
+  }
+
+  interface SeriesProps {
+    dataKey: string;
+    name?: string;
+    color?: string;
+    strokeDasharray?: string;
+  }
+
+  interface ChartBlockProps {
+    id: string;
+    type: 'bar' | 'line' | 'pie' | 'donut' | 'area';
+    data: ChartDataPoint[];
+    xAxis?: XAxisProps;
+    yAxis?: YAxisProps;
+    series: SeriesProps[];
+    tooltip?: boolean;
+    legend?: boolean;
+    grid?: boolean;
+    height?: number;
+    width?: number;
+    aspectRatio?: number;
+    animation?: boolean;
+    loading?: boolean;
+    error?: string;
+    horizontal?: boolean;
+    title?: string;
+  }
   
   // Component exports
   export function BlockKitProvider(props: BlockKitProviderProps): JSX.Element;
@@ -292,6 +334,7 @@ declare module '@vibing-ai/block-kit' {
   export function CanvasBlock(props: CanvasBlockProps): JSX.Element;
   export function FormBuilder(props: FormBuilderProps): JSX.Element;
   export function ConversationCard(props: ConversationCardProps): JSX.Element;
+  export function ChartBlock(props: ChartBlockProps): JSX.Element;
 
   // Theme utilities
   export function createCustomTheme(options: CustomTheme): CustomTheme;
