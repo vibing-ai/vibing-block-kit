@@ -42,11 +42,6 @@ Make the required changes in your feature branch. If you're adding a new feature
 3. Set the base repository's sandbox branch as the base branch and your feature branch as the compare branch.
 4. Fill in the details of the pull request and submit it.
 
-# Final Steps
-Once your PR is submitted, it will be reviewed by our Team. Participate in the discussion and make any required changes. Once your PR is approved, it will be merged into the sandbox branch for further integration testing before it becomes part of the main project.
-
-Thank you for contributing to our project! Your efforts help us build and refine a product that meets the needs of our community.
-
 ## Quick Start
 
 ```bash
@@ -369,7 +364,12 @@ npx tsc --noEmit
 **Solution**: Run tests in watch mode to debug:
 ```bash
 npm test -- --watch
+
 ```
+
+# Final Steps
+Once your PR is submitted, it will be reviewed by our Team. Participate in the discussion and make any required changes. Once your PR is approved, it will be merged into the sandbox branch for further integration testing before it becomes part of the main project.
+
 
 ## Communication
 
