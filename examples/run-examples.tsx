@@ -9,6 +9,9 @@ import FormExample from './basic/form';
 import ResponsiveExample from './basic/responsive';
 import App from './basic/app';
 import ThemeExample from './advanced/theme-example';
+import CodeBlockExample from './basic/code-block-example';
+import GrokCodeBlockExample from './basic/grok-code-block';
+import EnhancedCodeBlockExample from './basic/enhanced-code-block';
 
 // Define example components with metadata
 const examples = [
@@ -18,6 +21,9 @@ const examples = [
   { id: 'responsive', name: 'Responsive Example', component: ResponsiveExample },
   { id: 'app', name: 'App with Theme Toggle', component: App },
   { id: 'theme-example', name: 'Advanced Theme Example', component: ThemeExample },
+  { id: 'code-block-example', name: 'Enhanced Code Block', component: CodeBlockExample },
+  { id: 'grok-code-block', name: 'Grok-Style Code Block', component: GrokCodeBlockExample },
+  { id: 'enhanced-code-block', name: 'Enhanced Code Block Examples', component: EnhancedCodeBlockExample },
 ];
 
 function ExampleRunner() {

@@ -19,6 +19,6 @@
       "@/*": ["./src/*"]
     }
   },
-  "include": ["src"],
+  "include": ["src", "examples"],
   "references": [{ "path": "./tsconfig.node.json" }]
 } 
