@@ -1,0 +1,162 @@
+import React, { useState } from 'react';
+import { Button, Input, DatePicker } from '@heroui/react';
+import { DateValue } from '@react-types/datepicker';
+
+export type FormFieldType = 'text' | 'email' | 'date' | 'select' | 'checkbox' | 'radio' | 'textarea';
+
+export interface FormField {
+  id: string;
+  type: FormFieldType;
+  label: string;
+  required?: boolean;
+  placeholder?: string;
+  options?: { label: string; value: string; disabled?: boolean }[];
+}
+
+export interface FormBlockProps {
+  id?: string;
+  fields: FormField[];
+  onSubmit: (data: Record<string, string | boolean | DateValue | null>) => Promise<void> | void;
+  submitText?: string;
+}
+
+const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+export const FormBlock: React.FC<FormBlockProps> = ({
+  id,
+  fields,
+  onSubmit,
+  submitText = 'Submit',
+}) => {
+  const [formData, setFormData] = useState<Record<string, string | boolean | DateValue | null>>({});
+  const [errors, setErrors] = useState<Record<string, string>>({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const handleChange = (fieldId: string, value: string | DateValue | null) => {
+    setFormData((prev) => ({ ...prev, [fieldId]: value }));
+    setErrors((prev) => ({ ...prev, [fieldId]: '' }));
+  };
+
+  const validate = () => {
+    const newErrors: Record<string, string> = {};
+    fields.forEach((field) => {
+      const value = formData[field.id];
+      if (field.required && (!value || (typeof value === 'string' && value.trim() === ''))) {
+        newErrors[field.id] = 'This field is required';
+      } else if (field.type === 'email' && value && typeof value === 'string' && !emailPattern.test(value)) {
+        newErrors[field.id] = 'Please enter a valid email address';
+      }
+    });
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!validate()) return;
+    setIsSubmitting(true);
+    try {
+      await onSubmit(formData);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  return (
+    <form
+      id={id}
+      onSubmit={handleSubmit}
+      className="form-block max-w-lg mx-auto p-6 bg-white rounded shadow"
+    >
+      <h2 className="text-2xl font-bold mb-4">Registration Form</h2>
+      <p className="mb-6 text-gray-600">
+        Welcome! Please complete the form below.
+      </p>
+      {fields.map((field) => (
+        <div key={field.id} className="mb-5">
+          <label htmlFor={field.id} className="block font-medium mb-1">
+            {field.label}
+            {field.required && <span className="text-red-500 ml-1">*</span>}
+          </label>
+          {field.type === 'date' ? (
+            <DatePicker
+              id={field.id}
+              value={formData[field.id] as DateValue | null}
+              onChange={(val) => handleChange(field.id, val)}
+              fullWidth
+            />
+          ) : field.type === 'select' ? (
+            <select
+              id={field.id}
+              value={formData[field.id] as string || ''}
+              onChange={(e) => handleChange(field.id, e.target.value)}
+            >
+              {field.placeholder && (
+                <option value="" disabled>
+                  {field.placeholder}
+                </option>
+              )}
+              {field.options?.map((option) => (
+                <option key={option.value} value={option.value}>
+                  {option.label}
+                </option>
+              ))}
+            </select>
+          ) : field.type === 'checkbox' ? (
+            <label className="flex items-center">
+              <input
+                type="checkbox"
+                checked={!!formData[field.id]}
+                onChange={e => {
+                  setFormData(prev => ({
+                    ...prev,
+                    [field.id]: e.target.checked
+                  }));
+                }}
+                placeholder={field.placeholder}
+              />
+              <span className="ml-2">{field.options?.[0]?.label}</span>
+            </label>
+          ) : field.type === 'radio' ? (
+            <div>
+              {field.options?.map((option) => (
+                <label key={option.value} className="flex items-center">
+                  <input
+                    type="radio"
+                    value={option.value}
+                    checked={formData[field.id] === option.value}
+                    onChange={(e) => handleChange(field.id, e.target.value)}
+                    placeholder={field.placeholder}
+                  />
+                  <span className="ml-2">{option.label}</span>
+                </label>
+              ))}
+            </div>
+          ) : (
+            <Input
+              id={field.id}
+              type={field.type}
+              value={formData[field.id] as string || ''}
+              onChange={e => handleChange(field.id, e.target.value)}
+              placeholder={field.placeholder}
+              fullWidth
+            />
+          )}
+          {errors[field.id] && (
+            <p className="text-red-500 text-sm mt-1">{errors[field.id]}</p>
+          )}
+        </div>
+      ))}
+      <Button
+        type="submit"
+        variant="solid"
+        isLoading={isSubmitting}
+        fullWidth
+      >
+        {submitText}
+      </Button>
+    </form>
+  );
+};
+
+export default FormBlock;
