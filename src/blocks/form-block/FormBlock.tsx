@@ -22,6 +22,83 @@ export interface FormBlockProps {
 
 const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
+function renderField(
+  field: FormField,
+  formData: Record<string, string | boolean | DateValue | null>,
+  handleChange: (fieldId: string, value: string | boolean | DateValue | null) => void
+) {
+  switch (field.type) {
+    case 'text':
+    case 'email':
+      return <Input
+        id={field.id}
+        type={field.type}
+        value={formData[field.id] as string || ''}
+        onChange={e => handleChange(field.id, e.target.value)}
+        placeholder={field.placeholder}
+        fullWidth
+      />;
+    case 'select':
+      return <select
+        id={field.id}
+        value={formData[field.id] as string || ''}
+        onChange={(e) => handleChange(field.id, e.target.value)}
+      >
+        {field.placeholder && (
+          <option value="" disabled>
+            {field.placeholder}
+          </option>
+        )}
+        {field.options?.map((option: { label: string; value: string; disabled?: boolean }) => (
+          <option key={option.value} value={option.value}>
+            {option.label}
+          </option>
+        ))}
+      </select>;
+    case 'checkbox':
+      return <label className="flex items-center">
+        <input
+          type="checkbox"
+          checked={!!formData[field.id]}
+          onChange={e => handleChange(field.id, e.target.checked)}
+          placeholder={field.placeholder}
+        />
+        <span className="ml-2">{field.options?.[0]?.label}</span>
+      </label>;
+    case 'radio':
+      return <div>
+        {field.options?.map((option: { label: string; value: string; disabled?: boolean }) => (
+          <label key={option.value} className="flex items-center">
+            <input
+              type="radio"
+              value={option.value}
+              checked={formData[field.id] === option.value}
+              onChange={(e) => handleChange(field.id, e.target.value)}
+              placeholder={field.placeholder}
+            />
+            <span className="ml-2">{option.label}</span>
+          </label>
+        ))}
+      </div>;
+    case 'date':
+      return <DatePicker
+        id={field.id}
+        value={formData[field.id] as DateValue | null}
+        onChange={(val) => handleChange(field.id, val)}
+        fullWidth
+      />;
+    default:
+      return <Input
+        id={field.id}
+        type={field.type}
+        value={formData[field.id] as string || ''}
+        onChange={e => handleChange(field.id, e.target.value)}
+        placeholder={field.placeholder}
+        fullWidth
+      />;
+  }
+}
+
 export const FormBlock: React.FC<FormBlockProps> = ({
   id,
   fields,
@@ -32,7 +109,7 @@ export const FormBlock: React.FC<FormBlockProps> = ({
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleChange = (fieldId: string, value: string | DateValue | null) => {
+  const handleChange = (fieldId: string, value: string | boolean | DateValue | null) => {
     setFormData((prev) => ({ ...prev, [fieldId]: value }));
     setErrors((prev) => ({ ...prev, [fieldId]: '' }));
   };
@@ -72,79 +149,18 @@ export const FormBlock: React.FC<FormBlockProps> = ({
       <p className="mb-6 text-gray-600">
         Welcome! Please complete the form below.
       </p>
-      {fields.map((field) => (
-        <div key={field.id} className="mb-5">
-          <label htmlFor={field.id} className="block font-medium mb-1">
-            {field.label}
-            {field.required && <span className="text-red-500 ml-1">*</span>}
-          </label>
-          {field.type === 'date' ? (
-            <DatePicker
-              id={field.id}
-              value={formData[field.id] as DateValue | null}
-              onChange={(val) => handleChange(field.id, val)}
-              fullWidth
-            />
-          ) : field.type === 'select' ? (
-            <select
-              id={field.id}
-              value={formData[field.id] as string || ''}
-              onChange={(e) => handleChange(field.id, e.target.value)}
-            >
-              {field.placeholder && (
-                <option value="" disabled>
-                  {field.placeholder}
-                </option>
-              )}
-              {field.options?.map((option) => (
-                <option key={option.value} value={option.value}>
-                  {option.label}
-                </option>
-              ))}
-            </select>
-          ) : field.type === 'checkbox' ? (
-            <label className="flex items-center">
-              <input
-                type="checkbox"
-                checked={!!formData[field.id]}
-                onChange={e => {
-                  setFormData(prev => ({
-                    ...prev,
-                    [field.id]: e.target.checked
-                  }));
-                }}
-                placeholder={field.placeholder}
-              />
-              <span className="ml-2">{field.options?.[0]?.label}</span>
+      {fields.map(field => (
+        <div key={field.id}>
+          <div className="mb-5">
+            <label htmlFor={field.id} className="block font-medium mb-1">
+              {field.label}
+              {field.required && <span className="text-red-500 ml-1">*</span>}
             </label>
-          ) : field.type === 'radio' ? (
-            <div>
-              {field.options?.map((option) => (
-                <label key={option.value} className="flex items-center">
-                  <input
-                    type="radio"
-                    value={option.value}
-                    checked={formData[field.id] === option.value}
-                    onChange={(e) => handleChange(field.id, e.target.value)}
-                    placeholder={field.placeholder}
-                  />
-                  <span className="ml-2">{option.label}</span>
-                </label>
-              ))}
-            </div>
-          ) : (
-            <Input
-              id={field.id}
-              type={field.type}
-              value={formData[field.id] as string || ''}
-              onChange={e => handleChange(field.id, e.target.value)}
-              placeholder={field.placeholder}
-              fullWidth
-            />
-          )}
-          {errors[field.id] && (
-            <p className="text-red-500 text-sm mt-1">{errors[field.id]}</p>
-          )}
+            {renderField(field, formData, handleChange)}
+            {errors[field.id] && (
+              <p className="text-red-500 text-sm mt-1">{errors[field.id]}</p>
+            )}
+          </div>
         </div>
       ))}
       <Button
