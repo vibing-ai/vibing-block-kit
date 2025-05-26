@@ -99,14 +99,14 @@ function renderField(
   }
 }
 
-function validateRequired(field: FormField, value: any) {
+function validateRequired(field: FormField, value: string | boolean | DateValue | null) {
   if (field.required && (!value || (typeof value === 'string' && value.trim() === ''))) {
     return 'This field is required';
   }
   return undefined;
 }
 
-function validateEmail(field: FormField, value: any) {
+function validateEmail(field: FormField, value: string | boolean | DateValue | null) {
   if (field.type === 'email' && value && typeof value === 'string' && !emailPattern.test(value)) {
     return 'Please enter a valid email address';
   }
