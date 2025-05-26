@@ -99,18 +99,26 @@ function renderField(
   }
 }
 
-function getFieldError(
-  field: FormField,
-  value: string | boolean | DateValue | null
-) {
+function validateRequired(field: FormField, value: any) {
   if (field.required && (!value || (typeof value === 'string' && value.trim() === ''))) {
     return 'This field is required';
   }
+  return undefined;
+}
+
+function validateEmail(field: FormField, value: any) {
   if (field.type === 'email' && value && typeof value === 'string' && !emailPattern.test(value)) {
     return 'Please enter a valid email address';
   }
-  // ...other field-specific validation
   return undefined;
+}
+
+function getFieldError(field: FormField, value: string | boolean | DateValue | null) {
+  return (
+    validateRequired(field, value) ||
+    validateEmail(field, value)
+    // || ...other validators
+  );
 }
 
 export const FormBlock: React.FC<FormBlockProps> = ({
