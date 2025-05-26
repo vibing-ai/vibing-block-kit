@@ -99,6 +99,20 @@ function renderField(
   }
 }
 
+function getFieldError(
+  field: FormField,
+  value: string | boolean | DateValue | null
+) {
+  if (field.required && (!value || (typeof value === 'string' && value.trim() === ''))) {
+    return 'This field is required';
+  }
+  if (field.type === 'email' && value && typeof value === 'string' && !emailPattern.test(value)) {
+    return 'Please enter a valid email address';
+  }
+  // ...other field-specific validation
+  return undefined;
+}
+
 export const FormBlock: React.FC<FormBlockProps> = ({
   id,
   fields,
@@ -118,11 +132,8 @@ export const FormBlock: React.FC<FormBlockProps> = ({
     const newErrors: Record<string, string> = {};
     fields.forEach((field) => {
       const value = formData[field.id];
-      if (field.required && (!value || (typeof value === 'string' && value.trim() === ''))) {
-        newErrors[field.id] = 'This field is required';
-      } else if (field.type === 'email' && value && typeof value === 'string' && !emailPattern.test(value)) {
-        newErrors[field.id] = 'Please enter a valid email address';
-      }
+      const error = getFieldError(field, value);
+      if (error) newErrors[field.id] = error;
     });
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
