@@ -112,10 +112,64 @@ declare module '@vibing-ai/block-kit' {
     sandbox?: string;
   }
 
+  // Add these new types before the FormBlockProps interface
+  export type FormFieldType = 
+    | 'text'
+    | 'email'
+    | 'number'
+    | 'tel'
+    | 'url'
+    | 'select'
+    | 'checkbox'
+    | 'radio'
+    | 'textarea'
+    | 'date';
+
+  export interface FormFieldValidation {
+    required?: boolean;
+    pattern?: RegExp;
+    message?: string;
+    min?: number;
+    max?: number;
+    minLength?: number;
+    maxLength?: number;
+  }
+
+  export interface FormFieldOption {
+    label: string;
+    value: string | number;
+  }
+
+  export interface FormField {
+    id: string;
+    type: FormFieldType;
+    label: string;
+    placeholder?: string;
+    required?: boolean;
+    validation?: FormFieldValidation;
+    options?: FormFieldOption[];
+    defaultValue?: string | number | boolean;
+    helperText?: string;
+    disabled?: boolean;
+  }
+
+  export interface SubmitButtonProps {
+    text: string;
+    variant?: 'primary' | 'secondary' | 'outline' | 'ghost';
+    size?: 'sm' | 'md' | 'lg';
+    loading?: boolean;
+    disabled?: boolean;
+  }
+
+  // Update the existing FormBlockProps interface
   interface FormBlockProps {
     id: string;
-    children?: ReactNode;
-    onSubmit?: (data: unknown) => void;
+    fields: FormField[];
+    onSubmit?: (data: Record<string, unknown>) => void;
+    submitButton?: SubmitButtonProps;
+    layout?: 'vertical' | 'horizontal' | 'grid';
+    spacing?: 'none' | 'xs' | 'sm' | 'md' | 'lg' | 'xl';
+    fullWidth?: boolean;
     className?: string;
   }
 
