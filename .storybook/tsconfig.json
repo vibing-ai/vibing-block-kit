@@ -1,0 +1,17 @@
+{
+  "extends": "../tsconfig.json",
+  "compilerOptions": {
+    "jsx": "react-jsx",
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true
+  },
+  "include": [
+    "../src/**/*",
+    "../docs/**/*",
+    "*.ts",
+    "*.tsx",
+    "../.storybook/**/*.ts",
+    "../.storybook/**/*.tsx"
+  ],
+  "exclude": ["node_modules", "dist"]
+}

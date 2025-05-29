@@ -1,4 +1,10 @@
-import { BlockProps } from '../../../types';
+// Base properties for all blocks
+export interface BlockProps {
+  id?: string;
+  className?: string;
+  style?: React.CSSProperties;
+  children?: React.ReactNode;
+}
 
 export type ImageSource = {
   /** URL of the image */
@@ -11,6 +17,10 @@ export type ImageSource = {
   type?: string;
   /** Image sizes attribute for responsive images */
   sizes?: string;
+  /** Width of the image (used for srcset generation) */
+  width?: number | string;
+  /** Height of the image (for aspect ratio) */
+  height?: number | string;
 };
 
 export type BorderRadiusScale = 'none' | 'sm' | 'md' | 'lg' | 'full' | number;
@@ -42,6 +52,18 @@ export interface ImageBlockProps extends Omit<BlockProps, 'onChange'> {
    * @default 'lazy'
    */
   loading?: 'lazy' | 'eager';
+
+  /**
+   * Image decoding hint
+   * @default 'async'
+   */
+  decoding?: 'sync' | 'async' | 'auto';
+
+  /**
+   * Fetch priority hint for the browser
+   * @default 'auto'
+   */
+  fetchPriority?: 'high' | 'low' | 'auto';
   
   /**
    * Optional caption displayed below the image
@@ -83,6 +105,17 @@ export interface ImageBlockProps extends Omit<BlockProps, 'onChange'> {
    * @default 'cover'
    */
   objectFit?: 'contain' | 'cover' | 'fill' | 'none' | 'scale-down';
+
+  /**
+   * Image sources for responsive images
+   */
+  srcSet?: string;
+
+  /**
+   * Image sizes attribute for responsive images
+   * @default '100vw'
+   */
+  sizes?: string;
   
   /**
    * Callback when image loads successfully

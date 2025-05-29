@@ -1,10 +1,8 @@
 import * as React from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
 import { Icon } from '@iconify/react';
-import { BlockProps } from '../../../types';
+import type { BlockProps } from './types';
 
 // Type definitions
-type Position = 'static' | 'relative' | 'absolute' | 'fixed' | 'sticky';
 type PointerEvents = 'auto' | 'none' | 'visiblePainted' | 'visibleFill' | 'visibleStroke' | 'visible' | 'painted' | 'fill' | 'stroke' | 'all' | 'inherit' | 'initial' | 'revert' | 'unset';
 
 interface ImageSource {
@@ -19,8 +17,10 @@ interface ImageSource {
 
 type FallbackComponent = React.ReactNode | ((props: { src?: string; alt: string }) => React.ReactNode);
 
-interface SimpleImageBlockProps extends Omit<BlockProps, 'onChange'> {
+interface SimpleImageBlockProps extends BlockProps {
+  /** The source URL or array of sources for the image */
   src: string | ImageSource[];
+  /** Alternative text for the image */
   alt: string;
   /** Width of the image */
   width?: number | string;
@@ -52,14 +52,13 @@ interface SimpleImageBlockProps extends Omit<BlockProps, 'onChange'> {
   lazyLoad?: boolean;
   /** Whether to enable blur-up technique */
   enableBlurUp?: boolean;
-  /** Low-quality image placeholder for blur-up effect */
+  /** Low Quality Image Placeholder (LQIP) */
   lqip?: string;
   /** Optional caption for the image */
-  caption?: React.ReactNode;
+  caption?: string;
 }
 
 export const SimpleImageBlock: React.FC<SimpleImageBlockProps> = ({
-  id,
   src: srcProp,
   alt,
   width = '100%',
@@ -78,27 +77,41 @@ export const SimpleImageBlock: React.FC<SimpleImageBlockProps> = ({
   className = '',
   onError,
   onLoad,
-  caption,
-  ...props
+  caption
 }) => {
-  // State
+  // State for tracking loading and error states
   const [isLoaded, setIsLoaded] = React.useState(false);
   const [hasError, setHasError] = React.useState(false);
   const [isZoomed, setIsZoomed] = React.useState(false);
   const [isInView, setIsInView] = React.useState(!lazyLoad);
+  const [currentSrc, setCurrentSrc] = React.useState<string>('');
   
   // Refs
+  const containerRef = React.useRef<HTMLDivElement>(null);
   const imgRef = React.useRef<HTMLImageElement>(null);
   const observerRef = React.useRef<IntersectionObserver | null>(null);
-  
   // Process image sources
   const { sources, defaultSource, hasMultipleSources } = React.useMemo(() => {
-    const srcArray = Array.isArray(srcProp) ? srcProp : [{ src: srcProp }];
+    // Generate a random image from picsum.photos if no source is provided
+    const defaultPicsumImage = { 
+      src: `https://picsum.photos/seed/${Math.floor(Math.random() * 1000)}/800/600`,
+      width: 800,
+      height: 600
+    };
+    
+    const srcArray = Array.isArray(srcProp) ? srcProp : [{ src: srcProp || defaultPicsumImage.src }];
     const defaultSrc = srcArray.find(src => !src.media) || srcArray[0];
+    
+    // Ensure the default source has required properties
+    const processedDefault = {
+      ...defaultPicsumImage, // Use picsum as base
+      ...defaultSrc,         // Override with any provided props
+      src: defaultSrc.src || defaultPicsumImage.src // Ensure src is never empty
+    };
     
     return {
       sources: srcArray,
-      defaultSource: defaultSrc,
+      defaultSource: processedDefault,
       hasMultipleSources: srcArray.length > 1
     };
   }, [srcProp]);
@@ -131,11 +144,20 @@ export const SimpleImageBlock: React.FC<SimpleImageBlockProps> = ({
   }, [lazyLoad, hasError, isInView]);
   
   // Event handlers
-  const handleLoad = React.useCallback((event: React.SyntheticEvent<HTMLImageElement>) => {
+  const handleLoad = (e: React.SyntheticEvent<HTMLImageElement>) => {
+    // If we were using LQIP, switch to the actual image
+    if (lqip && currentSrc === lqip) {
+      setCurrentSrc(defaultSource.src);
+      return; // Don't mark as loaded yet, wait for the actual image to load
+    }
+    
     setIsLoaded(true);
     setHasError(false);
-    onLoad?.(event);
-  }, [onLoad]);
+    
+    if (onLoad) {
+      onLoad(e);
+    }
+  };
   
   const handleError = React.useCallback((event: React.SyntheticEvent<HTMLImageElement>) => {
     setHasError(true);
@@ -145,11 +167,29 @@ export const SimpleImageBlock: React.FC<SimpleImageBlockProps> = ({
     onError?.(new Error('Failed to load image'));
   }, [onError]);
   
+  // Toggle zoom state
   const toggleZoom = React.useCallback(() => {
     if (zoomable) {
-      setIsZoomed(!isZoomed);
+      setIsZoomed((prev: boolean) => !prev);
     }
-  }, [zoomable, isZoomed]);
+  }, [zoomable]);
+  
+  // Handle click on the image
+  const handleClick = () => {
+    if (zoomable) {
+      toggleZoom();
+    }
+  };
+  
+  // Handle keyboard events for zooming
+  const handleKeyDown = (event: React.KeyboardEvent) => {
+    if (event.key === 'Enter' || event.key === ' ') {
+      event.preventDefault();
+      toggleZoom();
+    } else if (event.key === 'Escape' && isZoomed) {
+      setIsZoomed(false);
+    }
+  };
   
   // Styles
   const containerStyle: React.CSSProperties = {
@@ -220,11 +260,21 @@ export const SimpleImageBlock: React.FC<SimpleImageBlockProps> = ({
     );
 
     return (
-      <div style={containerStyle} className={className}>
+      <div 
+        className={`relative ${zoomable ? 'cursor-zoom-in' : ''} ${className}`}
+        onClick={handleClick}
+        onKeyDown={handleKeyDown}
+        role={zoomable ? 'button' : undefined}
+        tabIndex={zoomable ? 0 : undefined}
+        aria-label={zoomable ? (isZoomed ? 'Zoom out' : 'Zoom in') : undefined}
+      >
         {fallbackContent}
       </div>
     );
   }
+
+  // Generate a random image from picsum.photos for the placeholder
+  const placeholderImage = `https://picsum.photos/800/600?random=${Math.floor(Math.random() * 1000)}`;
 
   // Render loading state
   if (!isInView && lazyLoad) {
@@ -232,7 +282,11 @@ export const SimpleImageBlock: React.FC<SimpleImageBlockProps> = ({
       <div style={containerStyle} className={className}>
         {showLoadingSkeleton && (
           <div style={placeholderStyle}>
-            <Icon icon="mdi:image" style={{ fontSize: '2rem', color: '#ddd' }} />
+            <img 
+              src={placeholderImage} 
+              alt="Loading..." 
+              style={{ width: '100%', height: '100%', objectFit: 'cover', opacity: 0.5 }} 
+            />
           </div>
         )}
       </div>
@@ -241,14 +295,29 @@ export const SimpleImageBlock: React.FC<SimpleImageBlockProps> = ({
 
   // Render image with blur-up technique
   return (
-    <div style={containerStyle} className={className} onClick={toggleZoom}>
+    <div 
+      className={`image-block ${className} ${zoomable ? 'cursor-pointer' : ''}`} 
+      style={containerStyle}
+      onClick={zoomable ? toggleZoom : undefined}
+      onKeyDown={zoomable ? handleKeyDown : undefined}
+      role={zoomable ? 'button' : undefined}
+      tabIndex={zoomable ? 0 : undefined}
+      aria-label={zoomable ? (isZoomed ? 'Zoom out' : 'Zoom in') : undefined}
+      ref={containerRef}
+    >
       {enableBlurUp && lqip && <div style={blurUpStyle} />}
       
-      {!isLoaded && placeholder ? (
+      {!isLoaded && (
         <div style={placeholderStyle}>
-          {placeholder}
+          {placeholder || (
+            <img 
+              src={placeholderImage} 
+              alt="Loading..." 
+              style={{ width: '100%', height: '100%', objectFit: 'cover', opacity: 0.5 }} 
+            />
+          )}
         </div>
-      ) : null}
+      )}
 
       <img
         ref={imgRef}
