@@ -29,7 +29,12 @@ const generateSrcSet = (sources: ImageSource[]): string => {
       if (source.srcSet) {
         return source.srcSet;
       }
-      return `${source.src} ${source.width || ''}w`;
+      // Only append width descriptor if it's a number
+      if (typeof source.width === 'number') {
+        return `${source.src} ${source.width}w`;
+      }
+      // For string widths or no width, just return the src
+      return source.src;
     })
     .filter(Boolean)
     .join(', ');
@@ -197,12 +202,27 @@ const CleanImageBlock: React.FC<ImageBlockProps> = ({
   useEffect(() => {
     if (lqip && currentSrc === lqip) {
       const img = new window.Image();
+      let isMounted = true;
+      
       img.src = mainSrc;
-      img.onload = () => setCurrentSrc(mainSrc);
+      img.onload = () => {
+        if (isMounted) {
+          setCurrentSrc(mainSrc);
+        }
+      };
       img.onerror = () => {
-        const error = new Error(`Failed to load image: ${mainSrc}`);
-        setError(error);
-        if (onError) onError(error);
+        if (isMounted) {
+          const error = new Error(`Failed to load image: ${mainSrc}`);
+          setError(error);
+          if (onError) onError(error);
+        }
+      };
+      
+      return () => {
+        isMounted = false;
+        // Clean up the image object
+        img.onload = null;
+        img.onerror = null;
       };
     }
   }, [lqip, mainSrc, currentSrc, onError]);
@@ -333,7 +353,8 @@ const CleanImageBlock: React.FC<ImageBlockProps> = ({
               height={typeof height === 'number' ? height : undefined}
               loading={loading}
               decoding={decoding}
-              fetchPriority={fetchPriority}
+              // Using a type assertion for fetchPriority as it's not yet in React's type definitions
+              {...{ fetchPriority } as React.ImgHTMLAttributes<HTMLImageElement>}
               style={{
                 ...imageStyle,
                 maxWidth: '100%',
@@ -357,8 +378,14 @@ const CleanImageBlock: React.FC<ImageBlockProps> = ({
             height={typeof height === 'number' ? height : undefined}
             loading={loading}
             decoding={decoding}
-            fetchPriority={fetchPriority}
-            style={imageStyle}
+            // Using a type assertion for fetchPriority as it's not yet in React's type definitions
+            {...{ fetchPriority } as React.ImgHTMLAttributes<HTMLImageElement>}
+            style={{
+              ...imageStyle,
+              maxWidth: '100%',
+              maxHeight: '100%',
+              objectFit
+            }}
             className={`image-main ${isLoaded ? 'is-loaded' : ''}`}
             onLoad={handleLoad}
             onError={handleError}

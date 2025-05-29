@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useRef, useEffect, useCallback } from 'react';
 import { Icons } from '../icons/Icons';
-import type { PromptContainerFullLineBottomActionsProps } from './types';
+import type { PromptContainerFullLineBottomActionsProps, PromptActionButton } from './types';
 
 const sizeClasses = {
   sm: {
@@ -94,18 +94,9 @@ export const PromptContainerFullLineBottomActions = React.forwardRef<
     isComposing.current = false;
   };
 
-  // Define the button type for action buttons
-  type ActionButton = {
-    label: string;
-    icon: React.ReactNode;
-    onClick: () => void;
-    disabled?: boolean;
-    className?: string;
-  };
-
   // Default action buttons
-  const defaultActionButtons: ActionButton[] = [
-    ...(actionButtons as ActionButton[]),
+  const defaultActionButtons: PromptActionButton[] = [
+    ...actionButtons,
     ...(showSubmitButton ? [{
       label: submitButtonLabel,
       icon: submitButtonIcon || <Icons.Send className={sizeClass.icon} />,

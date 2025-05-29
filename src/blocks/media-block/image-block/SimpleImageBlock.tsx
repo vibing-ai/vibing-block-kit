@@ -319,18 +319,7 @@ export const SimpleImageBlock: React.FC<SimpleImageBlockProps> = ({
         </div>
       )}
 
-      <img
-        ref={imgRef}
-        src={defaultSource.src}
-        alt={alt}
-        style={imageStyle}
-        onLoad={handleLoad}
-        onError={handleError}
-        loading={lazyLoad ? 'lazy' : 'eager'}
-        decoding="async"
-      />
-
-      {hasMultipleSources && (
+      {hasMultipleSources ? (
         <picture>
           {sources
             .filter(source => source.media)
@@ -343,7 +332,28 @@ export const SimpleImageBlock: React.FC<SimpleImageBlockProps> = ({
                 sizes={source.sizes}
               />
             ))}
+          <img
+            ref={imgRef}
+            src={defaultSource.src}
+            alt={alt}
+            style={imageStyle}
+            onLoad={handleLoad}
+            onError={handleError}
+            loading={lazyLoad ? 'lazy' : 'eager'}
+            decoding="async"
+          />
         </picture>
+      ) : (
+        <img
+          ref={imgRef}
+          src={defaultSource.src}
+          alt={alt}
+          style={imageStyle}
+          onLoad={handleLoad}
+          onError={handleError}
+          loading={lazyLoad ? 'lazy' : 'eager'}
+          decoding="async"
+        />
       )}
 
       {caption && <div style={captionStyle}>{caption}</div>}
