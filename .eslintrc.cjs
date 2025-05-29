@@ -16,17 +16,33 @@ module.exports = {
     'plugin:storybook/recommended',
     'prettier',
   ],
-  parser: '@typescript-eslint/parser',
-  parserOptions: {
-    ecmaFeatures: {
-      jsx: true,
+  overrides: [
+    {
+      files: ['*.ts', '*.tsx'],
+      parser: '@typescript-eslint/parser',
+      parserOptions: {
+        ecmaFeatures: {
+          jsx: true,
+        },
+        ecmaVersion: 'latest',
+        sourceType: 'module',
+        project: ['./tsconfig.json', './docs/tsconfig.json'],
+        tsconfigRootDir: __dirname,
+        warnOnUnsupportedTypeScriptVersion: false
+      },
     },
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: './tsconfig.json',
-    tsconfigRootDir: __dirname,
-    warnOnUnsupportedTypeScriptVersion: false
-  },
+    {
+      files: ['*.js', '*.jsx', '*.cjs', '*.mjs'],
+      parser: '@babel/eslint-parser',
+      parserOptions: {
+        ecmaFeatures: {
+          jsx: true,
+        },
+        ecmaVersion: 'latest',
+        sourceType: 'module',
+      },
+    },
+  ],
   plugins: [
     'react',
     'react-hooks',
@@ -48,5 +64,16 @@ module.exports = {
     '@typescript-eslint/no-unused-expressions': 'warn',
     'jsx-a11y/media-has-caption': 'off', // We've implemented captions in our media components
   },
-  ignorePatterns: ['dist', 'node_modules', 'storybook-static'],
+  ignorePatterns: [
+    'dist',
+    'node_modules',
+    'storybook-static',
+    '*.config.js',
+    '*.config.ts',
+    'postcss.config.js',
+    'tailwind.config.js',
+    'vite.config.ts',
+    'vitest.config.ts',
+    'tsup.config.ts',
+  ],
 }; 
