@@ -57,7 +57,7 @@ const generateSizes = (sources: ImageSource[]): string => {
  * A responsive image component with support for modern image formats,
  * lazy loading, and various styling options.
  */
-const CleanImageBlock: React.FC<ImageBlockProps> = ({
+const EnhancedImageBlock: React.FC<ImageBlockProps> = ({
   id,
   src: srcProp,
   alt,
@@ -452,4 +452,4 @@ const CleanImageBlock: React.FC<ImageBlockProps> = ({
   );
 };
 
-export default CleanImageBlock;
+export default EnhancedImageBlock;

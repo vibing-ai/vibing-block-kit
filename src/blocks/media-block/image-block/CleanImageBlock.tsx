@@ -22,6 +22,11 @@ const shadowMap: Record<string, string> = {
   '2xl': '0 25px 50px -12px rgb(0 0 0 / 0.25)',
 };
 
+// Type predicate to check if a value is a non-empty string
+const isNonEmptyString = (value: unknown): value is string => {
+  return typeof value === 'string' && value.trim() !== '';
+};
+
 // Generate srcset string from sources
 const generateSrcSet = (sources: ImageSource[]): string => {
   return sources
@@ -29,9 +34,10 @@ const generateSrcSet = (sources: ImageSource[]): string => {
       if (source.srcSet) {
         return source.srcSet;
       }
-      return `${source.src} ${source.width || ''}w`;
+      const widthSuffix = source.width ? ` ${source.width}w` : '';
+      return `${source.src}${widthSuffix}`;
     })
-    .filter(Boolean as unknown as (value: unknown) => value is string)
+    .filter(isNonEmptyString)
     .join(', ');
 };
 
@@ -39,12 +45,12 @@ const generateSrcSet = (sources: ImageSource[]): string => {
 const generateSizes = (sources: ImageSource[]): string => {
   return sources
     .map((source) => {
-      if (source.media && source.sizes) {
-        return `(${source.media}) ${source.sizes}`;
+      if (source.sizes) {
+        return source.sizes;
       }
-      return undefined;
+      return source.media ? `(max-width: ${source.media}) 100vw` : '100vw';
     })
-    .filter((s): s is string => s !== undefined)
+    .filter(isNonEmptyString)
     .join(', ');
 };
 

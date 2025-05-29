@@ -1,3 +1,6 @@
+// Import types from parent module
+import { BorderRadiusScale, ShadowScale } from '../types';
+
 // Base properties for all blocks
 export interface BlockProps {
   id?: string;
@@ -21,10 +24,7 @@ export type ImageSource = {
   width?: number | string;
   /** Height of the image (for aspect ratio) */
   height?: number | string;
-};
-
-export type BorderRadiusScale = 'none' | 'sm' | 'md' | 'lg' | 'full' | number;
-export type ShadowScale = 'none' | 'sm' | 'md' | 'lg' | 'xl' | '2xl';
+}
 
 export interface ImageBlockProps extends Omit<BlockProps, 'onChange'> {
   /**
@@ -126,9 +126,4 @@ export interface ImageBlockProps extends Omit<BlockProps, 'onChange'> {
    * Callback when image fails to load
    */
   onError?: (error: Error) => void;
-  
-  /**
-   * Custom class name for additional styling
-   */
-  className?: string;
 }
