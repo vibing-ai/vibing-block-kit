@@ -1,6 +1,4 @@
-import * as React from 'react';
-import { useState, useRef, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import React, { useCallback, useEffect, useState } from 'react';
 import type { ImageBlockProps, ImageSource } from './types';
 
 // Default radius values for different scales
@@ -75,88 +73,132 @@ const CleanImageBlock: React.FC<ImageBlockProps> = ({
   zoomable = false,
   srcSet: propSrcSet,
   sizes: propSizes,
-  ...restProps
+  ..._restProps
 }) => {
-  // State for tracking image loading status and zoom
-  const [isLoaded, setIsLoaded] = useState(false);
+  // State for tracking zoom state
   const [isZoomed, setIsZoomed] = useState(false);
-  const [currentSrc, setCurrentSrc] = useState<string>('');
-  
-  // Refs
-  const buttonRef = useRef<HTMLButtonElement>(null);
-  const divRef = useRef<HTMLDivElement>(null);
-  const imgRef = useRef<HTMLImageElement>(null);
-  const lqipRef = useRef<HTMLImageElement>(null);
   
   // Handle both string and array of sources
   const isResponsive = Array.isArray(srcProp) && srcProp.length > 0;
   const sources = isResponsive ? srcProp : [];
   const mainSrc = isResponsive ? sources[0]?.src || '' : (typeof srcProp === 'string' ? srcProp : '');
   
-  // Generate srcset and sizes for responsive images
-  const generatedSrcSet = isResponsive ? generateSrcSet(sources) : propSrcSet;
-  const generatedSizes = isResponsive ? (propSizes || generateSizes(sources)) : propSizes;
-
-  // Set initial source (LQIP or main source)
-  useEffect(() => {
-    setCurrentSrc(lqip || mainSrc);
-  }, [lqip, mainSrc]);
-  
-  // Handle image load
-  const handleLoad = (e: React.SyntheticEvent<HTMLImageElement>) => {
-    // If we were using LQIP, switch to the actual image
-    if (lqip && currentSrc === lqip) {
-      setCurrentSrc(mainSrc);
-      return; // Don't mark as loaded yet, wait for the actual image to load
-    }
-    
-    setIsLoaded(true);
-    
-    if (onLoad) {
-      onLoad(e);
-    }
-  };
-  
-  // Handle image error
-  const handleError = () => {
-    const imgError = new Error(`Failed to load image: ${currentSrc}`);
-    
-    if (onError) {
-      onError(imgError);
-    }
-  };
-  
   // Toggle zoom state
-  const toggleZoom = () => {
+  const toggleZoom = useCallback(() => {
     if (zoomable) {
-      setIsZoomed(!isZoomed);
+      setIsZoomed(prev => !prev);
     }
-  };
+  }, [zoomable]);
   
   // Handle keyboard events for accessibility
-  const handleKeyDown = (e: React.KeyboardEvent) => {
+  const handleKeyDown = useCallback((e: React.KeyboardEvent) => {
     if (e.key === 'Enter' || e.key === ' ') {
       e.preventDefault();
-      if (zoomable) {
-        toggleZoom();
-      }
+      toggleZoom();
     } else if (e.key === 'Escape' && isZoomed) {
       setIsZoomed(false);
     }
-  };
+  }, [isZoomed, toggleZoom]);
   
   // Handle click on image
-  const handleClick = (e: React.MouseEvent) => {
+  const handleClick = useCallback((e: React.MouseEvent) => {
     e.preventDefault();
-    if (zoomable) {
-      toggleZoom();
-    }
-  };
-  
+    toggleZoom();
+  }, [toggleZoom]);
+
   // Close zoom when clicking outside
-  const handleCloseZoom = () => {
+  const handleCloseZoom = useCallback(() => {
     setIsZoomed(false);
-  };
+  }, []);
+
+  // Handle image load
+  const handleLoad = useCallback((e: React.SyntheticEvent<HTMLImageElement>) => {
+    if (onLoad) {
+      onLoad(e);
+    }
+  }, [onLoad]);
+
+  // Handle image error
+  const handleError = useCallback((_e: React.SyntheticEvent<HTMLImageElement>) => {
+    console.error('Failed to load image:', mainSrc);
+    
+    // Call the onError callback if provided
+    if (onError) {
+      const error = new Error(`Failed to load image: ${mainSrc}`);
+      onError(error);
+    }
+  }, [mainSrc, onError]);
+
+  // Render error state
+  if (false) {
+    return (
+      <div 
+        className={`relative flex items-center justify-center bg-gray-100 text-gray-400 rounded-md border border-gray-200 ${className || ''}`}
+        style={{
+          width,
+          height,
+          borderRadius: radiusMap[borderRadius as string] || borderRadius,
+          boxShadow: shadowMap[shadow as string] || shadow,
+        }}
+      >
+        <div className="flex flex-col items-center p-4 text-center">
+          <svg
+            className="w-12 h-12 mb-2 text-gray-300"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={1}
+              d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
+            />
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={1}
+              d="M18 8l-8 8-4-4-6 6"
+              className="text-red-300"
+            />
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={1.5}
+              d="M6 18L18 6M6 6l12 12"
+              className="text-red-400"
+            />
+          </svg>
+          <p className="text-sm text-gray-500">Failed to load image</p>
+          {alt && <p className="text-xs text-gray-400 mt-1">{alt}</p>}
+        </div>
+      </div>
+    );
+  }
+  
+  // Handle body scroll when zoomed
+  useEffect(() => {
+    if (!isZoomed) return;
+    
+    // Store the current scroll position and disable scrolling
+    const scrollY = window.scrollY;
+    const body = document.body;
+    body.style.position = 'fixed';
+    body.style.top = `-${scrollY}px`;
+    body.style.width = '100%';
+    body.style.overflow = 'hidden';
+      
+      return () => {
+        // Re-enable scrolling and restore scroll position when unmounting or zooming out
+        body.style.position = '';
+        body.style.top = '';
+        body.style.width = '';
+        body.style.overflow = '';
+        window.scrollTo(0, scrollY);
+      };
+    }
+  }, [isZoomed]);
 
   // Container styles
   const containerStyle: React.CSSProperties = {
