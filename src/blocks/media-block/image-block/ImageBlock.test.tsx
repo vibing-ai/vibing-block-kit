@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeAll, afterAll, afterEach } from 'vitest';
-import { render, screen, cleanup } from '@testing-library/react';
+import { render, screen, cleanup, fireEvent } from '@testing-library/react';
 import ImageBlock from './ImageBlock';
 
 // Simple mock for IntersectionObserver
@@ -75,8 +75,11 @@ describe('ImageBlock', () => {
     expect(img).toHaveAttribute('src', defaultProps.src);
     expect(img).toHaveAttribute('alt', defaultProps.alt);
     
-    // The onLoad is handled internally, we can't reliably test it
-    // without mocking the image loading behavior
+    // Simulate image load
+    fireEvent.load(img);
+    
+    // Verify onLoad was called
+    expect(mockOnLoad).toHaveBeenCalled();
   });
 
   it('shows caption when provided', () => {
@@ -87,9 +90,9 @@ describe('ImageBlock', () => {
     const captionElement = screen.getByText(caption);
     expect(captionElement).toBeInTheDocument();
     
-    // The caption should be inside a figure element
-    const figure = container.querySelector('figure');
-    expect(figure).toBeInTheDocument();
+    // The caption should be in a div with the correct class
+    const captionDiv = container.querySelector('.mt-2.text-sm.text-gray-600');
+    expect(captionDiv).toBeInTheDocument();
   });
 
   describe('Zoom functionality', () => {

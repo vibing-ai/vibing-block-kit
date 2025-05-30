@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { PromptContainerFullLineBottomActions } from './PromptContainerFullLineBottomActions';
 import { PromptSize } from './types';
-import { cn } from '@/utils/cn';
+import { cn } from '../../utils/cn';
 
 /**
  * A large variant of the PromptContainerFullLineBottomActions component with increased typography,
