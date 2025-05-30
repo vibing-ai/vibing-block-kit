@@ -3,6 +3,11 @@ import { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import type { ImageBlockProps, ImageSource } from './types';
 
+// Extend the standard image attributes with proper typing for fetchPriority
+interface ImageElementProps extends React.ImgHTMLAttributes<HTMLImageElement> {
+  fetchPriority?: 'high' | 'low' | 'auto';
+}
+
 // Default radius values for different scales
 const radiusMap: Record<string, string> = {
   none: '0',
@@ -22,34 +27,62 @@ const shadowMap: Record<string, string> = {
   '2xl': '0 25px 50px -12px rgb(0 0 0 / 0.25)',
 };
 
-// Generate srcset string from sources
+/**
+ * Generates a srcset string from an array of image sources
+ * @param sources - Array of image sources with optional srcSet or width/height
+ * @returns A valid srcset string or empty string if no valid sources
+ */
 const generateSrcSet = (sources: ImageSource[]): string => {
+  if (!Array.isArray(sources) || sources.length === 0) {
+    return '';
+  }
+
   return sources
-    .map((source) => {
+    .map((source): string | undefined => {
+      if (!source?.src) {
+        return undefined;
+      }
+
+      // If srcSet is provided, use it as is
       if (source.srcSet) {
-        return source.srcSet;
+        return source.srcSet.trim();
       }
-      // Only append width descriptor if it's a number
-      if (typeof source.width === 'number') {
-        return `${source.src} ${source.width}w`;
+
+      // Only append width descriptor if it's a positive number
+      const width = Number(source.width);
+      if (Number.isFinite(width) && width > 0) {
+        return `${source.src.trim()} ${width}w`;
       }
-      // For string widths or no width, just return the src
-      return source.src;
+
+      // For invalid or missing width, just return the src
+      return source.src.trim();
     })
-    .filter(Boolean)
+    .filter((src): src is string => Boolean(src))
     .join(', ');
 };
 
-// Generate sizes attribute
+/**
+ * Generates a sizes attribute string from an array of image sources
+ * @param sources - Array of image sources with optional media and sizes
+ * @returns A valid sizes attribute string or empty string if no valid sources
+ */
 const generateSizes = (sources: ImageSource[]): string => {
+  if (!Array.isArray(sources) || sources.length === 0) {
+    return '';
+  }
+
   return sources
-    .map((source) => {
-      if (source.media && source.sizes) {
-        return `(${source.media}) ${source.sizes}`;
+    .map((source): string | undefined => {
+      const media = source.media?.trim();
+      const sizes = source.sizes?.trim();
+
+      if (!media || !sizes) {
+        return undefined;
       }
-      return undefined;
+
+      return `(${media}) ${sizes}`;
     })
-    .filter(Boolean)
+    .filter((size): size is string => Boolean(size))
     .join(', ');
 };
 
@@ -94,7 +127,9 @@ const EnhancedImageBlock: React.FC<ImageBlockProps> = ({
   // Handle both string and array of sources
   const isResponsive = Array.isArray(srcProp) && srcProp.length > 0;
   const sources = isResponsive ? srcProp : [];
-  const mainSrc = isResponsive ? sources[0]?.src : (typeof srcProp === 'string' ? srcProp : '');
+  const mainSrc = isResponsive 
+    ? sources[0]?.src ?? '' 
+    : (typeof srcProp === 'string' ? srcProp : '');
   
   // Generate srcset and sizes for responsive images
   const generatedSrcSet = isResponsive ? generateSrcSet(sources) : srcSet;
@@ -150,8 +185,11 @@ const EnhancedImageBlock: React.FC<ImageBlockProps> = ({
     }
   };
   
-  // Close zoom when clicking outside
+  // Handle zoom state and body overflow
   useEffect(() => {
+    // Store the original overflow value to restore it later
+    const originalOverflow = document.body.style.overflow;
+    
     const handleClickOutside = (e: MouseEvent) => {
       if (isZoomed && containerRef.current && !containerRef.current.contains(e.target as Node)) {
         setIsZoomed(false);
@@ -164,10 +202,17 @@ const EnhancedImageBlock: React.FC<ImageBlockProps> = ({
       document.body.style.overflow = 'hidden';
     }
     
-    // Cleanup
+    // Cleanup function that runs on unmount or when dependencies change
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
-      document.body.style.overflow = 'unset';
+      
+      // Always reset overflow to its original value on cleanup
+      document.body.style.overflow = originalOverflow || 'unset';
+      
+      // If still zoomed in when unmounting, ensure we reset the overflow
+      if (isZoomed) {
+        document.body.style.overflow = 'unset';
+      }
     };
   }, [isZoomed]);
   
@@ -353,8 +398,8 @@ const EnhancedImageBlock: React.FC<ImageBlockProps> = ({
               height={typeof height === 'number' ? height : undefined}
               loading={loading}
               decoding={decoding}
-              // Using a type assertion for fetchPriority as it's not yet in React's type definitions
-              {...{ fetchPriority } as React.ImgHTMLAttributes<HTMLImageElement>}
+              // Using properly typed image props
+              {...{ fetchPriority } as ImageElementProps}
               style={{
                 ...imageStyle,
                 maxWidth: '100%',
@@ -378,8 +423,8 @@ const EnhancedImageBlock: React.FC<ImageBlockProps> = ({
             height={typeof height === 'number' ? height : undefined}
             loading={loading}
             decoding={decoding}
-            // Using a type assertion for fetchPriority as it's not yet in React's type definitions
-            {...{ fetchPriority } as React.ImgHTMLAttributes<HTMLImageElement>}
+            // Using properly typed image props
+            {...{ fetchPriority } as ImageElementProps}
             style={{
               ...imageStyle,
               maxWidth: '100%',

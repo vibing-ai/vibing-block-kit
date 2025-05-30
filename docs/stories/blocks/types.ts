@@ -1,7 +1,5 @@
-import type { ImageBlockProps } from '../../../../src/blocks/media-block/ImageBlock';
-
-export type BorderRadiusScale = 'none' | 'sm' | 'md' | 'lg' | 'full' | number;
-export type ShadowScale = 'none' | 'sm' | 'md' | 'lg' | 'xl' | '2xl';
+import type { ImageBlockProps } from '@/blocks/media-block/image-block/types';
+import type { BorderRadiusScale, ShadowScale } from '@/blocks/media-block/types';
 
 // Extend the base props and add our custom ones
 export interface ImageBlockStoryProps extends Omit<ImageBlockProps, 'onLoad' | 'onError'> {

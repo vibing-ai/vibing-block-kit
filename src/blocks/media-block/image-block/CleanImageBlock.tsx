@@ -79,7 +79,6 @@ const CleanImageBlock: React.FC<ImageBlockProps> = ({
 }) => {
   // State for tracking image loading status and zoom
   const [isLoaded, setIsLoaded] = useState(false);
-  const [, setError] = useState<Error | null>(null);
   const [isZoomed, setIsZoomed] = useState(false);
   const [currentSrc, setCurrentSrc] = useState<string>('');
   
@@ -112,7 +111,6 @@ const CleanImageBlock: React.FC<ImageBlockProps> = ({
     }
     
     setIsLoaded(true);
-    setError(null);
     
     if (onLoad) {
       onLoad(e);
@@ -122,7 +120,6 @@ const CleanImageBlock: React.FC<ImageBlockProps> = ({
   // Handle image error
   const handleError = () => {
     const imgError = new Error(`Failed to load image: ${currentSrc}`);
-    setError(imgError);
     
     if (onError) {
       onError(imgError);

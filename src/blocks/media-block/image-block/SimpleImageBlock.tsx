@@ -1,19 +1,9 @@
 import * as React from 'react';
 import { Icon } from '@iconify/react';
-import type { BlockProps } from './types';
+import type { BlockProps, ImageSource } from './types';
 
 // Type definitions
 type PointerEvents = 'auto' | 'none' | 'visiblePainted' | 'visibleFill' | 'visibleStroke' | 'visible' | 'painted' | 'fill' | 'stroke' | 'all' | 'inherit' | 'initial' | 'revert' | 'unset';
-
-interface ImageSource {
-  src: string;
-  width?: number;
-  height?: number;
-  media?: string;
-  type?: string;
-  srcSet?: string;
-  sizes?: string;
-}
 
 type FallbackComponent = React.ReactNode | ((props: { src?: string; alt: string }) => React.ReactNode);
 
@@ -90,28 +80,28 @@ export const SimpleImageBlock: React.FC<SimpleImageBlockProps> = ({
   const containerRef = React.useRef<HTMLDivElement>(null);
   const imgRef = React.useRef<HTMLImageElement>(null);
   const observerRef = React.useRef<IntersectionObserver | null>(null);
+  // Ensure src prop is provided
+  React.useEffect(() => {
+    if (!srcProp) {
+      const error = new Error('The "src" prop is required for SimpleImageBlock');
+      console.error(error);
+      setHasError(true);
+      onError?.(error);
+    }
+  }, [srcProp, onError]);
+
   // Process image sources
   const { sources, defaultSource, hasMultipleSources } = React.useMemo(() => {
-    // Generate a random image from picsum.photos if no source is provided
-    const defaultPicsumImage = { 
-      src: `https://picsum.photos/seed/${Math.floor(Math.random() * 1000)}/800/600`,
-      width: 800,
-      height: 600
-    };
+    if (!srcProp) {
+      return { sources: [], defaultSource: { src: '' }, hasMultipleSources: false };
+    }
     
-    const srcArray = Array.isArray(srcProp) ? srcProp : [{ src: srcProp || defaultPicsumImage.src }];
+    const srcArray = Array.isArray(srcProp) ? srcProp : [{ src: srcProp }];
     const defaultSrc = srcArray.find(src => !src.media) || srcArray[0];
-    
-    // Ensure the default source has required properties
-    const processedDefault = {
-      ...defaultPicsumImage, // Use picsum as base
-      ...defaultSrc,         // Override with any provided props
-      src: defaultSrc.src || defaultPicsumImage.src // Ensure src is never empty
-    };
     
     return {
       sources: srcArray,
-      defaultSource: processedDefault,
+      defaultSource: defaultSrc,
       hasMultipleSources: srcArray.length > 1
     };
   }, [srcProp]);
@@ -250,12 +240,20 @@ export const SimpleImageBlock: React.FC<SimpleImageBlockProps> = ({
   };
 
   // Render error state
-  if (hasError) {
+  if (hasError || !defaultSource?.src) {
     const fallbackContent = fallback ? (
-      typeof fallback === 'function' ? fallback({ src: defaultSource.src, alt }) : fallback
+      typeof fallback === 'function' ? fallback({ src: defaultSource?.src, alt }) : fallback
     ) : (
-      <div style={placeholderStyle}>
-        <Icon icon="mdi:image-broken" style={{ fontSize: '2rem', color: '#ccc' }} />
+      <div style={{
+        ...placeholderStyle,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: '#f5f5f5',
+        color: '#999'
+      }}>
+        <Icon icon="mdi:image-broken" style={{ fontSize: '2rem', color: '#ccc', marginRight: '0.5rem' }} />
+        <span>Image not available</span>
       </div>
     );
 
@@ -273,20 +271,21 @@ export const SimpleImageBlock: React.FC<SimpleImageBlockProps> = ({
     );
   }
 
-  // Generate a random image from picsum.photos for the placeholder
-  const placeholderImage = `https://picsum.photos/800/600?random=${Math.floor(Math.random() * 1000)}`;
-
   // Render loading state
-  if (!isInView && lazyLoad) {
+  if ((!isInView && lazyLoad) || !defaultSource?.src) {
     return (
       <div style={containerStyle} className={className}>
         {showLoadingSkeleton && (
-          <div style={placeholderStyle}>
-            <img 
-              src={placeholderImage} 
-              alt="Loading..." 
-              style={{ width: '100%', height: '100%', objectFit: 'cover', opacity: 0.5 }} 
-            />
+          <div style={{
+            ...placeholderStyle,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            backgroundColor: '#f5f5f5',
+            color: '#999',
+            fontSize: '0.875rem'
+          }}>
+            {placeholder || 'Loading image...'}
           </div>
         )}
       </div>
@@ -310,11 +309,18 @@ export const SimpleImageBlock: React.FC<SimpleImageBlockProps> = ({
       {!isLoaded && (
         <div style={placeholderStyle}>
           {placeholder || (
-            <img 
-              src={placeholderImage} 
-              alt="Loading..." 
-              style={{ width: '100%', height: '100%', objectFit: 'cover', opacity: 0.5 }} 
-            />
+            <div style={{
+              width: '100%',
+              height: '100%',
+              backgroundColor: '#f5f5f5',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              color: '#999',
+              fontSize: '0.875rem'
+            }}>
+              Loading...
+            </div>
           )}
         </div>
       )}

@@ -5,7 +5,7 @@ function App() {
     <div style={{ padding: '2rem', maxWidth: '800px', margin: '0 auto' }}>
       <h1>ImageBlock Test</h1>
       <div style={{ maxWidth: '800px', margin: '0 auto', padding: '2rem' }}>
-        <h1>ImageBlock Component Demo</h1>
+        <h2>ImageBlock Component Demo</h2>
         
         <div style={{ marginBottom: '3rem' }}>
           <h2>Responsive Image with srcSet</h2>

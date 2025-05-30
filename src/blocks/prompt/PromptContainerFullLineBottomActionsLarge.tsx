@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { PromptContainerFullLineBottomActions } from './PromptContainerFullLineBottomActions';
 import { PromptSize } from './types';
+import { cn } from '@/utils/cn';
 
 /**
  * A large variant of the PromptContainerFullLineBottomActions component with increased typography,
@@ -25,7 +26,7 @@ export const PromptContainerFullLineBottomActionsLarge = React.forwardRef<
       size={size}
       className={cn(
         'border-2', // Thicker border for large variant
-        className
+        className || ''
       )}
       {...props}
     />
@@ -36,8 +37,3 @@ PromptContainerFullLineBottomActionsLarge.displayName = 'PromptContainerFullLine
 
 // Re-export the types for convenience
 export type { PromptActionButton } from './types';
-
-// Utility function for class name concatenation
-function cn(...classes: (string | undefined)[]) {
-  return classes.filter(Boolean).join(' ');
-}

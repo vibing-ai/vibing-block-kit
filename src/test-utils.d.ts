@@ -1,10 +1,12 @@
 // Type definitions for custom test matchers
-import { TestingLibraryMatchers } from '@testing-library/jest-dom/matchers';
+import type { TestingLibraryMatchers } from '@testing-library/jest-dom/matchers';
+import type { Assertion } from 'vitest';
 
 declare global {
+  // eslint-disable-next-line @typescript-eslint/no-namespace
   namespace Vi {
-    interface JestAssertion<T = unknown>
-      extends jest.Matchers<void, T>,
+    interface Assertion<T = unknown>
+      extends Assertion<T>,
         TestingLibraryMatchers<T, void> {}
   }
 }

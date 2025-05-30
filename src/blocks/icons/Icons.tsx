@@ -6,19 +6,14 @@ type IconProps = React.SVGProps<SVGSVGElement> & {
 };
 
 const createIcon = (Component: React.FC<IconProps>) => {
-  const Icon = React.forwardRef<SVGSVGElement, IconProps>(({ className, ...props }, ref) => {
-    // Ensure className is always a string
-    const combinedClassName = cn('inline-block flex-shrink-0', className || '');
-    
-    return (
-      <Component
-        ref={ref}
-        className={combinedClassName}
-        {...props}
-      />
-    );
-  });
-  Icon.displayName = Component.name.replace('Svg', '');
+  const Icon = React.forwardRef<SVGSVGElement, IconProps>(({ className, ...props }, ref) => (
+    <Component
+      ref={ref}
+      className={cn('inline-block flex-shrink-0', className ? className : '')}
+      {...props}
+    />
+  ));
+  Icon.displayName = Component.name;
   return Icon;
 };
 

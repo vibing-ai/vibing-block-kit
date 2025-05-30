@@ -1,8 +1,33 @@
 import * as React from 'react';
 import { cn } from '../../utils/cn';
 
-export type ButtonVariant = 'default' | 'primary' | 'secondary' | 'ghost' | 'link' | 'outline' | 'destructive';
-export type ButtonSize = 'sm' | 'md' | 'lg';
+/**
+ * Calculates the appropriate size and width classes for a button based on its props
+ * @param size - The size of the button
+ * @param isIconButton - Whether the button is an icon button
+ * @param fullWidth - Whether the button should take full width
+ * @returns An object containing the size and width classes
+ */
+const getButtonLayoutClasses = (
+  size: ButtonSize,
+  isIconButton: boolean,
+  fullWidth: boolean
+): { sizeClass: string; widthClass: string } => {
+  if (isIconButton) {
+    return {
+      sizeClass: 'p-0',
+      widthClass: 'w-10',
+    };
+  }
+
+  return {
+    sizeClass: buttonSizes[size],
+    widthClass: fullWidth ? 'w-full' : '',
+  };
+};
+
+type ButtonVariant = keyof typeof buttonVariants;
+type ButtonSize = keyof typeof buttonSizes;
 
 export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   /**
@@ -66,13 +91,13 @@ const buttonVariants = {
   link: 'bg-transparent text-blue-600 hover:underline',
   outline: 'border border-gray-300 bg-transparent hover:bg-gray-50',
   destructive: 'bg-red-600 text-white hover:bg-red-700',
-};
+} as const;
 
 const buttonSizes = {
   sm: 'h-8 text-sm px-3',
   md: 'h-10 px-4 py-2',
   lg: 'h-12 px-6 text-lg',
-};
+} as const;
 
 export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
   (
@@ -93,8 +118,11 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     ref
   ) => {
     const isDisabled = disabled || isLoading;
-    const buttonSize = isIconButton ? 'p-0' : buttonSizes[size];
-    const buttonWidth = isIconButton ? 'w-10' : fullWidth ? 'w-full' : '';
+    const { sizeClass: buttonSize, widthClass: buttonWidth } = getButtonLayoutClasses(
+      size,
+      isIconButton,
+      fullWidth
+    );
     
     return (
       <button

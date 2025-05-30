@@ -1,5 +1,10 @@
 // Test file to verify module resolution
 import path from 'path';
+import { fileURLToPath } from 'url';
+
+// Polyfill __filename and __dirname for ESM
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 export function testImports() {
   const testImports = {

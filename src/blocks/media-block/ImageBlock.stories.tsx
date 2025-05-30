@@ -20,8 +20,7 @@ const meta = {
     },
     alt: { 
       control: 'text',
-      description: 'Alt text for accessibility',
-      defaultValue: 'Random image from picsum.photos'
+      description: 'Alt text for accessibility'
     },
     caption: { 
       control: 'text',
@@ -29,24 +28,27 @@ const meta = {
     },
     width: { 
       control: 'number',
-      description: 'Width of the image in pixels',
-      defaultValue: 800
+      description: 'Width of the image in pixels'
     },
     height: { 
       control: 'number',
-      description: 'Height of the image in pixels',
-      defaultValue: 450
+      description: 'Height of the image in pixels'
     },
     rounded: { 
       control: 'boolean',
-      description: 'Whether to apply border radius to the image',
-      defaultValue: true
+      description: 'Whether to apply border radius to the image'
     },
     zoomable: { 
       control: 'boolean',
-      description: 'Whether the image can be zoomed on click',
-      defaultValue: true
+      description: 'Whether the image can be zoomed on click'
     },
+  },
+  args: {
+    alt: 'Random image from picsum.photos',
+    width: 800,
+    height: 450,
+    rounded: true,
+    zoomable: true
   },
 } satisfies Meta<typeof ImageBlock>;
 

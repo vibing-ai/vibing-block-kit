@@ -1,18 +1,23 @@
-// @ts-nocheck
 import * as React from 'react';
-import type { Preview } from '@storybook/react';
+import type { Preview, Decorator } from '@storybook/react';
 import { withThemeByClassName } from '@storybook/addon-themes';
+import type { ReactRenderer } from '@storybook/react';
 import '../styles.css';
 
 // Simple error boundary for Storybook
-class ErrorBoundary extends React.Component<{ children: React.ReactNode }, { hasError: boolean; error: Error | null }> {
-  state = { hasError: false, error: null };
+interface ErrorBoundaryState {
+  hasError: boolean;
+  error: Error | null;
+}
 
-  static getDerivedStateFromError(error: Error) {
+class ErrorBoundary extends React.Component<{ children: React.ReactNode }, ErrorBoundaryState> {
+  public state: ErrorBoundaryState = { hasError: false, error: null };
+
+  public static getDerivedStateFromError(error: Error): Partial<ErrorBoundaryState> {
     return { hasError: true, error };
   }
 
-  componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
+  public componentDidCatch(error: Error, errorInfo: React.ErrorInfo): void {
     console.error('Error in story:', error, errorInfo);
   }
 
@@ -49,6 +54,12 @@ class ErrorBoundary extends React.Component<{ children: React.ReactNode }, { has
   }
 }
 
+const withErrorBoundary: Decorator = (Story) => (
+  <ErrorBoundary>
+    <Story />
+  </ErrorBoundary>
+);
+
 const preview: Preview = {
   parameters: {
     actions: { argTypesRegex: '^on[A-Z].*' },
@@ -60,12 +71,8 @@ const preview: Preview = {
     },
   },
   decorators: [
-    (Story: React.ComponentType) => (
-      <ErrorBoundary>
-        <Story />
-      </ErrorBoundary>
-    ),
-    withThemeByClassName({
+    withErrorBoundary,
+    withThemeByClassName<ReactRenderer>({
       themes: {
         light: '',
         dark: 'dark',
