@@ -1,6 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { TabBlockProps } from './TabBlock.types';
-// If you want to use CSS modules, import like this:
 import styles from './TabBlock.module.css';
 
 export const TabBlock: React.FC<TabBlockProps> = ({
@@ -10,7 +9,6 @@ export const TabBlock: React.FC<TabBlockProps> = ({
   responsiveBreakpoint = 768,
   className,
   style,
-  // Destructure onChange to prevent it from being spread onto the div
   onChange,
   ...rest
 }) => {
@@ -31,8 +29,7 @@ export const TabBlock: React.FC<TabBlockProps> = ({
   }, [responsiveBreakpoint]);
 
   const tabRefs = useRef<(HTMLButtonElement | null)[]>([]);
-  // TODO: Add responsive, accessibility, keyboard, and animation logic
-  // Keyboard navigation handler
+
   const handleKeyDown = (e: React.KeyboardEvent, idx: number) => {
     const enabledTabs = tabs.filter(tab => !tab.disabled);
     const enabledIndexes = tabs.map((tab, i) => (!tab.disabled ? i : -1)).filter(i => i !== -1);
@@ -81,12 +78,11 @@ export const TabBlock: React.FC<TabBlockProps> = ({
       setActiveKey(key);
       setFade(false);
       if (onChange) onChange(key, tab);
-    }, 150); // Half the transition duration
+    }, 150);
   };
 
   // --- URL hash integration ---
   useEffect(() => {
-    // Only set from hash if present and valid
     const hash = window.location.hash.replace('#', '');
     if (
       hash &&
@@ -95,7 +91,6 @@ export const TabBlock: React.FC<TabBlockProps> = ({
     ) {
       setActiveKey(hash);
     }
-    // Listen for hash changes
     const onHashChange = () => {
       const newHash = window.location.hash.replace('#', '');
       if (newHash && tabs.some(tab => tab.key === newHash)) {
@@ -107,7 +102,6 @@ export const TabBlock: React.FC<TabBlockProps> = ({
     // eslint-disable-next-line
   }, [tabs]);
 
-  // When activeKey changes, update the hash
   useEffect(() => {
     if (activeKey && window.location.hash.replace('#', '') !== activeKey) {
       window.location.hash = activeKey;
@@ -123,7 +117,11 @@ export const TabBlock: React.FC<TabBlockProps> = ({
     >
       {!isMobile ? (
         <>
-          <div className="vbk-tab-block__tablist" role="tablist" aria-orientation={orientation}>
+          <div
+            className="vbk-tab-block__tablist"
+            role="tablist"
+            aria-orientation={orientation}
+          >
             {tabs.map((tab, idx) => (
               <button
                 key={tab.key}
@@ -132,17 +130,24 @@ export const TabBlock: React.FC<TabBlockProps> = ({
                 aria-selected={activeKey === tab.key}
                 aria-controls={`vbk-tabpanel-${tab.key}`}
                 id={`vbk-tab-${tab.key}`}
+                aria-disabled={tab.disabled || undefined}
                 disabled={tab.disabled}
-                tabIndex={activeKey === tab.key ? 0 : -1}
+                tabIndex={
+                  tab.disabled
+                    ? -1
+                    : activeKey === tab.key
+                    ? 0
+                    : -1
+                }
                 className={`vbk-tab-block__tab${activeKey === tab.key ? ' vbk-tab-block__tab--active' : ''}`}
                 onClick={() => {
-                  setActiveKey(tab.key);
-                  if (onChange) onChange(tab.key, tab);
+                  if (!tab.disabled) handleTabChange(tab.key, tab);
                 }}
                 onKeyDown={e => handleKeyDown(e, idx)}
                 type="button"
+                aria-label={tab.label}
               >
-                {tab.icon && <span className="vbk-tab-block__icon">{tab.icon}</span>}
+                {tab.icon && <span className="vbk-tab-block__icon" aria-hidden="true">{tab.icon}</span>}
                 {tab.label}
               </button>
             ))}
@@ -155,6 +160,7 @@ export const TabBlock: React.FC<TabBlockProps> = ({
                   role="tabpanel"
                   id={`vbk-tabpanel-${tab.key}`}
                   aria-labelledby={`vbk-tab-${tab.key}`}
+                  tabIndex={0}
                   className={`${styles['vbk-tab-block__panel']} ${fade ? styles['vbk-tab-block__panel--fade'] : ''}`}
                 >
                   {tab.content}
@@ -170,16 +176,17 @@ export const TabBlock: React.FC<TabBlockProps> = ({
               <button
                 className={`vbk-tab-block__accordion-header${activeKey === tab.key ? ' vbk-tab-block__tab--active' : ''}`}
                 onClick={() => {
-                  setActiveKey(tab.key);
-                  if (onChange) onChange(tab.key, tab);
+                  if (!tab.disabled) handleTabChange(tab.key, tab);
                 }}
                 disabled={tab.disabled}
+                aria-disabled={tab.disabled || undefined}
                 aria-expanded={activeKey === tab.key}
                 aria-controls={`vbk-tabpanel-${tab.key}`}
                 id={`vbk-tab-${tab.key}`}
                 type="button"
+                aria-label={tab.label}
               >
-                {tab.icon && <span className="vbk-tab-block__icon">{tab.icon}</span>}
+                {tab.icon && <span className="vbk-tab-block__icon" aria-hidden="true">{tab.icon}</span>}
                 {tab.label}
               </button>
               {activeKey === tab.key && (
@@ -187,6 +194,7 @@ export const TabBlock: React.FC<TabBlockProps> = ({
                   id={`vbk-tabpanel-${tab.key}`}
                   role="region"
                   aria-labelledby={`vbk-tab-${tab.key}`}
+                  tabIndex={0}
                   className="vbk-tab-block__panel"
                 >
                   {tab.content}

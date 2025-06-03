@@ -83,3 +83,9 @@
   margin-right: 0.5em;
   vertical-align: middle;
 }
+
+.vbk-tab-block__tab:focus,
+.vbk-tab-block__accordion-header:focus {
+  outline: 2px solid #0078d4;
+  outline-offset: 2px;
+}
