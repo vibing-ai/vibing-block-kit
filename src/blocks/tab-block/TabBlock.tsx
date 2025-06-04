@@ -110,18 +110,10 @@ export const TabBlock: React.FC<TabBlockProps> = ({
   // --- end URL hash integration ---
 
   return (
-    <div
-      className={`vbk-tab-block vbk-tab-block--${orientation} ${isMobile ? 'vbk-tab-block--mobile' : ''} ${className || ''}`}
-      style={style}
-      {...rest}
-    >
+    <div className={`${styles['vbk-tab-block']} ${isMobile ? styles['vbk-tab-block--mobile'] : ''}`}>
       {!isMobile ? (
         <>
-          <div
-            className="vbk-tab-block__tablist"
-            role="tablist"
-            aria-orientation={orientation}
-          >
+          <div className={styles['vbk-tab-block__tablist']}>
             {tabs.map((tab, idx) => (
               <button
                 key={tab.key}
@@ -152,7 +144,7 @@ export const TabBlock: React.FC<TabBlockProps> = ({
               </button>
             ))}
           </div>
-          <div className="vbk-tab-block__panels">
+          <div className={styles['vbk-tab-block__panels']}>
             {tabs.map(tab =>
               activeKey === tab.key ? (
                 <div
@@ -170,7 +162,7 @@ export const TabBlock: React.FC<TabBlockProps> = ({
           </div>
         </>
       ) : (
-        <div className="vbk-tab-block__accordion">
+        <div className={styles['vbk-tab-block__accordion']}>
           {tabs.map((tab, idx) => (
             <div key={tab.key} className="vbk-tab-block__accordion-item">
               <button
@@ -194,7 +186,6 @@ export const TabBlock: React.FC<TabBlockProps> = ({
                   id={`vbk-tabpanel-${tab.key}`}
                   role="region"
                   aria-labelledby={`vbk-tab-${tab.key}`}
-                  tabIndex={0}
                   className="vbk-tab-block__panel"
                 >
                   {tab.content}

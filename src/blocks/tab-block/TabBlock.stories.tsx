@@ -1,4 +1,3 @@
-import React from 'react';
 import { TabBlock } from './TabBlock';
 import type { TabBlockProps } from './TabBlock.types';
 import { FaHome, FaUser, FaCog } from 'react-icons/fa';
@@ -36,8 +35,8 @@ const tabs: TabBlockProps['tabs'] = [
   },
 ];
 
-export const Default = (args: Partial<TabBlockProps>) => (
-  <TabBlock {...args} tabs={tabs} />
+export const Default = (args: Omit<TabBlockProps, 'id'> & { id?: string }) => (
+  <TabBlock {...args} tabs={tabs} id={args.id ?? 'tab-block-default'} />
 );
 
 Default.args = {

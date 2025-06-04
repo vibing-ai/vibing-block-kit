@@ -58,7 +58,7 @@
 }
 
 .vbk-tab-block__accordion {
-  width: 100%;
+  display: none;
 }
 
 .vbk-tab-block__accordion-header {
@@ -88,4 +88,8 @@
 .vbk-tab-block__accordion-header:focus {
   outline: 2px solid #0078d4;
   outline-offset: 2px;
+}
+
+.vbk-tab-block--mobile .vbk-tab-block__accordion {
+  display: block;
 }
