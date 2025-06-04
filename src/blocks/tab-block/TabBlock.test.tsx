@@ -10,6 +10,10 @@ const tabs: TabBlockProps['tabs'] = [
 ];
 
 describe('TabBlock', () => {
+  beforeEach(() => {
+    window.location.hash = '';
+  });
+
   it('renders all tab headers', () => {
     render(<TabBlock tabs={tabs} />);
     expect(screen.getByText('Tab 1')).toBeInTheDocument();
@@ -17,15 +21,15 @@ describe('TabBlock', () => {
     expect(screen.getByText('Tab 3')).toBeInTheDocument();
   });
 
-  it('shows the content of the default active tab', () => {
+  it('shows the content of the default active tab', async () => {
     render(<TabBlock tabs={tabs} defaultActiveKey="tab2" />);
-    expect(screen.getByText('Content 2')).toBeInTheDocument();
+    await expect(screen.findByText('Content 2')).resolves.toBeInTheDocument();
   });
 
-  it('switches tab on click', () => {
+  it('switches tab on click', async () => {
     render(<TabBlock tabs={tabs} />);
     fireEvent.click(screen.getByText('Tab 2'));
-    expect(screen.getByText('Content 2')).toBeInTheDocument();
+    await expect(screen.findByText('Content 2')).resolves.toBeInTheDocument();
   });
 
   it('does not switch to a disabled tab', () => {
