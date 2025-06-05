@@ -1,3 +1,4 @@
+// .storybook/ImageBlock.stories.ts
 import type { Meta, StoryObj } from '@storybook/react';
 import { ImageBlock } from '@vibing-ai/block-kit';
 
@@ -12,11 +13,12 @@ const meta: Meta<typeof ImageBlock> = {
     width: { control: 'text' },
     height: { control: 'text' },
     rounded: { control: 'boolean' },
-    loading: { control: 'radio', options: ['eager', 'lazy'] },
+    loading: { control: { type: 'radio' }, options: ['eager', 'lazy'] },
   },
 };
 
 export default meta;
+
 type Story = StoryObj<typeof ImageBlock>;
 
 export const Basic: Story = {
@@ -43,4 +45,4 @@ export const Rounded: Story = {
     alt: 'Example image with rounded corners',
     rounded: true,
   },
-}; 
+};
