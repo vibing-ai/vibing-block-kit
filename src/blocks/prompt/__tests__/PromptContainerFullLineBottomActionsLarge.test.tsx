@@ -21,20 +21,20 @@ describe('PromptContainerFullLineBottomActionsLarge', () => {
 
   it('renders with default large size', () => {
     render(<PromptContainerFullLineBottomActionsLarge {...defaultProps} />);
-    const textarea = screen.getByPlaceholderText('Test placeholder');
-    expect(textarea).toHaveClass('text-lg');
+    const container = screen.getByRole('group');
+    expect(container).toHaveClass('text-lg');
   });
 
   it('renders with small size', () => {
     render(<PromptContainerFullLineBottomActionsLarge {...defaultProps} size="sm" />);
-    const textarea = screen.getByPlaceholderText('Test placeholder');
-    expect(textarea).toHaveClass('text-sm');
+    const container = screen.getByRole('group');
+    expect(container).toHaveClass('text-sm');
   });
 
   it('renders with medium size', () => {
     render(<PromptContainerFullLineBottomActionsLarge {...defaultProps} size="md" />);
-    const textarea = screen.getByPlaceholderText('Test placeholder');
-    expect(textarea).toHaveClass('text-base');
+    const container = screen.getByRole('group');
+    expect(container).toHaveClass('text-base');
   });
 
   it('handles value changes', () => {
