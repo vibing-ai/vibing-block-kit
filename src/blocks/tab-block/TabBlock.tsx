@@ -1,24 +1,26 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, KeyboardEvent } from 'react';
 import { TabBlockProps } from './TabBlock.types';
 import styles from './TabBlock.module.css';
 
 export const TabBlock: React.FC<TabBlockProps> = ({
   tabs,
-  defaultActiveKey,
-  orientation = 'horizontal',
+  defaultTab,
+  layout = 'horizontal',
+  mobileMode = 'accordion',
   responsiveBreakpoint = 768,
   className,
   style,
   onChange,
+  syncWithUrl = false,
   ...rest
 }) => {
-  const [activeKey, setActiveKey] = useState(
-    defaultActiveKey || (tabs.length > 0 ? tabs[0].key : '')
+  const [activeId, setActiveId] = useState(
+    defaultTab || (tabs.length > 0 ? tabs[0].id : '')
   );
-
   const [isMobile, setIsMobile] = useState(false);
   const [fade, setFade] = useState(false);
 
+  // Responsive: detect mobile/accordion mode
   useEffect(() => {
     const checkMobile = () => {
       setIsMobile(window.innerWidth < responsiveBreakpoint);
@@ -30,163 +32,136 @@ export const TabBlock: React.FC<TabBlockProps> = ({
 
   const tabRefs = useRef<(HTMLButtonElement | null)[]>([]);
 
-  const handleKeyDown = (e: React.KeyboardEvent, idx: number) => {
-    const enabledTabs = tabs.filter(tab => !tab.disabled);
-    const enabledIndexes = tabs.map((tab, i) => (!tab.disabled ? i : -1)).filter(i => i !== -1);
-    let nextIdx = idx;
+  // Keyboard navigation
+  const handleKeyDown = (e: KeyboardEvent, idx: number) => {
+    const enabledIndexes = tabs
+      .map((tab, i) => (!tab.disabled ? i : -1))
+      .filter(i => i !== -1);
 
-    if (orientation === 'vertical') {
+    const currentEnabledIdx = enabledIndexes.indexOf(idx);
+    let nextEnabledIdx = currentEnabledIdx;
+
+    // Solo aplica navegación vertical si NO es móvil y layout es vertical
+    if (!isMobile && layout === 'vertical') {
       if (e.key === 'ArrowUp') {
-        const prev = enabledIndexes.indexOf(idx) - 1;
-        nextIdx = enabledIndexes[prev < 0 ? enabledIndexes.length - 1 : prev];
+        nextEnabledIdx = (currentEnabledIdx - 1 + enabledIndexes.length) % enabledIndexes.length;
+        e.preventDefault();
       } else if (e.key === 'ArrowDown') {
-        const next = enabledIndexes.indexOf(idx) + 1;
-        nextIdx = enabledIndexes[next >= enabledIndexes.length ? 0 : next];
+        nextEnabledIdx = (currentEnabledIdx + 1) % enabledIndexes.length;
+        e.preventDefault();
       }
     } else {
       if (e.key === 'ArrowLeft') {
-        const prev = enabledIndexes.indexOf(idx) - 1;
-        nextIdx = enabledIndexes[prev < 0 ? enabledIndexes.length - 1 : prev];
+        nextEnabledIdx = (currentEnabledIdx - 1 + enabledIndexes.length) % enabledIndexes.length;
+        e.preventDefault();
       } else if (e.key === 'ArrowRight') {
-        const next = enabledIndexes.indexOf(idx) + 1;
-        nextIdx = enabledIndexes[next >= enabledIndexes.length ? 0 : next];
+        nextEnabledIdx = (currentEnabledIdx + 1) % enabledIndexes.length;
+        e.preventDefault();
       }
     }
 
-    if (e.key === 'Home') {
-      nextIdx = enabledIndexes[0];
-    } else if (e.key === 'End') {
-      nextIdx = enabledIndexes[enabledIndexes.length - 1];
-    }
-
-    if (nextIdx !== idx && tabRefs.current[nextIdx]) {
-      tabRefs.current[nextIdx]?.focus();
+    if (
+      nextEnabledIdx !== currentEnabledIdx &&
+      tabRefs.current[enabledIndexes[nextEnabledIdx]]
+    ) {
+      tabRefs.current[enabledIndexes[nextEnabledIdx]]?.focus();
     }
 
     if (
       (e.key === 'Enter' || e.key === ' ') &&
       !tabs[idx].disabled
     ) {
-      setActiveKey(tabs[idx].key);
-      if (onChange) onChange(tabs[idx].key, tabs[idx]);
+      handleTabChange(tabs[idx].id);
+      e.preventDefault();
     }
   };
 
-  const handleTabChange = (key: string, tab: typeof tabs[0]) => {
+  // Cambia el tab activo y notifica al padre
+  const handleTabChange = (id: string) => {
     setFade(true);
     setTimeout(() => {
-      setActiveKey(key);
+      setActiveId(id);
       setFade(false);
-      if (onChange) onChange(key, tab);
+      if (onChange && rest.id) {
+        onChange(rest.id, { activeKey: id });
+      }
     }, 150);
   };
 
-  // --- URL hash integration ---
+  // Deep linking: sincroniza con hash de URL
   useEffect(() => {
+    if (!syncWithUrl) return;
     const hash = window.location.hash.replace('#', '');
     if (
       hash &&
-      tabs.some(tab => tab.key === hash) &&
-      hash !== activeKey
+      tabs.some(tab => tab.id === hash) &&
+      hash !== activeId
     ) {
-      setActiveKey(hash);
+      setActiveId(hash);
     }
     const onHashChange = () => {
       const newHash = window.location.hash.replace('#', '');
-      if (newHash && tabs.some(tab => tab.key === newHash)) {
-        setActiveKey(newHash);
+      if (newHash && tabs.some(tab => tab.id === newHash)) {
+        setActiveId(newHash);
       }
     };
     window.addEventListener('hashchange', onHashChange);
     return () => window.removeEventListener('hashchange', onHashChange);
-    // eslint-disable-next-line
-  }, [tabs]);
+  }, [tabs, syncWithUrl]);
 
   useEffect(() => {
-    if (activeKey && window.location.hash.replace('#', '') !== activeKey) {
-      window.location.hash = activeKey;
+    if (syncWithUrl && activeId && window.location.hash.replace('#', '') !== activeId) {
+      window.location.hash = activeId;
     }
-  }, [activeKey]);
-  // --- end URL hash integration ---
+  }, [activeId, syncWithUrl]);
 
   return (
-    <div className={`${styles['vbk-tab-block']} ${isMobile ? styles['vbk-tab-block--mobile'] : ''}`}>
-      {!isMobile ? (
-        <>
-          <div className={styles['vbk-tab-block__tablist']}>
-            {tabs.map((tab, idx) => (
-              <button
-                key={tab.key}
-                ref={el => (tabRefs.current[idx] = el)}
-                role="tab"
-                aria-selected={activeKey === tab.key}
-                aria-controls={`vbk-tabpanel-${tab.key}`}
-                id={`vbk-tab-${tab.key}`}
-                aria-disabled={tab.disabled || undefined}
-                disabled={tab.disabled}
-                tabIndex={
-                  tab.disabled
-                    ? -1
-                    : activeKey === tab.key
-                    ? 0
-                    : -1
-                }
-                className={`vbk-tab-block__tab${activeKey === tab.key ? ' vbk-tab-block__tab--active' : ''}`}
-                onClick={() => {
-                  if (!tab.disabled) handleTabChange(tab.key, tab);
-                }}
-                onKeyDown={e => handleKeyDown(e, idx)}
-                type="button"
-                aria-label={tab.label}
-              >
-                {tab.icon && <span className="vbk-tab-block__icon" aria-hidden="true">{tab.icon}</span>}
-                {tab.label}
-              </button>
-            ))}
-          </div>
-          <div className={styles['vbk-tab-block__panels']}>
-            {tabs.map(tab =>
-              activeKey === tab.key ? (
-                <div
-                  key={tab.key}
-                  role="tabpanel"
-                  id={`vbk-tabpanel-${tab.key}`}
-                  aria-labelledby={`vbk-tab-${tab.key}`}
-                  tabIndex={0}
-                  className={`${styles['vbk-tab-block__panel']} ${fade ? styles['vbk-tab-block__panel--fade'] : ''}`}
-                >
-                  {tab.content}
-                </div>
-              ) : null
-            )}
-          </div>
-        </>
-      ) : (
+    <div
+      className={[
+        styles['vbk-tab-block'],
+        styles[`vbk-tab-block--${layout}`],
+        isMobile ? styles['vbk-tab-block--mobile'] : '',
+        className,
+      ].filter(Boolean).join(' ')}
+      style={style}
+      {...rest}
+    >
+      {isMobile && mobileMode === 'accordion' ? (
         <div className={styles['vbk-tab-block__accordion']}>
           {tabs.map((tab, idx) => (
-            <div key={tab.key} className="vbk-tab-block__accordion-item">
+            <div key={tab.id} className={styles['vbk-tab-block__accordion-item']}>
               <button
-                className={`vbk-tab-block__accordion-header${activeKey === tab.key ? ' vbk-tab-block__tab--active' : ''}`}
+                className={[
+                  styles['vbk-tab-block__accordion-header'],
+                  activeId === tab.id ? styles['vbk-tab-block__tab--active'] : '',
+                ].join(' ')}
                 onClick={() => {
-                  if (!tab.disabled) handleTabChange(tab.key, tab);
+                  if (!tab.disabled) {
+                    console.log('Tab clicked:', rest.id, { activeKey: tab.id });
+                    handleTabChange(tab.id);
+                  }
                 }}
                 disabled={tab.disabled}
                 aria-disabled={tab.disabled || undefined}
-                aria-expanded={activeKey === tab.key}
-                aria-controls={`vbk-tabpanel-${tab.key}`}
-                id={`vbk-tab-${tab.key}`}
+                aria-expanded={activeId === tab.id}
+                aria-controls={`vbk-tabpanel-${tab.id}`}
+                id={`vbk-tab-${tab.id}`}
                 type="button"
                 aria-label={tab.label}
               >
-                {tab.icon && <span className="vbk-tab-block__icon" aria-hidden="true">{tab.icon}</span>}
+                {tab.icon && (
+                  <span className={styles['vbk-tab-block__icon']} aria-hidden="true">
+                    {tab.icon}
+                  </span>
+                )}
                 {tab.label}
               </button>
-              {activeKey === tab.key && (
+              {activeId === tab.id && (
                 <div
-                  id={`vbk-tabpanel-${tab.key}`}
+                  id={`vbk-tabpanel-${tab.id}`}
                   role="region"
-                  aria-labelledby={`vbk-tab-${tab.key}`}
-                  className="vbk-tab-block__panel"
+                  aria-labelledby={`vbk-tab-${tab.id}`}
+                  className={styles['vbk-tab-block__panel']}
                 >
                   {tab.content}
                 </div>
@@ -194,6 +169,72 @@ export const TabBlock: React.FC<TabBlockProps> = ({
             </div>
           ))}
         </div>
+      ) : (
+        <>
+          <div
+            className={styles['vbk-tab-block__tablist']}
+            role="tablist"
+            aria-orientation={layout}
+          >
+            {tabs.map((tab, idx) => (
+              <button
+                key={tab.id}
+                ref={el => (tabRefs.current[idx] = el)}
+                role="tab"
+                aria-selected={activeId === tab.id}
+                aria-controls={`vbk-tabpanel-${tab.id}`}
+                id={`vbk-tab-${tab.id}`}
+                aria-disabled={tab.disabled || undefined}
+                disabled={tab.disabled}
+                tabIndex={
+                  tab.disabled
+                    ? -1
+                    : activeId === tab.id
+                    ? 0
+                    : -1
+                }
+                className={
+                  `${styles['vbk-tab-block__tab']}${activeId === tab.id ? ` ${styles['vbk-tab-block__tab--active']}` : ''}`
+                }
+                onClick={() => {
+                  if (!tab.disabled) {
+                    console.log('Tab clicked:', rest.id, { activeKey: tab.id });
+                    handleTabChange(tab.id);
+                  }
+                }}
+                onKeyDown={e => handleKeyDown(e, idx)}
+                type="button"
+                aria-label={tab.label}
+              >
+                {tab.icon && (
+                  <span className={styles['vbk-tab-block__icon']} aria-hidden="true">
+                    {tab.icon}
+                  </span>
+                )}
+                {tab.label}
+              </button>
+            ))}
+          </div>
+          <div className={styles['vbk-tab-block__panels']}>
+            {tabs.map(tab =>
+              activeId === tab.id ? (
+                <div
+                  key={tab.id}
+                  role="tabpanel"
+                  id={`vbk-tabpanel-${tab.id}`}
+                  aria-labelledby={`vbk-tab-${tab.id}`}
+                  tabIndex={0}
+                  className={[
+                    styles['vbk-tab-block__panel'],
+                    fade ? styles['vbk-tab-block__panel--fade'] : '',
+                  ].join(' ')}
+                >
+                  {tab.content}
+                </div>
+              ) : null
+            )}
+          </div>
+        </>
       )}
     </div>
   );
