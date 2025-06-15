@@ -137,7 +137,8 @@ export const TabBlock: React.FC<TabBlockProps> = ({
                 ].join(' ')}
                 onClick={() => {
                   if (!tab.disabled) {
-                    console.log('Tab clicked:', rest.id, { activeKey: tab.id });
+                    const blockId = rest.id || 'TabBlock';
+                    console.log('Tab clicked:', blockId, { activeKey: tab.id });
                     handleTabChange(tab.id);
                   }
                 }}
@@ -198,7 +199,8 @@ export const TabBlock: React.FC<TabBlockProps> = ({
                 }
                 onClick={() => {
                   if (!tab.disabled) {
-                    console.log('Tab clicked:', rest.id, { activeKey: tab.id });
+                    const blockId = rest.id || 'TabBlock';
+                    console.log('Tab clicked:', blockId, { activeKey: tab.id });
                     handleTabChange(tab.id);
                   }
                 }}
